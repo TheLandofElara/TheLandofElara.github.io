@@ -826,17 +826,30 @@ main: {
             }
             
             startPathway(pathwayType) {
-                this.currentPathway = pathwayType;
-                this.currentIndex = 0;
-                
-                if (pathwayType === 'main') {
-                    this.showMainQuest();
-                } else if (pathwayType === 'secret') {
-                    this.showSecretPath();
-                }
-            }
+    this.currentPathway = pathwayType;
+    this.currentIndex = 0;
+
+    if (pathwayType === 'main') {
+        this.showMainQuest();
+    } else if (pathwayType === 'secret') {
+        this.showSecretPath();
+    } else if (pathwayType === 'foundation') {
+        this.showFoundation();
+    } else if (this.pathways[pathwayType]) {
+        // Generic handler for dynamically added pathways like "mystic"
+        this.showMainQuest(); // or a more dynamic pathway loader
+    }
+}
+
             
             showMainQuest() {
+                this.hideAllContainers();
+                document.getElementById('riddle-container').style.display = 'block';
+                this.loadRiddle(this.currentIndex);
+                this.updateProgressIndicator();
+            }
+
+            showFoundation() {
                 this.hideAllContainers();
                 document.getElementById('riddle-container').style.display = 'block';
                 this.loadRiddle(this.currentIndex);
