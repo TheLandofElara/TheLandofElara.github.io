@@ -688,7 +688,75 @@ main: {
                                 lore: `To wield the key is to swear an oath of protection and courage; few have been worthy to bear the title.`
                             }
                         ]
-                    }
+                    },
+                    foundation: {
+  name: "The Foundation Path",
+  icon: "fas fa-university",
+  description: "Unearth the forgotten truth",
+  riddles: [
+    {
+      riddle: `Below obsidian roots, where silence was born,\nA question waits where none dare mourn.\nOne voice speaks, but not aloud—\nIts echo sealed in ash and cloud.\nWhat secret does the silence guard?`,
+      cipher: `𝖓𝖔𝓃𝐯𝖎𝓓𝕤𝖘𝓊𝓇𝖍𝖕𝖗𝖞𝕟𝕟𝖌𝖐𝓡𝖃𝖞𝓽𝕠𝓂`,
+      cipher_method: `
+        Step 1: Encode the answer in Latin: "Silentium veritatem celat"
+        Step 2: Encrypt using Atbash (reversed Latin alphabet)
+        Step 3: Overlay with stylized characters (Gothic, Cursive, Bold Italic)
+        Step 4: Embed zero-width spaces every 4 characters.
+      `,
+      hint: `Translate your answer to Latin first, then apply an Atbash cipher.`,
+      answer: "silentium veritatem celat",
+      reward: `You hear a name buried beneath stone — the Foundation remembers you.`
+    },
+    {
+      riddle: `Writ in stars, behind the veil,\nA code not spoken, yet all prevail.\nThe builders carved in silent script,\nTheir oath entwined in truth eclipsed.\nWhat word binds all who serve the Foundation?`,
+      cipher: `𝕐𝔷𝕣𝕒𝕝𝕓𝕓𝔲𝕤𝔱𝕠𝕞𝕟𝔱𝕞𝕞𝔲𝔱`,
+      cipher_method: `
+        Step 1: Take the Latin word "substructum" (foundation).
+        Step 2: Encrypt using Caesar cipher shift -13.
+        Step 3: Obfuscate using mirrored stylized Unicode (𝕐𝕫𝕒...).
+      `,
+      hint: `Latin for foundation, Caesar -13, look at stylized mirroring.`,
+      answer: "substructum",
+      reward: `You uncover the Builders' Creed. One of the Nine Oaths is now known.`
+    },
+    {
+      riddle: `Three keys turn in cryptic light,\nTheir shadows form the glyph of sight.\nThe third, forgotten, speaks in flame—\nWhat word did the third architect claim?`,
+      cipher: `ζψλ𐌍𐌴𐌹𐌿𐍃𐌻𐌰𐍄𐌸𐍂𐌰𐌹𐌽`,
+      cipher_method: `
+        Step 1: Answer in Old Gothic: "Naustraith"
+        Step 2: Transliterated to Unicode Runic + Gothic letters
+        Step 3: Caesar shift +5 (pre-transliteration)
+      `,
+      hint: `Reconstruct the third architect’s name. Look to Old Gothic forms.`,
+      answer: "naustraith",
+      reward: `The third architect’s vault opens — fragments of the Prime Directive are revealed.`
+    },
+    {
+      riddle: `By fire etched and iron sworn,\nThe gate below shall be reborn.\nTo find the door the others missed,\nWhat shape completes the sacred glyph?`,
+      cipher: `⟁⟡☍⊚⟠⟁⚷⚶⚘⟁⟁`,
+      cipher_method: `
+        Step 1: The answer is "hexagon".
+        Step 2: Convert to symbolic logic shapes: ⟁ = h, ⟡ = e, etc.
+        Step 3: Interleave with decoy glyphs; answer is hidden in position pattern.
+      `,
+      hint: `Look at the symbols' positions — every third one is real.`,
+      answer: "hexagon",
+      reward: `You recover a fragment of the Glyph Seal used to enter the inner sanctum.`
+    },
+    {
+      riddle: `When the twin moons cross at Zenith's crown,\nThe archive unlocks, but never stays down.\nSpeak the cycle that holds the key—\nThe number the Foundation guards silently.`,
+      cipher: `IVXLCDXIVCCIXCD𝕍𝕄𝕄𝕀𝕀𝕄`,
+      cipher_method: `
+        Step 1: Answer is Roman numeral "MMXV" (2015).
+        Step 2: Insert decoy numerals around it.
+        Step 3: Mix normal and stylized Unicode numerals.
+      `,
+      hint: `Focus only on stylized Roman numerals. Count them.`,
+      answer: "2015",
+      reward: `You’ve aligned with the Archive Cycle. You now possess access to Level One records.`
+    }
+  ]
+}
                 };
                 
                 this.currentPathway = null;
