@@ -377,19 +377,51 @@
                                 <p class="mb-0">Discover hidden lore and unlock exclusive rewards through the secret pathways of knowledge.</p>
                             </div>
                         </div>
-                                                <div class="col-md-6">
-                            <div class="pathway-card animate__animated animate__fadeInRight" id="start-foundation">
-                                <div class="d-flex align-items-center mb-3">
-                                    <i class="fas fa-mask fa-2x text-warning me-3"></i>
-                                    <div>
-                                        <h4 class="mb-1">The Foundation Path</h4>
-                                        <small class="text-muted">Unearth the forgotten truth</small>
-                                    </div>
-                                </div>
-                                <p class="mb-0">Discover hidden lore and unlock exclusive rewards through the secret pathways of knowledge.</p>
-                            </div>
-                        </div>
-                    </div>
+                                              <!-- Foundation Path Container -->
+<div id="foundation-path" style="display:none;">
+  <div class="quest-header">
+    <h2 class="quest-title fs-3">
+      <i class="fas fa-university me-2"></i>
+      The Foundation Path
+    </h2>
+    <p class="quest-subtitle">Unearth the forgotten truth</p>
+  </div>
+  <div class="quest-body">
+    <div class="riddle-container animate__animated animate__fadeIn">
+      <h4 class="mb-3 text-primary">
+        <i class="fas fa-question-circle me-2"></i>
+        The Riddle
+      </h4>
+      <p id="foundation-riddle-text" class="fs-5 lh-lg"></p>
+
+      <div class="cipher-display pulse-glow" id="foundation-cipher-text"></div>
+
+      <div class="row align-items-end">
+        <div class="col-md-8">
+          <label for="foundation-answer" class="form-label fw-bold">Your Answer:</label>
+          <input type="text" class="form-control" id="foundation-answer" autocomplete="off" placeholder="Enter your solution...">
+        </div>
+        <div class="col-md-4 mt-3 mt-md-0">
+          <button class="btn btn-primary w-100" id="foundation-submit-btn">
+            <i class="fas fa-paper-plane me-2"></i>
+            Submit
+          </button>
+        </div>
+      </div>
+
+      <div id="foundation-feedback-container" class="mt-3"></div>
+    </div>
+
+    <div class="text-center">
+      <button class="btn btn-outline-light" id="foundation-back-to-landing">
+        <i class="fas fa-arrow-left me-2"></i>
+        Back to Landing
+      </button>
+    </div>
+  </div>
+</div>
+
+                  
                     
                     <div class="text-center mt-4">
                         <button class="btn btn-outline-light" id="add-pathway-demo">
