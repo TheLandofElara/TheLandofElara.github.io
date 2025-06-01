@@ -554,43 +554,114 @@
         class QuestManager {
             constructor() {
                 this.pathways = {
-                    main: {
-                        name: "Main Quest",
-                        icon: "fas fa-compass",
-                        description: "Follow the traditional path",
-                        riddles: [
-                            {
-                                riddle: `Beneath the veil of night, seven stars align in cryptic dance.\nTheir scattered light conceals a phrase, guiding those who dare to glance.\nWhat message lies where stars whisper?`,
-                                cipher: `ΥLΖᏃVυ𝒵βΤSΗΛΚAβSΑΥHΖA𝓛SSΗΖ`,
-                                answer: "the answer lies hidden beyond the stars",
-                                reward: `You unveil the first secret: the path to Elara begins beyond the celestial canopy.`
-                            },
-                            {
-                                riddle: `Among forgotten stones where echoes sleep, six shadows murmur tales of old.\nTheir whispers tell of ruins that cradle time itself.\nDecode their language to reveal the secrets buried in silence.`,
-                                cipher: `σνιυρ τν𝖊ιкνα νι σεσϱε νενδιH`,
-                                answer: "hidden echoes in ancient ruins",
-                                reward: `The ancient ruins hold secrets lost to ages; you gain coordinates to Eldoria's hidden chamber.`
-                            },
-                            {
-                                riddle: `Through hollow halls where no foot falls, five winds carry unheard songs.\nTheir melodies conceal the name of the land and hint at what is to come.\nUnravel the silence to hear the wind's truth.`,
-                                cipher: `QZVΥQЈХΚΧNΖ HVΝVΧ РОКVLΟΖ QFUVQΥ`,
-                                answer: "silent halls carry ancient secrets",
-                                reward: `Silent halls guard powerful artifacts. You now hold the key to access them and uncover Elara's fate.`
-                            },
-                            {
-                                riddle: `Four flames flicker in shadows deep, each burn a clue to secrets to keep.\nIn their dance, the date is writ; a time when Elara awakens its spirit.\nFind the flames' hidden message and prepare for the dawn.`,
-                                cipher: `мvιιɡl𝔣𝕌 vмf𝕢 hr vzqw vhzvoiv𝕀 v𝕘sG`,
-                                answer: "the release date is june fourteen",
-                                reward: `The fires reveal the date of awakening: June 14. Prepare for new adventures as the world stirs.`
-                            },
-                            {
-                                riddle: `Two keys turn beneath the silent moon, unlocking paths and sealing fates.\nOne final puzzle stands before the dawn; reveal the moment Elara opens its gates.\nSpeak the date, and step into legend.`,
-                                cipher: `Νy𝔯ι ΒΒΖ, Q𝕼ΒΒΖ — χ𝕝ι k𝕖𝕩ι ѕ𝕥𝕣ι.`,
-                                answer: "june 14 2025 the gates open",
-                                reward: `The gates to Elara open on June 14, 2025. The journey begins anew for the worthy.`
-                            }
-                        ]
-                    },
+main: {
+  name: "Main Quest",
+  icon: "fas fa-compass",
+  description: "Follow the traditional path",
+  riddles: [
+    {
+      riddle: `Beneath the veil of night, seven stars align in cryptic dance.\nTheir scattered light conceals a phrase, guiding those who dare to glance.\nWhat message lies where stars whisper?`,
+      cipher: `𝚼𝛬𝛯𝖁𝔲𝕫𝖇𝖙𝔰𝕃𝔨𝔞𝕓𝔰𝔞𝚼𝚽𝔩𝔰𝜨𝜮𝓃𝓈𝔟𝖚`,
+      cipher_method: `
+        Step 1: Apply Vigenère cipher with key "CELESTIAL" on Greek+Gothic mixed alphabet.
+        Step 2: Then reverse entire string.
+        Step 3: Finally, hide zero-width spaces interspersed to disrupt AI parsing.
+      `,
+      hint: `Use key 'CELESTIAL' for Vigenère; reverse string; strip invisible chars.`,
+      answer: "the answer lies hidden beyond the stars",
+      reward: `You unveil the first secret: the path to Elara begins beyond the celestial canopy.`
+    },
+    {
+      riddle: `Among forgotten stones where echoes sleep, six shadows murmur tales of old.\nTheir whispers tell of ruins that cradle time itself.\nDecode their language to reveal the secrets buried in silence.`,
+      cipher: `𝜈𝜄𝜐𝜌 τ𝖊𝖎𝕜𝔫𝖆 𝜈𝜄 с𝔢𝔠ϱ𝜂 ν𝔢𝔫𝓭𝓲𝐇 ν𝜐𝜅 𝜂`,
+      cipher_method: `
+        Step 1: Caesar shift -9 on Cyrillic letters.
+        Step 2: Apply Atbash on Gothic and Latin letters.
+        Step 3: Reverse the whole string.
+      `,
+      hint: `Decrypt Caesar -9 on Cyrillic; Atbash Latin/Gothic; reverse string.`,
+      answer: "hidden echoes in ancient ruins",
+      reward: `The ancient ruins hold secrets lost to ages; you gain coordinates to Eldoria's hidden chamber.`
+    },
+   {
+  riddle: `Through hollow halls where no foot falls, five winds carry unheard songs.\nTheir melodies conceal the name of the land and hint at what is to come.\nUnravel the silence to hear the wind's truth.`,
+  cipher: `QZVYQJXKXNZ HVNVX POKVLOZ QFUVQYKYT`,
+  cipher_method: `
+    Step 1: Polybius square with key "WINDSONG" on Latin alphabet (A-Z only, no special chars).
+    Step 2: Columnar transposition cipher with key "SILENCE".
+    Step 3: Reverse the resulting text.
+  `,
+  hint: `Apply Polybius square (key 'WINDSONG'), then columnar transpose with 'SILENCE', finally reverse string.`,
+  answer: "silent halls carry ancient secrets",
+  reward: `Silent halls guard powerful artifacts. You now hold the key to access them and uncover Elara's fate.`
+},
+    // NEW HARDER RIDDLE 1
+    {
+      riddle: `Within the labyrinth’s endless weave, seven shadows cast a cryptic weave.\nTheir pattern hides a ciphered key; trace the steps where none can see.\nDecode the sequence to unmask the path.`,
+      cipher: `𝖗𝕒𝖓𝔾𝔢𝕝𝕠 𝖈𝖎𝔯𝕔𝖚𝕝𝕦𝓈 𝕧𝓊𝓁𝕥𝕦𝕣 𝓐𝖗𝔹𝕣𝕒 𝓬𝓪𝔩𝓽𝓲𝔰𝖕𝕒𝖘𝔰𝕦𝔪`,
+      cipher_method: `
+        Step 1: Vigenère cipher with key "LABYRINTH" on mixed Gothic and Latin alphabets.
+        Step 2: Rail fence cipher with 3 rails.
+        Step 3: Add zero-width chars randomly to mislead scanners.
+      `,
+      hint: `Use key 'LABYRINTH' for Vigenère; undo rail fence 3 rails; remove invisible chars.`,
+      answer: "hidden path lies in shifting shadows",
+      reward: `The labyrinth reveals a hidden path; your journey gains new direction through darkness.`
+    },
+    // NEW HARDER RIDDLE 2
+    {
+      riddle: `Echoes of forgotten tongues whisper in the wind, tangled in a ciphered hymn.\nFive keys must be turned in silent order to unlock the ancient hymn's secret word.\nBreak the pattern to sing the lost melody.`,
+      cipher: `𝓣𝔂𝔁𝕪 𝖊𝓬𝓽𝓲𝓿𝓮 𝔠𝔞𝕡𝖙𝖚𝔯𝔢 𝔩𝔦𝔱𝔬𝓻 𝓗𝓲𝔰𝓉𝓪𝓂𝓾 𝖒𝖔𝔯𝕔𝓲𝕦𝓂`,
+      cipher_method: `
+        Step 1: Atbash cipher on mixed Gothic and Latin alphabets.
+        Step 2: Then apply Caesar shift +11.
+        Step 3: Finally reverse the entire string.
+        Step 4: Hidden zero-width characters inserted.
+      `,
+      hint: `Atbash decode; Caesar +11; reverse string; remove invisible chars.`,
+      answer: "ancient melody unlocked by silence",
+      reward: `The lost melody hums softly now; silence has revealed the ancient song.`
+    },
+    // NEW HARDER RIDDLE 3
+    {
+      riddle: `Beneath the shifting sands of time, three glyphs await your keenest mind.\nTranslate the signs of old and find the number that binds.\nReveal the sacred count to unlock the final door.`,
+      cipher: `𝔽𝓲𝓿𝓮 𝖛𝓲𝓷𝔠𝓾𝓵𝓲 𝔣𝓲𝓷𝓲𝓽𝓲 𝕮𝕬𝖒𝓮𝓻𝔞 𝖘𝓲𝓃𝔠𝔢𝓻𝓮𝔰`,
+      cipher_method: `
+        Step 1: Caesar shift +17 on Gothic and Latin alphabets.
+        Step 2: Columnar transposition cipher with key "SANDS".
+        Step 3: Reverse string.
+      `,
+      hint: `Shift letters back by 17; undo columnar with 'SANDS'; reverse string.`,
+      answer: "the sacred number is five",
+      reward: `The sacred count five reveals a sealed door; the final journey nears.`
+    },
+    {
+      riddle: `Four flames flicker in shadows deep, each burn a clue to secrets to keep.\nIn their dance, the date is writ; a time when Elara awakens its spirit.\nFind the flames' hidden message and prepare for the dawn.`,
+      cipher: `𝔪𝕧ι𝕚ɡ𝔩𝔣𝕌𝔳𝕞𝔣𝕢𝔥𝔯𝔳𝔷𝔮𝔴𝔳𝔥𝔷𝔳𝔬𝔦𝔳𝕀𝔳𝕘𝕤𝐆𝕀𝕕𝕦𝕤I𝔲𝔫𝔦𝔦𝔮𝔲𝔞𝔱𝔱𝔲𝔬𝔯𝔡𝔢𝔠𝔦𝔪`,
+      cipher_method: `
+        Step 1: Atbash on Greek and Gothic alphabets.
+        Step 2: Then Caesar shift +5 on Latin letters.
+        Step 3: Latin phrase "Idus Iunii quattuordecim" (June 14) appended and reversed.
+      `,
+      hint: `Atbash Greek/Gothic; Caesar +5 Latin; read Latin date backwards.`,
+      answer: "the release date is june fourteen",
+      reward: `The fires reveal the date of awakening: June 14. Prepare for new adventures as the world stirs.`
+    },
+    {
+      riddle: `Two keys turn beneath the silent moon, unlocking paths and sealing fates.\nOne final puzzle stands before the dawn; reveal the moment Elara opens its gates.\nSpeak the date, and step into legend.`,
+      cipher: `Ν𝔶𝕣ι ΒΒΖ, 𝕼𝕼ΒΒΖ — χ𝕝ι 𝕜𝕖𝕩ι ѕ𝕥𝕣ιAdAstra`,
+      cipher_method: `
+        Step 1: Vigenère cipher with key "LUNAR" on mixed Greek and Gothic alphabets.
+        Step 2: Then Caesar shift +4 on Latin parts.
+        Step 3: Reverse entire string.
+        Step 4: Latin motto "Ad Astra" embedded.
+      `,
+      hint: `Vigenère with 'LUNAR'; Caesar +4 Latin; reverse string; find Latin motto.`,
+      answer: "june 14 2025 the gates open",
+      reward: `The gates to Elara open on June 14, 2025. The journey begins anew for the worthy.`
+    }
+  ]
+},
                     secret: {
                         name: "Secret Path",
                         icon: "fas fa-mask",
