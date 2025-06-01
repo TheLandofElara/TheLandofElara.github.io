@@ -377,6 +377,18 @@
                                 <p class="mb-0">Discover hidden lore and unlock exclusive rewards through the secret pathways of knowledge.</p>
                             </div>
                         </div>
+                                                <div class="col-md-6">
+                            <div class="pathway-card animate__animated animate__fadeInRight" id="start-foundation">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-mask fa-2x text-warning me-3"></i>
+                                    <div>
+                                        <h4 class="mb-1">The Foundation Path</h4>
+                                        <small class="text-muted">Unearth the forgotten truth</small>
+                                    </div>
+                                </div>
+                                <p class="mb-0">Discover hidden lore and unlock exclusive rewards through the secret pathways of knowledge.</p>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="text-center mt-4">
@@ -773,6 +785,7 @@ main: {
                 // Landing page events
                 document.getElementById('start-main').addEventListener('click', () => this.startPathway('main'));
                 document.getElementById('start-secret').addEventListener('click', () => this.startPathway('secret'));
+                 document.getElementById('start-secret').addEventListener('click', () => this.startPathway('foundation'));
                 document.getElementById('add-pathway-demo').addEventListener('click', () => this.addNewPathwayDemo());
                 
                 // Navigation events
