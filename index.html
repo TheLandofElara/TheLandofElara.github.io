@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elara Cipher Quest</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-card: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container-fluid {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .quest-card {
+            background: rgba(58, 58, 58, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .quest-header {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .quest-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="20" cy="20" r="1" fill="white" opacity="0.3"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.4"/><circle cx="40" cy="70" r="1" fill="white" opacity="0.2"/><circle cx="90" cy="80" r="1" fill="white" opacity="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .quest-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .quest-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quest-body {
+            padding: 2rem;
+        }
+
+        .pathway-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pathway-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .pathway-card:hover::before {
+            left: 100%;
+        }
+
+        .pathway-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent-primary);
+        }
+
+        .riddle-container {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cipher-display {
+            background: var(--bg-primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            word-break: break-all;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--accent-primary);
+        }
+
+        .form-control {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: var(--bg-card);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+        }
+
+        .btn-outline-light {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+
+        .reward-list {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .reward-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .reward-item i {
+            color: var(--accent-primary);
+            margin-right: 0.75rem;
+            width: 20px;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .progress-step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: var(--accent-primary);
+            box-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        .progress-step.completed {
+            background: var(--success);
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quest-title {
+                font-size: 2rem;
+            }
+            
+            .quest-body {
+                padding: 1.5rem;
+            }
+            
+            .cipher-display {
+                font-size: 1rem;
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles Background -->
+    <div class="floating-particles" id="particles"></div>
+
+    <div class="container-fluid">
+        <div class="quest-card animate__animated animate__fadeIn">
+            
+            <!-- Landing Page -->
+            <div id="landing-page">
+                <div class="quest-header">
+                    <h1 class="quest-title">
+                        <i class="fas fa-key me-3"></i>
+                        Elara Cipher Quest
+                    </h1>
+                    <p class="quest-subtitle">Unlock the secrets of the ancient realm</p>
+                </div>
+                
+                <div class="quest-body">
+                    <p class="text-center mb-4 fs-5">Choose your destiny and embark on an adventure through cryptic puzzles and hidden lore.</p>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="pathway-card animate__animated animate__fadeInLeft" id="start-main">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-compass fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h4 class="mb-1">Main Quest</h4>
+                                        <small class="text-muted">Follow the traditional path</small>
+                                    </div>
+                                </div>
+                                <p class="mb-0">Solve ancient riddles and unlock the mysteries of Elara through carefully crafted challenges.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="pathway-card animate__animated animate__fadeInRight" id="start-secret">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-mask fa-2x text-warning me-3"></i>
+                                    <div>
+                                        <h4 class="mb-1">Secret Path</h4>
+                                        <small class="text-muted">For the truly curious</small>
+                                    </div>
+                                </div>
+                                <p class="mb-0">Discover hidden lore and unlock exclusive rewards through the secret pathways of knowledge.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-outline-light" id="add-pathway-demo">
+                            <i class="fas fa-plus me-2"></i>Add New Pathway
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Quest Container -->
+            <div id="riddle-container" style="display:none;">
+                <div class="quest-header">
+                    <h2 class="quest-title fs-3">
+                        <i class="fas fa-scroll me-2"></i>
+                        Cipher Challenge
+                    </h2>
+                    <div class="progress-indicator" id="progress-indicator"></div>
+                </div>
+                
+                <div class="quest-body">
+                    <div class="riddle-container animate__animated animate__fadeIn">
+                        <h4 class="mb-3 text-primary">
+                            <i class="fas fa-question-circle me-2"></i>
+                            The Riddle
+                        </h4>
+                        <p id="riddle-text" class="fs-5 lh-lg"></p>
+                        
+                        <div class="cipher-display pulse-glow" id="cipher-text"></div>
+                        
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
+                                <label for="answer" class="form-label fw-bold">Your Answer:</label>
+                                <input type="text" class="form-control" id="answer" autocomplete="off" placeholder="Enter your solution...">
+                            </div>
+                            <div class="col-md-4 mt-3 mt-md-0">
+                                <button class="btn btn-primary w-100" id="submit-btn">
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="feedback-container" class="mt-3"></div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-outline-light" id="back-to-landing">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Landing
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secret Path Container -->
+            <div id="secret-path" style="display:none;">
+                <div class="quest-header">
+                    <h2 class="quest-title fs-3">
+                        <i class="fas fa-eye me-2"></i>
+                        Secret Path Unlocked
+                    </h2>
+                    <p class="quest-subtitle">Ancient knowledge awaits the worthy</p>
+                </div>
+                
+                <div class="quest-body">
+                    <div class="alert alert-warning animate__animated animate__pulse">
+                        <i class="fas fa-star me-2"></i>
+                        <strong>Hidden Reward Unlocked:</strong> Access to the Ancient Archives and exclusive in-game artifacts.
+                    </div>
+                    
+                    <div class="riddle-container">
+                        <h4 class="mb-3 text-warning">
+                            <i class="fas fa-book-open me-2"></i>
+                            Ancient Lore
+                        </h4>
+                        <div id="secret-lore" class="fs-5 lh-lg mb-4"></div>
+                        
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
+                                <label for="secret-answer" class="form-label fw-bold">Your Input:</label>
+                                <input type="text" class="form-control" id="secret-answer" autocomplete="off" placeholder="Type 'continue' or 'next'...">
+                            </div>
+                            <div class="col-md-4 mt-3 mt-md-0">
+                                <button class="btn btn-primary w-100" id="secret-continue">
+                                    <i class="fas fa-forward me-2"></i>
+                                    Continue
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="secret-feedback-container" class="mt-3"></div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-outline-light" id="secret-back-to-landing">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Landing
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Message -->
+            <div id="final-message" style="display:none;">
+                <div class="quest-header">
+                    <h2 class="quest-title">
+                        <i class="fas fa-crown me-2"></i>
+                        Quest Complete!
+                    </h2>
+                    <p class="quest-subtitle">You have proven yourself worthy</p>
+                </div>
+                
+                <div class="quest-body">
+                    <div class="alert alert-success animate__animated animate__bounceIn">
+                        <i class="fas fa-trophy me-2"></i>
+                        <strong>Congratulations!</strong> You have unlocked all the secrets of Elara.
+                    </div>
+                    
+                    <div class="reward-list">
+                        <h4 class="mb-3 text-success">
+                            <i class="fas fa-gift me-2"></i>
+                            Your Rewards
+                        </h4>
+                        <div class="reward-item">
+                            <i class="fas fa-map"></i>
+                            <span>Access to the Celestial Vault map</span>
+                        </div>
+                        <div class="reward-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Coordinates to the Ruins of Eldoria</span>
+                        </div>
+                        <div class="reward-item">
+                            <i class="fas fa-door-open"></i>
+                            <span>Access to the Silent Halls treasure room</span>
+                        </div>
+                        <div class="reward-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Early access to Elara's special events on June 14</span>
+                        </div>
+                        <div class="reward-item">
+                            <i class="fas fa-server"></i>
+                            <span>Full early entry into Elara server</span>
+                        </div>
+                        <div class="reward-item">
+                            <i class="fas fa-medal"></i>
+                            <span>Exclusive in-game title: "The Keybearer"</span>
+                        </div>
+                        <div class="reward-item">
+                            <i class="fas fa-box"></i>
+                            <span>Special starter kit with rare items</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary me-3" id="restart-quest">
+                            <i class="fas fa-redo me-2"></i>
+                            Play Again
+                        </button>
+                        <button class="btn btn-outline-light" id="final-back-to-landing">
+                            <i class="fas fa-home me-2"></i>
+                            Home
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Enhanced Quest System with Pathway Management
+        class QuestManager {
+            constructor() {
+                this.pathways = {
+                    main: {
+                        name: "Main Quest",
+                        icon: "fas fa-compass",
+                        description: "Follow the traditional path",
+                        riddles: [
+                            {
+                                riddle: `Beneath the veil of night, seven stars align in cryptic dance.\nTheir scattered light conceals a phrase, guiding those who dare to glance.\nWhat message lies where stars whisper?`,
+                                cipher: `ΥLΖᏃVυ𝒵βΤSΗΛΚAβSΑΥHΖA𝓛SSΗΖ`,
+                                answer: "the answer lies hidden beyond the stars",
+                                reward: `You unveil the first secret: the path to Elara begins beyond the celestial canopy.`
+                            },
+                            {
+                                riddle: `Among forgotten stones where echoes sleep, six shadows murmur tales of old.\nTheir whispers tell of ruins that cradle time itself.\nDecode their language to reveal the secrets buried in silence.`,
+                                cipher: `σνιυρ τν𝖊ιкνα νι σεσϱε νενδιH`,
+                                answer: "hidden echoes in ancient ruins",
+                                reward: `The ancient ruins hold secrets lost to ages; you gain coordinates to Eldoria's hidden chamber.`
+                            },
+                            {
+                                riddle: `Through hollow halls where no foot falls, five winds carry unheard songs.\nTheir melodies conceal the name of the land and hint at what is to come.\nUnravel the silence to hear the wind's truth.`,
+                                cipher: `QZVΥQЈХΚΧNΖ HVΝVΧ РОКVLΟΖ QFUVQΥ`,
+                                answer: "silent halls carry ancient secrets",
+                                reward: `Silent halls guard powerful artifacts. You now hold the key to access them and uncover Elara's fate.`
+                            },
+                            {
+                                riddle: `Four flames flicker in shadows deep, each burn a clue to secrets to keep.\nIn their dance, the date is writ; a time when Elara awakens its spirit.\nFind the flames' hidden message and prepare for the dawn.`,
+                                cipher: `мvιιɡl𝔣𝕌 vмf𝕢 hr vzqw vhzvoiv𝕀 v𝕘sG`,
+                                answer: "the release date is june fourteen",
+                                reward: `The fires reveal the date of awakening: June 14. Prepare for new adventures as the world stirs.`
+                            },
+                            {
+                                riddle: `Two keys turn beneath the silent moon, unlocking paths and sealing fates.\nOne final puzzle stands before the dawn; reveal the moment Elara opens its gates.\nSpeak the date, and step into legend.`,
+                                cipher: `Νy𝔯ι ΒΒΖ, Q𝕼ΒΒΖ — χ𝕝ι k𝕖𝕩ι ѕ𝕥𝕣ι.`,
+                                answer: "june 14 2025 the gates open",
+                                reward: `The gates to Elara open on June 14, 2025. The journey begins anew for the worthy.`
+                            }
+                        ]
+                    },
+                    secret: {
+                        name: "Secret Path",
+                        icon: "fas fa-mask",
+                        description: "For the truly curious",
+                        lore: [
+                            {
+                                clue: `whisper of the first light`,
+                                lore: `Long before Elara's stars shone, ancient guardians sealed the light within the core, awaiting a soul to awaken it.`
+                            },
+                            {
+                                clue: `echoes beyond the veil`,
+                                lore: `Echoes from another realm linger in Eldoria's ruins; only the chosen may cross the veil and learn their secrets.`
+                            },
+                            {
+                                clue: `winds carry forgotten names`,
+                                lore: `The wind whispers names lost to time, those who once shaped Elara's fate and may yet return.`
+                            },
+                            {
+                                clue: `flames that never die`,
+                                lore: `These eternal flames burn beneath the surface, holding the power to reshape worlds at dawn.`
+                            },
+                            {
+                                clue: `the keybearer's oath`,
+                                lore: `To wield the key is to swear an oath of protection and courage; few have been worthy to bear the title.`
+                            }
+                        ]
+                    }
+                };
+                
+                this.currentPathway = null;
+                this.currentIndex = 0;
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.createFloatingParticles();
+            }
+            
+            bindEvents() {
+                // Landing page events
+                document.getElementById('start-main').addEventListener('click', () => this.startPathway('main'));
+                document.getElementById('start-secret').addEventListener('click', () => this.startPathway('secret'));
+                document.getElementById('add-pathway-demo').addEventListener('click', () => this.addNewPathwayDemo());
+                
+                // Navigation events
+                document.getElementById('back-to-landing').addEventListener('click', () => this.showLanding());
+                document.getElementById('secret-back-to-landing').addEventListener('click', () => this.showLanding());
+                document.getElementById('final-back-to-landing').addEventListener('click', () => this.showLanding());
+                document.getElementById('restart-quest').addEventListener('click', () => this.startPathway('main'));
+                
+                // Main quest events
+                document.getElementById('submit-btn').addEventListener('click', () => this.submitMainAnswer());
+                document.getElementById('answer').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.submitMainAnswer();
+                });
+                
+                // Secret path events
+                document.getElementById('secret-continue').addEventListener('click', () => this.continueSecret());
+                document.getElementById('secret-answer').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleSecretInput();
+                });
+            }
+            
+            normalize(str) {
+                return str.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
+            }
+            
+            showLanding() {
+                this.hideAllContainers();
+                document.getElementById('landing-page').style.display = 'block';
+                this.currentPathway = null;
+                this.currentIndex = 0;
+            }
+            
+            hideAllContainers() {
+                document.getElementById('landing-page').style.display = 'none';
+                document.getElementById('riddle-container').style.display = 'none';
+                document.getElementById('secret-path').style.display = 'none';
+                document.getElementById('final-message').style.display = 'none';
+            }
+            
+            startPathway(pathwayType) {
+                this.currentPathway = pathwayType;
+                this.currentIndex = 0;
+                
+                if (pathwayType === 'main') {
+                    this.showMainQuest();
+                } else if (pathwayType === 'secret') {
+                    this.showSecretPath();
+                }
+            }
+            
+            showMainQuest() {
+                this.hideAllContainers();
+                document.getElementById('riddle-container').style.display = 'block';
+                this.loadRiddle(this.currentIndex);
+                this.updateProgressIndicator();
+            }
+            
+            showSecretPath() {
+                this.hideAllContainers();
+                document.getElementById('secret-path').style.display = 'block';
+                this.loadSecretLore(this.currentIndex);
+            }
+            
+            loadRiddle(index) {
+                const riddle = this.pathways.main.riddles[index];
+                document.getElementById('riddle-text').textContent = riddle.riddle;
+                document.getElementById('cipher-text').textContent = riddle.cipher;
+                document.getElementById('answer').value = '';
+                this.clearFeedback('feedback-container');
+                document.getElementById('answer').focus();
+            }
+            
+            loadSecretLore(index) {
+                const lore = this.pathways.secret.lore[index];
+                document.getElementById('secret-lore').textContent = lore.lore;
+                document.getElementById('secret-answer').value = '';
+                this.clearFeedback('secret-feedback-container');
+                document.getElementById('secret-answer').focus();
+            }
+            
+            submitMainAnswer() {
+                const userAnswer = this.normalize(document.getElementById('answer').value);
+                const correctAnswer = this.normalize(this.pathways.main.riddles[this.currentIndex].answer);
+                
+                if (userAnswer === correctAnswer) {
+                    this.showFeedback('feedback-container', 'success', this.pathways.main.riddles[this.currentIndex].reward);
+                    setTimeout(() => {
+                        this.currentIndex++;
+                        if (this.currentIndex >= this.pathways.main.riddles.length) {
+                            this.showFinalMessage();
+                        } else {
+                            this.loadRiddle(this.currentIndex);
+                            this.updateProgressIndicator();
+                        }
+                    }, 2000);
+                } else {
+                    // Check for secret path triggers
+                    const secretTrigger = this.pathways.secret.lore.find(s => 
+                        this.normalize(s.clue) === userAnswer
+                    );
+                    
+                    if (secretTrigger) {
+                        this.currentPathway = 'secret';
+                        this.currentIndex = this.pathways.secret.lore.indexOf(secretTrigger);
+                        this.showSecretPath();
+                    } else {
+                        this.showFeedback('feedback-container', 'danger', 'Incorrect answer. Try again, or perhaps explore hidden paths...');
+                    }
+                }
+            }
+            
+            continueSecret() {
+                this.currentIndex++;
+                if (this.currentIndex >= this.pathways.secret.lore.length) {
+                    this.showFeedback('secret-feedback-container', 'success', 'You have completed the secret lore path! Returning to main quest...');
+                    setTimeout(() => {
+                        this.currentPathway = 'main';
+                        this.showMainQuest();
+                    }, 2000);
+                } else {
+                    this.loadSecretLore(this.currentIndex);
+                }
+            }
+            
+            handleSecretInput() {
+                const input = this.normalize(document.getElementById('secret-answer').value);
+                if (input === 'continue' || input === 'next') {
+                    this.continueSecret();
+                } else {
+                    this.showFeedback('secret-feedback-container', 'danger', 'Type "continue" or "next" to proceed through the secret lore.');
+                }
+            }
+            
+            showFinalMessage() {
+                this.hideAllContainers();
+                document.getElementById('final-message').style.display = 'block';
+            }
+            
+            showFeedback(containerId, type, message) {
+                const container = document.getElementById(containerId);
+                const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+                const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+                
+                container.innerHTML = `
+                    <div class="alert ${alertClass} animate__animated animate__fadeIn">
+                        <i class="${icon} me-2"></i>
+                        ${message}
+                    </div>
+                `;
+            }
+            
+            clearFeedback(containerId) {
+                document.getElementById(containerId).innerHTML = '';
+            }
+            
+            updateProgressIndicator() {
+                const container = document.getElementById('progress-indicator');
+                const totalSteps = this.pathways.main.riddles.length;
+                
+                container.innerHTML = '';
+                for (let i = 0; i < totalSteps; i++) {
+                    const step = document.createElement('div');
+                    step.className = 'progress-step';
+                    
+                    if (i < this.currentIndex) {
+                        step.classList.add('completed');
+                    } else if (i === this.currentIndex) {
+                        step.classList.add('active');
+                    }
+                    
+                    container.appendChild(step);
+                }
+            }
+            
+            // Demo function to show how easy it is to add new pathways
+            addNewPathwayDemo() {
+                const newPathway = {
+                    name: "Mystic Path",
+                    icon: "fas fa-magic",
+                    description: "For those who seek ancient wisdom",
+                    riddles: [
+                        {
+                            riddle: "In the realm of shadows and light, what binds all things together?",
+                            cipher: "Βγδε ζηθι κλμν ξοπρ στυφ χψω",
+                            answer: "the eternal balance",
+                            reward: "You have discovered the secret of balance!"
+                        }
+                    ]
+                };
+                
+                // Add the new pathway to our system
+                this.pathways.mystic = newPathway;
+                
+                // Create the UI element
+                const pathwayCard = this.createPathwayCard('mystic', newPathway);
+                
+                // Insert it into the DOM
+                const pathwayContainer = document.querySelector('.row.g-3');
+                const newCol = document.createElement('div');
+                newCol.className = 'col-md-6';
+                newCol.appendChild(pathwayCard);
+                pathwayContainer.appendChild(newCol);
+                
+                // Bind the event
+                pathwayCard.addEventListener('click', () => this.startPathway('mystic'));
+                
+                // Show success message
+                this.showTemporaryMessage('New pathway added successfully!', 'success');
+            }
+            
+            createPathwayCard(pathwayId, pathway) {
+                const card = document.createElement('div');
+                card.className = 'pathway-card animate__animated animate__fadeInUp';
+                card.innerHTML = `
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="${pathway.icon} fa-2x text-info me-3"></i>
+                        <div>
+                            <h4 class="mb-1">${pathway.name}</h4>
+                            <small class="text-muted">${pathway.description}</small>
+                        </div>
+                    </div>
+                    <p class="mb-0">Embark on a mystical journey through ancient wisdom and forgotten secrets.</p>
+                `;
+                return card;
+            }
+            
+            showTemporaryMessage(message, type) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} animate__animated animate__fadeInDown position-fixed`;
+                alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                alertDiv.innerHTML = `
+                    <i class="fas fa-info-circle me-2"></i>
+                    ${message}
+                `;
+                
+                document.body.appendChild(alertDiv);
+                
+                setTimeout(() => {
+                    alertDiv.classList.add('animate__fadeOutUp');
+                    setTimeout(() => {
+                        document.body.removeChild(alertDiv);
+                    }, 500);
+                }, 3000);
+            }
+            
+            createFloatingParticles() {
+                const particlesContainer = document.getElementById('particles');
+                
+                setInterval(() => {
+                    if (document.querySelectorAll('.particle').length < 15) {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        particle.style.left = Math.random() * 100 + '%';
+                        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                        particle.style.animationDelay = Math.random() * 2 + 's';
+                        
+                        particlesContainer.appendChild(particle);
+                        
+                        setTimeout(() => {
+                            if (particle.parentNode) {
+                                particle.parentNode.removeChild(particle);
+                            }
+                        }, 8000);
+                    }
+                }, 800);
+            }
+        }
+        
+        // Initialize the quest system when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new QuestManager();
+        });
+        
+        // Enhanced pathway management functions for easy extension
+        const PathwayAPI = {
+            // Add a new riddle-based pathway
+            addRiddlePathway: function(id, config) {
+                const questManager = window.questManager || new QuestManager();
+                questManager.pathways[id] = {
+                    name: config.name,
+                    icon: config.icon || 'fas fa-question',
+                    description: config.description || 'A mysterious path awaits',
+                    riddles: config.riddles || []
+                };
+                return questManager;
+            },
+            
+            // Add a new lore-based pathway
+            addLorePathway: function(id, config) {
+                const questManager = window.questManager || new QuestManager();
+                questManager.pathways[id] = {
+                    name: config.name,
+                    icon: config.icon || 'fas fa-book',
+                    description: config.description || 'Ancient knowledge awaits',
+                    lore: config.lore || []
+                };
+                return questManager;
+            },
+            
+            // Add a custom pathway with any structure
+            addCustomPathway: function(id, config) {
+                const questManager = window.questManager || new QuestManager();
+                questManager.pathways[id] = config;
+                return questManager;
+            }
+        };
+        
+        // Make PathwayAPI globally available for easy extension
+        window.PathwayAPI = PathwayAPI;
+    </script>
+</body>
+</html>
