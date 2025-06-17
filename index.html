@@ -1,650 +1,826 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Elara - The Awakening Approaches</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Exo+2:wght@300;400;600;900&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AurixAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-quaternary: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #7d8590;
+            --text-muted: #656d76;
+            --border: #30363d;
+            --border-light: #21262d;
+            --accent: #f0f6fc;
+            --accent-hover: #ffffff;
+            --button-bg: #238636;
+            --button-hover: #2ea043;
+            --user-bg: #0969da;
+            --user-hover: #0860ca;
+        }
 
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
-  }
-  html, body {
-    height: 100%;
-    overflow: hidden;
-    background: radial-gradient(ellipse at 30% 40%, #1a0850 0%, #0d0335 50%, #000012 100%);
-    font-family: 'Orbitron', sans-serif;
-    color: #e8efff;
-    user-select: none;
-  }
+        * {
+            box-sizing: border-box;
+        }
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background:
-      radial-gradient(2.5px 2.5px at 18% 12%, #ffffff, transparent),
-      radial-gradient(1.8px 1.8px at 77% 28%, #ccd9ff, transparent),
-      radial-gradient(2px 2px at 45% 68%, #b8c6ff, transparent),
-      radial-gradient(1.3px 1.3px at 88% 82%, #dde8ff, transparent),
-      radial-gradient(2.2px 2.2px at 12% 88%, #a8b8ff, transparent),
-      radial-gradient(1.6px 1.6px at 65% 15%, #c8d4ff, transparent),
-      radial-gradient(1.9px 1.9px at 25% 55%, #ffffff, transparent),
-      radial-gradient(1.4px 1.4px at 92% 45%, #b4c4ff, transparent);
-    background-repeat: repeat;
-    background-size: 400% 400%;
-    animation: starMove 150s linear infinite;
-    z-index: 0;
-  }
+        body {
+            background: var(--bg-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-  @keyframes starMove {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 400% 400%; }
-  }
+        .chat-layout {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
 
-  #nebula-container {
-    position: fixed;
-    top: 50%; left: 50%;
-    width: 200vw;
-    height: 200vh;
-    transform: translate(-50%, -50%);
-    overflow: visible;
-    pointer-events: none;
-    z-index: 1;
-  }
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
 
-  .nebula-layer {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.4;
-    animation-timing-function: linear;
-  }
-  .nebula1 {
-    width: 1200px;
-    height: 1200px;
-    background: radial-gradient(circle at 35% 45%, #aa44ff, #8833dd 40%, #6622bb 60%, transparent 80%);
-    top: 5%;
-    left: 15%;
-    animation: swirlRotate 180s linear infinite;
-  }
-  .nebula2 {
-    width: 1400px;
-    height: 1400px;
-    background: radial-gradient(circle at 65% 55%, #9955ff, #7744cc 50%, #5533aa 70%, transparent 85%);
-    top: 25%;
-    left: 45%;
-    animation: swirlRotateReverse 220s linear infinite;
-  }
-  .nebula3 {
-    width: 1000px;
-    height: 1000px;
-    background: radial-gradient(circle at 50% 50%, #cc77ff, #aa55dd 45%, #8833bb 65%, transparent 80%);
-    top: 55%;
-    left: 25%;
-    animation: swirlRotate 160s linear infinite;
-  }
-  .nebula4 {
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle at 70% 30%, #dd88ff, #bb66dd 50%, #9944bb 70%, transparent 85%);
-    top: 70%;
-    left: 65%;
-    animation: swirlRotateReverse 140s linear infinite;
-  }
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-  @keyframes swirlRotate {
-    from { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(180deg) scale(1.1); }
-    to { transform: rotate(360deg) scale(1); }
-  }
-  @keyframes swirlRotateReverse {
-    from { transform: rotate(360deg) scale(1); }
-    50% { transform: rotate(180deg) scale(1.1); }
-    to { transform: rotate(0deg) scale(1); }
-  }
+        .logo {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
 
-  #flying-objects {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 2;
-  }
+        .new-chat-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 16px;
+        }
 
-  .flying-object {
-    position: absolute;
-    opacity: 0;
-    filter: drop-shadow(0 0 15px rgba(185, 148, 255, 0.9));
-  }
+        .new-chat-btn:hover {
+            background: var(--bg-quaternary);
+        }
 
-  .foundation-glyph {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(45deg, #ff77dd, #dd55bb, #bb3399);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    animation: flyAcross 10s linear infinite;
-  }
+        .sidebar-content {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+        }
 
-  .star-fragment {
-    width: 60px;
-    height: 60px;
-    background: radial-gradient(circle, #ffffff, #ddddff, #aabbff);
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    animation: flyAcross 12s linear infinite;
-  }
+        .session-item {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 4px;
+            text-align: left;
+        }
 
-  .obsidian-shard {
-    width: 100px;
-    height: 40px;
-    background: linear-gradient(135deg, #2a2a3a, #4a4a5a, #1a1a2a, #3a3a4a);
-    clip-path: polygon(0% 50%, 20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%);
-    animation: flyAcross 14s linear infinite;
-  }
+        .session-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
 
-  .celestial-key {
-    width: 70px;
-    height: 70px;
-    background: radial-gradient(circle, #ffdd00, #ffcc22, #ff9900);
-    clip-path: circle(50%);
-    animation: flyAcross 11s linear infinite;
-  }
+        .session-item.active {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
 
-  .void-essence {
-    width: 50px;
-    height: 50px;
-    background: radial-gradient(circle, #330066, #220044, transparent);
-    border-radius: 50%;
-    animation: flyAcross 9s linear infinite;
-  }
+        .session-title {
+            flex: 1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
 
-  @keyframes flyAcross {
-    0% {
-      transform: translateX(-300px) translateY(var(--random-y, 0px)) rotate(0deg) scale(0.8);
-      opacity: 0;
-    }
-    8% {
-      opacity: 1;
-      transform: translateX(-200px) translateY(var(--random-y, 0px)) rotate(30deg) scale(1);
-    }
-    92% {
-      opacity: 1;
-      transform: translateX(calc(100vw + 100px)) translateY(var(--random-y, 0px)) rotate(330deg) scale(1);
-    }
-    100% {
-      transform: translateX(calc(100vw + 300px)) translateY(var(--random-y, 0px)) rotate(360deg) scale(0.8);
-      opacity: 0;
-    }
-  }
+        .session-actions {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
 
-  #main-text {
-    position: fixed;
-    top: 45%; left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 3;
-    max-width: 95vw;
-  }
+        .session-item:hover .session-actions {
+            opacity: 1;
+        }
 
-  #main-text h1 {
-    font-size: clamp(4.5rem, 9vw, 12rem);
-    color: #dd99ff;
-    text-shadow:
-      0 0 20px #dd99ff,
-      0 0 40px #cc77ff,
-      0 0 60px #bb55ff,
-      0 0 80px #aa33ff,
-      0 0 120px #9911ff,
-      0 0 160px #8800ff;
-    letter-spacing: 0.4em;
-    animation: intensePulse 3s ease-in-out infinite;
-    font-weight: 900;
-    text-transform: uppercase;
-    font-family: 'Exo 2', sans-serif;
-    user-select: none;
-    background: linear-gradient(45deg, #dd99ff, #cc77ff, #bb55ff);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 200% 200%;
-    animation: intensePulse 3s ease-in-out infinite, gradientShift 6s ease-in-out infinite;
-  }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
 
-  @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
+        .delete-btn:hover {
+            color: #f85149;
+            background: rgba(248, 81, 73, 0.1);
+        }
 
-  #countdown {
-    font-size: clamp(1.8rem, 3.5vw, 4rem);
-    color: #ffffff;
-    letter-spacing: 0.2em;
-    text-shadow:
-      0 0 10px #ffffff,
-      0 0 25px #ddbbff,
-      0 0 40px #cc99ff;
-    margin-top: 3rem;
-    font-weight: 600;
-    font-family: 'Orbitron', sans-serif;
-    background: linear-gradient(90deg, #ffffff, #ddbbff, #ffffff);
-    background-size: 200% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shimmer 4s ease-in-out infinite;
-  }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
 
-  @keyframes shimmer {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
+        .mobile-header {
+            display: none;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-  #subtitle-container {
-    position: fixed;
-    bottom: 15%;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    z-index: 4;
-    width: 95vw;
-  }
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+        }
 
-  .subtitle {
-    font-size: clamp(1.4rem, 3vw, 3rem);
-    color: #ffffff;
-    text-shadow:
-      0 0 15px #ffffff,
-      0 0 30px #ddbbff,
-      0 0 45px #cc99ff;
-    letter-spacing: 0.15em;
-    font-weight: 400;
-    opacity: 0;
-    animation: subtitleFade 5s ease-in-out;
-    font-family: 'Exo 2', sans-serif;
-    margin-bottom: 1rem;
-    font-style: italic;
-  }
+        .mobile-menu-btn:hover {
+            background: var(--bg-tertiary);
+        }
 
-  @keyframes subtitleFade {
-    0% { opacity: 0; transform: translateY(50px) scale(0.9); }
-    15% { opacity: 1; transform: translateY(0px) scale(1); }
-    85% { opacity: 1; transform: translateY(0px) scale(1); }
-    100% { opacity: 0; transform: translateY(-50px) scale(0.9); }
-  }
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
 
-  @keyframes intensePulse {
-    0%, 100% { 
-      text-shadow:
-        0 0 20px #dd99ff,
-        0 0 40px #cc77ff,
-        0 0 60px #bb55ff,
-        0 0 80px #aa33ff,
-        0 0 120px #9911ff,
-        0 0 160px #8800ff;
-      transform: scale(1);
-      filter: brightness(1);
-    }
-    50% { 
-      text-shadow:
-        0 0 30px #ffbbdd,
-        0 0 60px #ff99cc,
-        0 0 90px #ff77bb,
-        0 0 120px #ff55aa,
-        0 0 180px #ff3399,
-        0 0 240px #ff1188;
-      transform: scale(1.08);
-      filter: brightness(1.2);
-    }
-  }
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 100%;
+        }
 
-  .star {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle, #ffffff, #ddddff);
-    opacity: 0.9;
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
-    animation: starTwinkle 5s infinite ease-in-out;
-  }
-  @keyframes starTwinkle {
-    0%, 100% { opacity: 0.9; transform: scale(1); filter: brightness(1); }
-    50% { opacity: 0.3; transform: scale(1.4); filter: brightness(1.5); }
-  }
+        .message.user {
+            flex-direction: row-reverse;
+        }
 
-  #observant-eye {
-    position: fixed;
-    top: 15%;
-    right: 8%;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(ellipse at 50% 40%, #ffffff 15%, #ddbbff 35%, #bb99ff 55%, transparent 75%);
-    border-radius: 50%;
-    opacity: 0;
-    animation: eyeWatch 8s ease-in-out infinite;
-    z-index: 3;
-    filter: drop-shadow(0 0 30px #bb99ff);
-  }
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
 
-  #observant-eye::after {
-    content: '';
-    position: absolute;
-    top: 35%;
-    left: 45%;
-    width: 12px;
-    height: 12px;
-    background: #000000;
-    border-radius: 50%;
-    animation: pupilMove 3s ease-in-out infinite;
-  }
+        .message.ai .message-avatar {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
 
-  @keyframes pupilMove {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(-3px, -2px); }
-    50% { transform: translate(3px, 2px); }
-    75% { transform: translate(-2px, 3px); }
-  }
+        .message.user .message-avatar {
+            background: var(--user-bg);
+            color: white;
+        }
 
-  @keyframes eyeWatch {
-    0%, 85% { opacity: 0; transform: scale(0.7); }
-    10%, 75% { opacity: 0.8; transform: scale(1.1); }
-    15%, 70% { opacity: 1; transform: scale(1); }
-  }
+        .message-content {
+            flex: 1;
+            min-width: 0;
+        }
 
-  #aurora-effect {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    background: linear-gradient(45deg, 
-      transparent 0%, 
-      rgba(170, 68, 255, 0.1) 25%, 
-      transparent 50%, 
-      rgba(204, 119, 255, 0.08) 75%, 
-      transparent 100%);
-    background-size: 400% 400%;
-    animation: auroraFlow 20s ease-in-out infinite;
-  }
+        .message-bubble {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 0;
+            border-radius: 0;
+            word-wrap: break-word;
+            line-height: 1.6;
+            font-size: 14px;
+        }
 
-  @keyframes auroraFlow {
-    0%, 100% { background-position: 0% 50%; opacity: 0.3; }
-    50% { background-position: 100% 50%; opacity: 0.6; }
-  }
+        .message-stats {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
 
-  @media (max-width: 768px) {
-    #main-text h1 {
-      letter-spacing: 0.2em;
-    }
-    #countdown {
-      letter-spacing: 0.1em;
-      margin-top: 2rem;
-    }
-    .subtitle {
-      letter-spacing: 0.1em;
-    }
-  }
-</style>
+        .input-container {
+            padding: 24px;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+        }
+
+        .input-wrapper {
+            max-width: 768px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .message-input {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 12px 48px 12px 16px;
+            font-size: 14px;
+            resize: none;
+            min-height: 24px;
+            max-height: 200px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .message-input:focus {
+            border-color: var(--text-secondary);
+        }
+
+        .message-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .send-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--text-primary);
+            border: none;
+            color: var(--bg-primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .send-button:hover:not(:disabled) {
+            background: var(--accent-hover);
+        }
+
+        .send-button:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 14px;
+            padding: 16px 0;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 24px;
+        }
+
+        .empty-state h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 32px;
+            max-width: 400px;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 1000;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .messages-container {
+                padding: 16px;
+                gap: 16px;
+            }
+
+            .input-container {
+                padding: 16px;
+            }
+
+            .message {
+                gap: 8px;
+            }
+
+            .message-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+
+            .empty-state h2 {
+                font-size: 24px;
+            }
+
+            .empty-state p {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .messages-container {
+                padding: 12px;
+            }
+
+            .input-container {
+                padding: 12px;
+            }
+
+            .message-input {
+                padding: 10px 40px 10px 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .send-button {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+        }
+
+        /* Scrollbar styles */
+        .messages-container::-webkit-scrollbar,
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-container::-webkit-scrollbar-track,
+        .sidebar-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb,
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover,
+        .sidebar-content::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
 </head>
 <body>
+    <div class="chat-layout">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">AurixAI</div>
+            </div>
+            <div class="sidebar-content">
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fas fa-plus"></i>
+                    New chat
+                </button>
+                <div id="sessionsList">
+                    <!-- Sessions will be populated here -->
+                </div>
+            </div>
+        </div>
 
-  <div id="aurora-effect"></div>
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <div id="nebula-container">
-    <div class="nebula-layer nebula1"></div>
-    <div class="nebula-layer nebula2"></div>
-    <div class="nebula-layer nebula3"></div>
-    <div class="nebula-layer nebula4"></div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Mobile Header -->
+            <div class="mobile-header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">AurixAI</div>
+                <div></div>
+            </div>
 
-    <div class="star" style="top: 8%; left: 15%; width: 5px; height: 5px; animation-delay: 0s;"></div>
-    <div class="star" style="top: 12%; left: 35%; width: 3px; height: 3px; animation-delay: 1.5s;"></div>
-    <div class="star" style="top: 25%; left: 65%; width: 6px; height: 6px; animation-delay: 0.8s;"></div>
-    <div class="star" style="top: 35%; left: 80%; width: 2px; height: 2px; animation-delay: 2.8s;"></div>
-    <div class="star" style="top: 55%; left: 25%; width: 4px; height: 4px; animation-delay: 3.2s;"></div>
-    <div class="star" style="top: 75%; left: 70%; width: 5px; height: 5px; animation-delay: 4.1s;"></div>
-    <div class="star" style="top: 85%; left: 45%; width: 3px; height: 3px; animation-delay: 5.5s;"></div>
-    <div class="star" style="top: 20%; left: 85%; width: 4px; height: 4px; animation-delay: 6.2s;"></div>
-    <div class="star" style="top: 40%; left: 10%; width: 3px; height: 3px; animation-delay: 2.1s;"></div>
-    <div class="star" style="top: 60%; left: 90%; width: 5px; height: 5px; animation-delay: 4.8s;"></div>
-    <div class="star" style="top: 90%; left: 20%; width: 2px; height: 2px; animation-delay: 7.2s;"></div>
-    <div class="star" style="top: 5%; left: 50%; width: 4px; height: 4px; animation-delay: 1.2s;"></div>
-  </div>
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="empty-state" id="emptyState">
+                    <h2>AurixAI</h2>
+                    <p>How can I help you today?</p>
+                </div>
+            </div>
 
-  <div id="flying-objects"></div>
+            <!-- Input Container -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea class="message-input" id="messageInput" placeholder="Message AurixAI..." rows="1" maxlength="500"></textarea>
+                    <button class="send-button" id="sendButton">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <div id="observant-eye"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        class AurixAIChat {
+            constructor() {
+                this.apiUrl = 'https://cors-anywhere.herokuapp.com/https://spaceaimage.reaai.workers.dev/text';
+                this.currentSessionId = null;
+                this.sessions = this.loadSessions();
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.messagesContainer = document.getElementById('messagesContainer');
+                this.emptyState = document.getElementById('emptyState');
+                this.sidebar = document.getElementById('sidebar');
+                this.sidebarOverlay = document.getElementById('sidebarOverlay');
+                
+                this.initializeEventListeners();
+                this.renderSessions();
+                
+                // Start with empty state
+                this.showEmptyState();
+            }
 
-  <div id="main-text" role="main" aria-label="Elara Countdown Screen">
-    <h1>ELARA AWAKENS</h1>
-    <div id="countdown">CALCULATING TIME UNTIL AWAKENING...</div>
-  </div>
+            initializeEventListeners() {
+                // Send message events
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
 
-  <div id="subtitle-container">
-    <div id="current-subtitle" class="subtitle"></div>
-  </div>
+                // Auto-resize textarea
+                this.messageInput.addEventListener('input', () => {
+                    this.autoResizeTextarea();
+                });
 
-<script>
-const targetDate = new Date('June 14, 2025 18:00:00').getTime();
+                // New chat button
+                document.getElementById('newChatBtn').addEventListener('click', () => {
+                    this.createNewSession();
+                    this.closeMobileSidebar();
+                });
 
-// ===========================================
-// EASY SOUND CONFIGURATION
-// Add your scheduled sounds here!
-// ===========================================
-const scheduledSounds = [
-  {
-    minutesBefore: 60,          // 1 hour before
-    soundUrl: 'https://example.com/alert-1hour.mp3',
-    volume: 0.8,                // Optional: 0.0 to 1.0
-    loop: false                 // Optional: play once or loop
-  },
-  {
-    minutesBefore: 30,          // 30 minutes before
-    soundUrl: 'https://example.com/alert-30min.mp3',
-    volume: 0.9
-  },
-  {
-    minutesBefore: 10,          // 10 minutes before
-    soundUrl: 'https://example.com/alert-10min.mp3',
-    volume: 1.0
-  },
-  {
-    minutesBefore: 5,           // 5 minutes before
-    soundUrl: 'https://example.com/alert-5min.mp3',
-    volume: 1.0,
-    loop: true
-  },
-  {
-    minutesBefore: 1,           // 1 minute before
-    soundUrl: 'https://example.com/final-countdown.mp3',
-    volume: 1.0,
-    loop: true
-  }
-];
-// ===========================================
+                // Mobile menu
+                document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                    this.toggleMobileSidebar();
+                });
 
-const subtitles = [
-  "The stars no longer whisper—they scream of ancient truths...",
-  "Obsidian towers of Eldoria pulse with forgotten energies",
-  "The Foundation's trials await those who dare to seek",
-  "Nine Sacred Oaths guard the deepest secrets of existence",
-  "The Vestige stir from their millennia of slumber",
-  "Keybearers traverse the fracturing boundaries of reality",
-  "The Observant Eye pierces through veils of time itself",
-  "Temporal streams converge at the moment of awakening",
-  "The Archivum's sealed gates tremble with anticipation",
-  "Celestial ciphers reveal pathways to transcendence",
-  "Luminescent forests echo with primordial harmonies",
-  "Sky-borne isles drift toward their prophesied alignment",
-  "The Code of Unbinding resonates across dimensions...",
-  "Eldoria's eternal night surrenders to inevitable dawn",
-  "Whispers of the void speak of coming transformation",
-  "Ancient seals weaken as the awakening draws near"
-];
+                this.sidebarOverlay.addEventListener('click', () => {
+                    this.closeMobileSidebar();
+                });
 
-let currentSubtitleIndex = 0;
-let subtitleInterval;
-let triggeredSounds = new Set(); // Track which sounds have been played
-let currentAudio = null; // Track currently playing audio
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 768) {
+                        this.closeMobileSidebar();
+                    }
+                });
+            }
 
-const objectTypes = [
-  { class: 'foundation-glyph', weight: 3 },
-  { class: 'star-fragment', weight: 4 },
-  { class: 'obsidian-shard', weight: 2 },
-  { class: 'celestial-key', weight: 1 },
-  { class: 'void-essence', weight: 2 }
-];
+            autoResizeTextarea() {
+                this.messageInput.style.height = 'auto';
+                this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 200) + 'px';
+            }
 
-function playSound(soundConfig) {
-  try {
-    // Stop any currently playing looped sound
-    if (currentAudio && !currentAudio.paused) {
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-    }
-    
-    const audio = new Audio(soundConfig.soundUrl);
-    audio.volume = soundConfig.volume || 0.8;
-    audio.loop = soundConfig.loop || false;
-    
-    if (soundConfig.loop) {
-      currentAudio = audio; // Store reference for looped sounds
-    }
-    
-    audio.play().catch(error => {
-      console.log('Audio play failed (user interaction may be required):', error);
-    });
-    
-    console.log(`🔊 Playing sound: ${soundConfig.minutesBefore} minutes before event`);
-  } catch (error) {
-    console.error('Error playing sound:', error);
-  }
-}
+            toggleMobileSidebar() {
+                this.sidebar.classList.toggle('open');
+                this.sidebarOverlay.classList.toggle('active');
+            }
 
-function checkScheduledSounds(distance) {
-  const minutesRemaining = Math.floor(distance / (1000 * 60));
-  
-  scheduledSounds.forEach((soundConfig, index) => {
-    const soundId = `sound_${index}_${soundConfig.minutesBefore}`;
-    
-    // Check if we've reached the trigger time and haven't played this sound yet
-    if (minutesRemaining <= soundConfig.minutesBefore && !triggeredSounds.has(soundId)) {
-      triggeredSounds.add(soundId);
-      playSound(soundConfig);
-    }
-  });
-}
+            closeMobileSidebar() {
+                this.sidebar.classList.remove('open');
+                this.sidebarOverlay.classList.remove('active');
+            }
 
-function updateCountdown() {
-  const now = new Date().getTime();
-  const distance = targetDate - now;
+            loadSessions() {
+                try {
+                    const saved = JSON.parse(localStorage.getItem('aurixai_sessions') || '[]');
+                    return saved.length > 0 ? saved : [];
+                } catch (e) {
+                    return [];
+                }
+            }
 
-  if (distance < 0) {
-    document.getElementById('countdown').innerHTML = "THE AWAKENING HAS BEGUN";
-    document.getElementById('main-text').querySelector('h1').textContent = "ELARA LIVES";
-    
-    // Stop any looped sounds when event starts
-    if (currentAudio && !currentAudio.paused) {
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-    }
-    return;
-  }
+            saveSessions() {
+                try {
+                    localStorage.setItem('aurixai_sessions', JSON.stringify(this.sessions));
+                } catch (e) {
+                    console.warn('Could not save sessions to localStorage');
+                }
+            }
 
-  // Check for scheduled sounds
-  checkScheduledSounds(distance);
+            showEmptyState() {
+                this.emptyState.style.display = 'flex';
+                this.currentSessionId = null;
+            }
 
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            hideEmptyState() {
+                this.emptyState.style.display = 'none';
+            }
 
-  document.getElementById('countdown').innerHTML = 
-    `${days}D ${hours}H ${minutes}M ${seconds}S`;
+            createNewSession() {
+                this.currentSessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+                this.hideEmptyState();
+                this.messagesContainer.innerHTML = '';
+                
+                // Add to sessions list
+                const newSession = {
+                    id: this.currentSessionId,
+                    title: 'New chat',
+                    timestamp: new Date().toISOString(),
+                    messages: []
+                };
+                this.sessions.unshift(newSession);
+                this.saveSessions();
+                this.renderSessions();
+            }
 
-  const eyeElement = document.getElementById('observant-eye');
-  if (distance < 48 * 60 * 60 * 1000) {
-    eyeElement.style.opacity = '1';
-  } else {
-    eyeElement.style.opacity = '0';
-  }
-}
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || this.sendButton.disabled) return;
 
-function showNextSubtitle() {
-  const subtitleElement = document.getElementById('current-subtitle');
-  subtitleElement.textContent = subtitles[currentSubtitleIndex];
-  subtitleElement.style.animation = 'none';
-  
-  subtitleElement.offsetHeight;
-  subtitleElement.style.animation = 'subtitleFade 5s ease-in-out';
-  
-  currentSubtitleIndex = (currentSubtitleIndex + 1) % subtitles.length;
-}
+                // Create new session if needed
+                if (!this.currentSessionId) {
+                    this.createNewSession();
+                }
 
-function createFlyingObject() {
-  const container = document.getElementById('flying-objects');
-  
-  const totalWeight = objectTypes.reduce((sum, type) => sum + type.weight, 0);
-  let random = Math.random() * totalWeight;
-  let selectedType = objectTypes[0];
-  
-  for (const type of objectTypes) {
-    random -= type.weight;
-    if (random <= 0) {
-      selectedType = type;
-      break;
-    }
-  }
-  
-  const object = document.createElement('div');
-  object.className = `flying-object ${selectedType.class}`;
-  
-  const randomY = Math.random() * window.innerHeight;
-  const randomDelay = Math.random() * 4;
-  const randomSpeed = 9 + Math.random() * 8;
-  
-  object.style.top = randomY + 'px';
-  object.style.left = '-300px';
-  object.style.animationDelay = randomDelay + 's';
-  object.style.animationDuration = randomSpeed + 's';
-  object.style.setProperty('--random-y', (Math.random() - 0.5) * 300 + 'px');
-  
-  container.appendChild(object);
-  
-  setTimeout(() => {
-    if (object.parentElement) {
-      object.parentElement.removeChild(object);
-    }
-  }, (randomSpeed + randomDelay + 2) * 1000);
-}
+                this.addMessage(message, 'user');
+                this.messageInput.value = '';
+                this.messageInput.style.height = 'auto';
+                this.sendButton.disabled = true;
+                this.showTypingIndicator();
 
-// Enable audio on first user interaction
-document.addEventListener('click', function enableAudio() {
-  console.log('🔊 Audio enabled - scheduled sounds will now play');
-  document.removeEventListener('click', enableAudio);
-}, { once: true });
+                try {
+                    const response = await fetch(`${this.apiUrl}?message=${encodeURIComponent(message)}&session_id=${this.currentSessionId}`);
+                    const data = await response.json();
 
-updateCountdown();
-showNextSubtitle();
+                    this.hideTypingIndicator();
 
-setInterval(updateCountdown, 1000);
+                    if (data.success) {
+                        this.addMessage(data.generated_text, 'ai', {
+                            tokens: data.total_tokens,
+                            responseTime: data.response_time_ms
+                        });
+                        
+                        // Update session with messages
+                        this.updateSession(message, data.generated_text);
+                    } else {
+                        this.addMessage('Sorry, I encountered an error. Please try again.', 'ai');
+                    }
+                } catch (error) {
+                    this.hideTypingIndicator();
+                    this.addMessage('Network error. Please check your connection and try again.', 'ai');
+                    console.error('API Error:', error);
+                } finally {
+                    this.sendButton.disabled = false;
+                }
+            }
 
-subtitleInterval = setInterval(showNextSubtitle, 7000);
+            addMessage(text, sender, stats = null) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const avatar = sender === 'user' ? 'You' : 'AI';
+                const avatarIcon = sender === 'user' ? 'U' : 'A';
+                
+                let statsHtml = '';
+                if (stats) {
+                    statsHtml = `<div class="message-stats">${stats.tokens} tokens • ${stats.responseTime}ms</div>`;
+                }
+                
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">${avatarIcon}</div>
+                    <div class="message-content">
+                        <div class="message-bubble">${this.formatMessage(text)}</div>
+                        ${statsHtml}
+                    </div>
+                `;
+                
+                this.messagesContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
 
-function scheduleNextObject() {
-  const delay = 1500 + Math.random() * 3500;
-  setTimeout(() => {
-    createFlyingObject();
-    scheduleNextObject();
-  }, delay);
-}
+            formatMessage(text) {
+                // Basic markdown-like formatting
+                return text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/`(.*?)`/g, '<code style="background: var(--bg-tertiary); padding: 2px 4px; border-radius: 3px; font-family: monospace;">$1</code>')
+                    .replace(/\n/g, '<br>');
+            }
 
-scheduleNextObject();
+            showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message ai typing-indicator-message';
+                typingDiv.innerHTML = `
+                    <div class="message-avatar">A</div>
+                    <div class="message-content">
+                        <div class="typing-indicator">
+                            <div class="typing-dots">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                            <span>AurixAI is typing...</span>
+                        </div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(typingDiv);
+                this.scrollToBottom();
+            }
 
-for (let i = 0; i < 4; i++) {
-  setTimeout(() => createFlyingObject(), i * 800);
-}
-</script>
+            hideTypingIndicator() {
+                const typing = this.messagesContainer.querySelector('.typing-indicator-message');
+                if (typing) typing.remove();
+            }
 
+            scrollToBottom() {
+                requestAnimationFrame(() => {
+                    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                });
+            }
+
+            updateSession(userMessage, aiResponse) {
+                const session = this.sessions.find(s => s.id === this.currentSessionId);
+                if (session) {
+                    session.messages.push(
+                        { text: userMessage, sender: 'user', timestamp: new Date().toISOString() },
+                        { text: aiResponse, sender: 'ai', timestamp: new Date().toISOString() }
+                    );
+                    
+                    // Update title if it's still "New chat"
+                    if (session.title === 'New chat' && userMessage.length > 0) {
+                        session.title = userMessage.length > 30 ? userMessage.substring(0, 30) + '...' : userMessage;
+                    }
+                    
+                    session.timestamp = new Date().toISOString();
+                    this.saveSessions();
+                    this.renderSessions();
+                }
+            }
+
+            loadSession(sessionId) {
+                const session = this.sessions.find(s => s.id === sessionId);
+                if (!session) return;
+
+                this.currentSessionId = sessionId;
+                this.hideEmptyState();
+                this.messagesContainer.innerHTML = '';
+                
+                session.messages.forEach(msg => {
+                    this.addMessage(msg.text, msg.sender);
+                });
+                
+                this.renderSessions();
+                this.closeMobileSidebar();
+            }
+
+            renderSessions() {
+                const sessionsList = document.getElementById('sessionsList');
+                if (this.sessions.length === 0) {
+                    sessionsList.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 16px; font-size: 14px;">No conversations yet</div>';
+                    return;
+                }
+
+                sessionsList.innerHTML = this.sessions.map(session => `
+                    <div class="session-item ${session.id === this.currentSessionId ? 'active' : ''}" 
+                         onclick="chatApp.loadSession('${session.id}')">
+                        <div class="session-title">${this.escapeHtml(session.title)}</div>
+                        <div class="session-actions">
+                            <button class="delete-btn" 
+                                    onclick="event.stopPropagation(); chatApp.deleteSession('${session.id}')"
+                                    title="Delete chat">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            deleteSession(sessionId) {
+                if (confirm('Delete this chat?')) {
+                    this.sessions = this.sessions.filter(s => s.id !== sessionId);
+                    this.saveSessions();
+                    this.renderSessions();
+                    
+                    if (sessionId === this.currentSessionId) {
+                        this.showEmptyState();
+                    }
+                }
+            }
+        }
+
+        // Initialize the app
+        const chatApp = new AurixAIChat();
+    </script>
 </body>
 </html>
