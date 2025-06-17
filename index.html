@@ -524,3 +524,305 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <script>
+        class AurixAIChat {
+            constructor() {
+                this.apiUrl = 'https://corsproxy.io/?https://spaceaimage.reaai.workers.dev/text';
+                this.currentSessionId = null;
+                this.sessions = this.loadSessions();
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.messagesContainer = document.getElementById('messagesContainer');
+                this.emptyState = document.getElementById('emptyState');
+                this.sidebar = document.getElementById('sidebar');
+                this.sidebarOverlay = document.getElementById('sidebarOverlay');
+                
+                this.initializeEventListeners();
+                this.renderSessions();
+                
+                // Start with empty state
+                this.showEmptyState();
+            }
+
+            initializeEventListeners() {
+                // Send message events
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+
+                // Auto-resize textarea
+                this.messageInput.addEventListener('input', () => {
+                    this.autoResizeTextarea();
+                });
+
+                // New chat button
+                document.getElementById('newChatBtn').addEventListener('click', () => {
+                    this.createNewSession();
+                    this.closeMobileSidebar();
+                });
+
+                // Mobile menu
+                document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                    this.toggleMobileSidebar();
+                });
+
+                this.sidebarOverlay.addEventListener('click', () => {
+                    this.closeMobileSidebar();
+                });
+
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 768) {
+                        this.closeMobileSidebar();
+                    }
+                });
+            }
+
+            autoResizeTextarea() {
+                this.messageInput.style.height = 'auto';
+                this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 200) + 'px';
+            }
+
+            toggleMobileSidebar() {
+                this.sidebar.classList.toggle('open');
+                this.sidebarOverlay.classList.toggle('active');
+            }
+
+            closeMobileSidebar() {
+                this.sidebar.classList.remove('open');
+                this.sidebarOverlay.classList.remove('active');
+            }
+
+            loadSessions() {
+                try {
+                    const saved = JSON.parse(localStorage.getItem('aurixai_sessions') || '[]');
+                    return saved.length > 0 ? saved : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            saveSessions() {
+                try {
+                    localStorage.setItem('aurixai_sessions', JSON.stringify(this.sessions));
+                } catch (e) {
+                    console.warn('Could not save sessions to localStorage');
+                }
+            }
+
+            showEmptyState() {
+                this.emptyState.style.display = 'flex';
+                this.currentSessionId = null;
+            }
+
+            hideEmptyState() {
+                this.emptyState.style.display = 'none';
+            }
+
+            createNewSession() {
+                this.currentSessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+                this.hideEmptyState();
+                this.messagesContainer.innerHTML = '';
+                
+                // Add to sessions list
+                const newSession = {
+                    id: this.currentSessionId,
+                    title: 'New chat',
+                    timestamp: new Date().toISOString(),
+                    messages: []
+                };
+                this.sessions.unshift(newSession);
+                this.saveSessions();
+                this.renderSessions();
+            }
+
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || this.sendButton.disabled) return;
+
+                // Create new session if needed
+                if (!this.currentSessionId) {
+                    this.createNewSession();
+                }
+
+                this.addMessage(message, 'user');
+                this.messageInput.value = '';
+                this.messageInput.style.height = 'auto';
+                this.sendButton.disabled = true;
+                this.showTypingIndicator();
+
+                try {
+                    const response = await fetch(`${this.apiUrl}?message=${encodeURIComponent(message)}&session_id=${this.currentSessionId}`);
+                    const data = await response.json();
+
+                    this.hideTypingIndicator();
+
+                    if (data.success) {
+                        this.addMessage(data.generated_text, 'ai', {
+                            tokens: data.total_tokens,
+                            responseTime: data.response_time_ms
+                        });
+                        
+                        // Update session with messages
+                        this.updateSession(message, data.generated_text);
+                    } else {
+                        this.addMessage('Sorry, I encountered an error. Please try again.', 'ai');
+                    }
+                } catch (error) {
+                    this.hideTypingIndicator();
+                    this.addMessage('Network error. Please check your connection and try again.', 'ai');
+                    console.error('API Error:', error);
+                } finally {
+                    this.sendButton.disabled = false;
+                }
+            }
+
+            addMessage(text, sender, stats = null) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const avatar = sender === 'user' ? 'You' : 'AI';
+                const avatarIcon = sender === 'user' ? 'U' : 'A';
+                
+                let statsHtml = '';
+                if (stats) {
+                    statsHtml = `<div class="message-stats">${stats.tokens} tokens • ${stats.responseTime}ms</div>`;
+                }
+                
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">${avatarIcon}</div>
+                    <div class="message-content">
+                        <div class="message-bubble">${this.formatMessage(text)}</div>
+                        ${statsHtml}
+                    </div>
+                `;
+                
+                this.messagesContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            formatMessage(text) {
+                // Basic markdown-like formatting
+                return text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/`(.*?)`/g, '<code style="background: var(--bg-tertiary); padding: 2px 4px; border-radius: 3px; font-family: monospace;">$1</code>')
+                    .replace(/\n/g, '<br>');
+            }
+
+            showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message ai typing-indicator-message';
+                typingDiv.innerHTML = `
+                    <div class="message-avatar">A</div>
+                    <div class="message-content">
+                        <div class="typing-indicator">
+                            <div class="typing-dots">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                            <span>AurixAI is typing...</span>
+                        </div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(typingDiv);
+                this.scrollToBottom();
+            }
+
+            hideTypingIndicator() {
+                const typing = this.messagesContainer.querySelector('.typing-indicator-message');
+                if (typing) typing.remove();
+            }
+
+            scrollToBottom() {
+                requestAnimationFrame(() => {
+                    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                });
+            }
+
+            updateSession(userMessage, aiResponse) {
+                const session = this.sessions.find(s => s.id === this.currentSessionId);
+                if (session) {
+                    session.messages.push(
+                        { text: userMessage, sender: 'user', timestamp: new Date().toISOString() },
+                        { text: aiResponse, sender: 'ai', timestamp: new Date().toISOString() }
+                    );
+                    
+                    // Update title if it's still "New chat"
+                    if (session.title === 'New chat' && userMessage.length > 0) {
+                        session.title = userMessage.length > 30 ? userMessage.substring(0, 30) + '...' : userMessage;
+                    }
+                    
+                    session.timestamp = new Date().toISOString();
+                    this.saveSessions();
+                    this.renderSessions();
+                }
+            }
+
+            loadSession(sessionId) {
+                const session = this.sessions.find(s => s.id === sessionId);
+                if (!session) return;
+
+                this.currentSessionId = sessionId;
+                this.hideEmptyState();
+                this.messagesContainer.innerHTML = '';
+                
+                session.messages.forEach(msg => {
+                    this.addMessage(msg.text, msg.sender);
+                });
+                
+                this.renderSessions();
+                this.closeMobileSidebar();
+            }
+
+            renderSessions() {
+                const sessionsList = document.getElementById('sessionsList');
+                if (this.sessions.length === 0) {
+                    sessionsList.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 16px; font-size: 14px;">No conversations yet</div>';
+                    return;
+                }
+
+                sessionsList.innerHTML = this.sessions.map(session => `
+                    <div class="session-item ${session.id === this.currentSessionId ? 'active' : ''}" 
+                         onclick="chatApp.loadSession('${session.id}')">
+                        <div class="session-title">${this.escapeHtml(session.title)}</div>
+                        <div class="session-actions">
+                            <button class="delete-btn" 
+                                    onclick="event.stopPropagation(); chatApp.deleteSession('${session.id}')"
+                                    title="Delete chat">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            deleteSession(sessionId) {
+                if (confirm('Delete this chat?')) {
+                    this.sessions = this.sessions.filter(s => s.id !== sessionId);
+                    this.saveSessions();
+                    this.renderSessions();
+                    
+                    if (sessionId === this.currentSessionId) {
+                        this.showEmptyState();
+                    }
+                }
+            }
+        }
+
+        // Initialize the app
+        const chatApp = new AurixAIChat();
+    </script>
+</body>
+</html>
