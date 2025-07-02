@@ -3,532 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AurixAI - Login</title>
+    <title>Dayride Transit Company - Developer Application</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #1a1a2e;
-            --bg-tertiary: #16213e;
-            --bg-quaternary: #1e2a4a;
-            --bg-glass: rgba(255, 255, 255, 0.05);
-            --bg-glass-hover: rgba(255, 255, 255, 0.08);
+            --primary-dark: #1a1a1a;
+            --secondary-dark: #2d2d2d;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
             --text-primary: #ffffff;
-            --text-secondary: #a0a9c0;
-            --text-muted: #6b7280;
-            --border: rgba(255, 255, 255, 0.1);
-            --border-light: rgba(255, 255, 255, 0.05);
-            --accent: #00d4ff;
-            --accent-hover: #00b8e6;
-            --button-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --button-hover: linear-gradient(135deg, #5a6fd8 0%, #6b4190 100%);
-            --user-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --user-hover: linear-gradient(135deg, #5a6fd8 0%, #6b4190 100%);
-            --google-bg: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-            --google-hover: linear-gradient(135deg, #ff5252 0%, #e55100 100%);
-            --error: #ff6b6b;
-            --error-bg: rgba(255, 107, 107, 0.1);
-            --success: #4ecdc4;
-            --success-bg: rgba(78, 205, 196, 0.1);
-            
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.2);
-            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.3);
-            --shadow-glow: 0 0 30px rgba(102, 126, 234, 0.3);
+            --text-secondary: #a1a1aa;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg-primary);
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, var(--bg-primary) 0%, #0f0f1a 50%, var(--bg-primary) 100%);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-gradient-custom {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-container {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow-x: hidden;
+            padding: 2rem 1rem;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.15) 0%, transparent 50%);
-            animation: backgroundShift 20s ease-in-out infinite;
-            z-index: -1;
-        }
-
-        @keyframes backgroundShift {
-            0%, 100% { 
-                background: 
-                    radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.15) 0%, transparent 50%);
-            }
-            50% { 
-                background: 
-                    radial-gradient(circle at 80% 20%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
-                    radial-gradient(circle at 20% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%);
-            }
-        }
-
-        .login-container {
-            background: var(--bg-glass);
+        .question-card {
+            background: rgba(45, 45, 45, 0.8);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
             width: 100%;
-            max-width: 420px;
-            box-shadow: var(--shadow-xl), var(--shadow-glow);
-            position: relative;
-            animation: containerEntry 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-            overflow: hidden;
+            max-width: 600px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: borderGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes containerEntry {
-            0% {
-                opacity: 0;
-                transform: translateY(30px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        .logo-section {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: logoEntry 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
-        }
-
-        @keyframes logoEntry {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo {
-            font-size: 36px;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--accent) 0%, #667eea 50%, #764ba2 100%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 3s ease-in-out infinite;
-            letter-spacing: -0.02em;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .logo-subtitle {
-            color: var(--text-secondary);
-            font-size: 16px;
-            font-weight: 400;
-            opacity: 0.8;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-            animation: formEntry 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-        }
-
-        .form-group:nth-child(1) { animation-delay: 0.3s; }
-        .form-group:nth-child(2) { animation-delay: 0.4s; }
-
-        @keyframes formEntry {
-            0% {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .form-label {
-            display: block;
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: 0.01em;
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.4);
         }
 
         .form-input {
-            width: 100%;
-            background: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 16px 20px;
-            font-size: 15px;
-            font-weight: 400;
-            outline: none;
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            position: relative;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
         }
 
         .form-input:focus {
-            border-color: var(--accent);
-            background: var(--bg-glass-hover);
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1), var(--shadow-md);
-            transform: translateY(-1px);
+            outline: none;
+            border-color: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
         }
 
-        .form-input::placeholder {
-            color: var(--text-muted);
-            font-weight: 400;
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
         }
 
-        .form-input.error {
-            border-color: var(--error);
-            box-shadow: 0 0 0 3px var(--error-bg);
-            animation: shake 0.5s ease-in-out;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .error-message {
-            color: var(--error);
-            font-size: 13px;
-            font-weight: 500;
-            margin-top: 8px;
-            display: none;
-            opacity: 0;
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
-        }
-
-        .error-message.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .login-button {
-            width: 100%;
-            background: var(--user-bg);
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
             border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: white;
-            border-radius: 12px;
-            padding: 16px 20px;
-            font-size: 15px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            animation: buttonEntry 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
         }
 
-        .login-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .login-button:hover::before {
-            left: 100%;
-        }
-
-        .login-button:hover:not(:disabled) {
-            background: var(--user-hover);
+        .btn-primary-custom:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg), 0 0 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
         }
 
-        .login-button:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        .login-button:disabled {
-            background: var(--text-muted);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        @keyframes buttonEntry {
-            0% {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .divider {
-            text-align: center;
-            margin: 32px 0;
-            position: relative;
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 500;
-            animation: dividerEntry 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-        }
-
-        .divider span {
-            background: var(--bg-secondary);
-            backdrop-filter: blur(10px);
-            padding: 0 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes dividerEntry {
-            0% {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .google-button {
-            width: 100%;
-            background: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
+        .btn-secondary-custom {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
             color: var(--text-primary);
-            border-radius: 12px;
-            padding: 16px 20px;
-            font-size: 15px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-custom:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-bar-custom {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 28px;
-            position: relative;
-            overflow: hidden;
-            animation: buttonEntry 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
         }
 
-        .google-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
         }
 
-        .google-button:hover::before {
-            left: 100%;
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
         }
 
-        .google-button:hover {
-            background: var(--bg-glass-hover);
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        .google-icon {
-            width: 20px;
-            height: 20px;
-            transition: transform 0.3s ease;
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        .google-button:hover .google-icon {
-            transform: rotate(5deg) scale(1.1);
-        }
-
-        .forgot-password {
-            text-align: center;
-            margin-bottom: 28px;
-            animation: linkEntry 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
-        }
-
-        .forgot-password a {
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .forgot-password a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .forgot-password a:hover::after {
-            width: 100%;
-        }
-
-        .signup-link {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 400;
-            animation: linkEntry 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
-        }
-
-        .signup-link a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .signup-link a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .signup-link a:hover::after {
-            width: 100%;
-        }
-
-        @keyframes linkEntry {
-            0% {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .loading-spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid currentColor;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .success-message {
-            background: var(--success-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--success);
-            color: var(--success);
-            padding: 16px 20px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 24px;
-            display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            animation: successPulse 2s ease-in-out infinite;
-        }
-
-        .success-message.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @keyframes successPulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(78, 205, 196, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(78, 205, 196, 0.5); }
-        }
-
-        /* Floating particles animation */
-        .particles {
+        .floating-shapes {
             position: fixed;
             top: 0;
             left: 0;
@@ -538,363 +182,781 @@
             z-index: -1;
         }
 
-        .particle {
+        .shape {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
             border-radius: 50%;
-            opacity: 0.3;
-            animation: float 15s linear infinite;
+            animation: float 6s ease-in-out infinite;
         }
 
-        .particle:nth-child(odd) {
-            background: #667eea;
-            animation-duration: 20s;
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
         }
 
-        .particle:nth-child(3n) {
-            background: #764ba2;
-            animation-duration: 25s;
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.3;
-            }
-            90% {
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg);
-                opacity: 0;
-            }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 32px 24px;
-                margin: 20px;
-                border-radius: 20px;
-                max-width: none;
-            }
-
-            .logo {
-                font-size: 32px;
-            }
-
-            .form-input {
-                font-size: 16px; /* Prevents zoom on iOS */
-                padding: 14px 18px;
-            }
-
-            .login-button,
-            .google-button {
-                padding: 14px 18px;
-            }
+        .logo-text {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1rem;
         }
 
-        /* High-performance blur for supported browsers */
-        @supports (backdrop-filter: blur(20px)) {
-            .login-container {
-                background: rgba(255, 255, 255, 0.05);
-            }
+        .subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
         }
 
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .select-custom {
+            background: var(--secondary-dark);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .select-custom:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: rgba(45, 45, 45, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .select-custom option {
+            background: var(--secondary-dark);
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            margin-right: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-custom.checked {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-color: var(--accent-blue);
+        }
+
+        .checkbox-custom.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid var(--accent-blue);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- Floating particles -->
-    <div class="particles">
-        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
-        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
-        <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
-        <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
-        <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
-        <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
-        <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
 
-    <div class="login-container">
-        <div class="logo-section">
-            <div class="logo">AurixAI</div>
-            <div class="logo-subtitle">Sign in to your account</div>
-        </div>
-
-        <div id="successMessage" class="success-message">
-            Welcome back! Redirecting to dashboard...
-        </div>
-
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email" class="form-label">Email</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    class="form-input" 
-                    placeholder="Enter your email"
-                    required
-                >
-                <div id="emailError" class="error-message">Please enter a valid email</div>
+    <div class="form-container">
+        <div class="question-card animate__animated animate__fadeInUp">
+            <div class="logo-text">
+                <i class="fas fa-bus"></i> Dayride Transit
+            </div>
+            <div class="subtitle">Developer Application Portal</div>
+            
+            <div class="progress-bar-custom">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
             </div>
 
-            <div class="form-group">
-                <label for="password" class="form-label">Password</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    class="form-input" 
-                    placeholder="Enter your password"
-                    required
-                >
-                <div id="passwordError" class="error-message">Password is required</div>
-            </div>
+            <form id="applicationForm">
+                <!-- Question 1: Discord Username -->
+                <div class="question-step active" id="step1">
+                    <div class="question-number">1</div>
+                    <h3 class="mb-3">What's your Discord username?</h3>
+                    <p class="text-secondary mb-3">We'll use this to contact you about your application.</p>
+                    <input type="text" class="form-input" id="discordUsername" placeholder="e.g., username#1234 or @username" required>
+                    <div class="error-message" id="error1"></div>
+                </div>
 
-            <button type="submit" id="loginBtn" class="login-button">
-                <span id="loginText">Sign In</span>
-                <div id="loginSpinner" class="loading-spinner" style="display: none;"></div>
-            </button>
-        </form>
+                <!-- Question 2: Roblox Username -->
+                <div class="question-step" id="step2" style="display: none;">
+                    <div class="question-number">2</div>
+                    <h3 class="mb-3">What's your Roblox username?</h3>
+                    <p class="text-secondary mb-3">This helps us verify your identity and experience.</p>
+                    <input type="text" class="form-input" id="robloxUsername" placeholder="Enter your Roblox username" required>
+                    <div class="error-message" id="error2"></div>
+                </div>
 
-        <div class="forgot-password">
-            <a href="#" id="forgotPasswordLink">Forgot your password?</a>
-        </div>
+                <!-- Question 3: Experience Level -->
+                <div class="question-step" id="step3" style="display: none;">
+                    <div class="question-number">3</div>
+                    <h3 class="mb-3">What's your development experience level?</h3>
+                    <p class="text-secondary mb-3">Help us understand your current skill level.</p>
+                    <select class="select-custom" id="experienceLevel" required>
+                        <option value="">Select your experience level</option>
+                        <option value="beginner">Beginner (0-6 months)</option>
+                        <option value="intermediate">Intermediate (6 months - 2 years)</option>
+                        <option value="advanced">Advanced (2-5 years)</option>
+                        <option value="expert">Expert (5+ years)</option>
+                    </select>
+                    <div class="error-message" id="error3"></div>
+                </div>
 
-        <div class="divider">
-            <span>or</span>
-        </div>
+                <!-- Question 4: Specialization -->
+                <div class="question-step" id="step4" style="display: none;">
+                    <div class="question-number">4</div>
+                    <h3 class="mb-3">What's your primary development specialization?</h3>
+                    <p class="text-secondary mb-3">Choose the area you're most skilled in.</p>
+                    <select class="select-custom" id="specialization" required>
+                        <option value="">Select your specialization</option>
+                        <option value="scripting">Scripting (Lua/Programming)</option>
+                        <option value="building">Building & Design</option>
+                        <option value="ui-ux">UI/UX Design</option>
+                        <option value="modeling">3D Modeling</option>
+                        <option value="game-design">Game Design</option>
+                        <option value="animation">Animation</option>
+                        <option value="vfx">Visual Effects</option>
+                        <option value="sound">Sound Design</option>
+                        <option value="full-stack">Full-Stack Development</option>
+                    </select>
+                    <div class="error-message" id="error4"></div>
+                </div>
 
-        <button id="googleSignIn" class="google-button">
-            <svg class="google-icon" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            Continue with Google
-        </button>
+                <!-- Question 5: Previous Projects -->
+                <div class="question-step" id="step5" style="display: none;">
+                    <div class="question-number">5</div>
+                    <h3 class="mb-3">Tell us about your previous projects</h3>
+                    <p class="text-secondary mb-3">Share any games, scripts, or assets you've worked on.</p>
+                    <textarea class="form-input form-textarea" id="previousProjects" placeholder="Describe your past projects, including links to games, portfolio, or GitHub if available..." required></textarea>
+                    <div class="error-message" id="error5"></div>
+                </div>
 
-        <div class="signup-link">
-            Don't have an account? <a href="#" id="signupLink">Sign up</a>
+                <!-- Question 6: Availability -->
+                <div class="question-step" id="step6" style="display: none;">
+                    <div class="question-number">6</div>
+                    <h3 class="mb-3">How many hours per week can you commit?</h3>
+                    <p class="text-secondary mb-3">Help us understand your availability for development work.</p>
+                    <select class="select-custom" id="availability" required>
+                        <option value="">Select your availability</option>
+                        <option value="1-5">1-5 hours/week (Casual)</option>
+                        <option value="5-10">5-10 hours/week (Part-time)</option>
+                        <option value="10-20">10-20 hours/week (Regular)</option>
+                        <option value="20-30">20-30 hours/week (Dedicated)</option>
+                        <option value="30+">30+ hours/week (Full-time)</option>
+                    </select>
+                    <div class="error-message" id="error6"></div>
+                </div>
+
+                <!-- Question 7: Motivation -->
+                <div class="question-step" id="step7" style="display: none;">
+                    <div class="question-number">7</div>
+                    <h3 class="mb-3">Why do you want to join Dayride Transit Company?</h3>
+                    <p class="text-secondary mb-3">Tell us what motivates you to work on transportation games.</p>
+                    <textarea class="form-input form-textarea" id="motivation" placeholder="Share your passion for transportation games and what excites you about joining our team..." required></textarea>
+                    <div class="error-message" id="error7"></div>
+                </div>
+
+                <!-- Question 8: Skills -->
+                <div class="question-step" id="step8" style="display: none;">
+                    <div class="question-number">8</div>
+                    <h3 class="mb-3">What specific skills can you bring to our team?</h3>
+                    <p class="text-secondary mb-3">List your technical and creative abilities.</p>
+                    <textarea class="form-input form-textarea" id="skills" placeholder="List your programming languages, tools, software knowledge, or any unique skills you possess..." required></textarea>
+                    <div class="error-message" id="error8"></div>
+                </div>
+
+                <!-- Question 9: Portfolio -->
+                <div class="question-step" id="step9" style="display: none;">
+                    <div class="question-number">9</div>
+                    <h3 class="mb-3">Share your portfolio or work samples</h3>
+                    <p class="text-secondary mb-3">Provide links to your best work (optional but recommended).</p>
+                    <textarea class="form-input form-textarea" id="portfolio" placeholder="Include links to your games, GitHub, DevForum posts, or any other relevant work..."></textarea>
+                    <div class="error-message" id="error9"></div>
+                </div>
+
+                <!-- Question 10: Additional Info -->
+                <div class="question-step" id="step10" style="display: none;">
+                    <div class="question-number">10</div>
+                    <h3 class="mb-3">Is there anything else you'd like us to know?</h3>
+                    <p class="text-secondary mb-3">Any additional information that might help your application.</p>
+                    <textarea class="form-input form-textarea" id="additionalInfo" placeholder="Share any additional information, achievements, or questions you have..."></textarea>
+                    <div class="error-message" id="error10"></div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-secondary-custom" id="prevBtn" onclick="previousStep()" style="display: none;">
+                        <i class="fas fa-arrow-left me-2"></i>Previous
+                    </button>
+                    <div></div>
+                    <button type="button" class="btn btn-primary-custom" id="nextBtn" onclick="nextStep()">
+                        Next<i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+
+                <div class="loading-spinner" id="loadingSpinner"></div>
+                <div class="success-message" id="successMessage"></div>
+                <div class="error-message" id="generalError"></div>
+            </form>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            signInWithPopup, 
-            GoogleAuthProvider,
-            sendPasswordResetEmail 
-        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentStep = 1;
+        const totalSteps = 10;
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R'; // Replace with your Discord webhook URL
 
-        // Your Firebase config - Replace with your actual config
-        const firebaseConfig = {
-  apiKey: "AIzaSyCbJ9CKd_Q6FvWdoR6Wgy0rrIGqGokKmbg",
-  authDomain: "cmlfg-8d8e8.firebaseapp.com",
-  databaseURL: "https://cmlfg-8d8e8-default-rtdb.firebaseio.com",
-  projectId: "cmlfg-8d8e8",
-  storageBucket: "cmlfg-8d8e8.appspot.com",
-  messagingSenderId: "982484793832",
-  appId: "1:982484793832:web:7ea55a1bce1fd93f07cc5d",
-  measurementId: "G-N45HDVJ98T"
+        const formData = {
+            discordUsername: '',
+            robloxUsername: '',
+            experienceLevel: '',
+            specialization: '',
+            previousProjects: '',
+            availability: '',
+            motivation: '',
+            skills: '',
+            portfolio: '',
+            additionalInfo: ''
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
-
-        // DOM elements
-        const loginForm = document.getElementById('loginForm');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginText = document.getElementById('loginText');
-        const loginSpinner = document.getElementById('loginSpinner');
-        const googleSignInBtn = document.getElementById('googleSignIn');
-        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
-        const successMessage = document.getElementById('successMessage');
-
-        // Error elements
-        const emailError = document.getElementById('emailError');
-        const passwordError = document.getElementById('passwordError');
-
-        // Utility functions
-        function showError(input, errorElement, message) {
-            input.classList.add('error');
-            errorElement.textContent = message;
-            errorElement.classList.add('show');
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
         }
 
-        function hideError(input, errorElement) {
-            input.classList.remove('error');
-            errorElement.classList.remove('show');
-        }
-
-        function setLoading(isLoading) {
-            loginBtn.disabled = isLoading;
-            googleSignInBtn.disabled = isLoading;
+        function validateStep(step) {
+            const errorElement = document.getElementById(`error${step}`);
+            errorElement.style.display = 'none';
             
-            if (isLoading) {
-                loginText.style.display = 'none';
-                loginSpinner.style.display = 'block';
-            } else {
-                loginText.style.display = 'block';
-                loginSpinner.style.display = 'none';
+            let isValid = true;
+            let errorMessage = '';
+
+            switch(step) {
+                case 1:
+                    const discord = document.getElementById('discordUsername').value.trim();
+                    if (!discord) {
+                        errorMessage = 'Please enter your Discord username.';
+                        isValid = false;
+                    } else if (discord.length < 2) {
+                        errorMessage = 'Discord username seems too short.';
+                        isValid = false;
+                    }
+                    formData.discordUsername = discord;
+                    break;
+                case 2:
+                    const roblox = document.getElementById('robloxUsername').value.trim();
+                    if (!roblox) {
+                        errorMessage = 'Please enter your Roblox username.';
+                        isValid = false;
+                    } else if (roblox.length < 3) {
+                        errorMessage = 'Roblox username must be at least 3 characters.';
+                        isValid = false;
+                    }
+                    formData.robloxUsername = roblox;
+                    break;
+                case 3:
+                    const experience = document.getElementById('experienceLevel').value;
+                    if (!experience) {
+                        errorMessage = 'Please select your experience level.';
+                        isValid = false;
+                    }
+                    formData.experienceLevel = experience;
+                    break;
+                case 4:
+                    const specialization = document.getElementById('specialization').value;
+                    if (!specialization) {
+                        errorMessage = 'Please select your specialization.';
+                        isValid = false;
+                    }
+                    formData.specialization = specialization;
+                    break;
+                case 5:
+                    const projects = document.getElementById('previousProjects').value.trim();
+                    if (!projects) {
+                        errorMessage = 'Please describe your previous projects.';
+                        isValid = false;
+                    } else if (projects.length < 20) {
+                        errorMessage = 'Please provide more details about your projects.';
+                        isValid = false;
+                    }
+                    formData.previousProjects = projects;
+                    break;
+                case 6:
+                    const availability = document.getElementById('availability').value;
+                    if (!availability) {
+                        errorMessage = 'Please select your availability.';
+                        isValid = false;
+                    }
+                    formData.availability = availability;
+                    break;
+                case 7:
+                    const motivation = document.getElementById('motivation').value.trim();
+                    if (!motivation) {
+                        errorMessage = 'Please share your motivation for joining.';
+                        isValid = false;
+                    } else if (motivation.length < 30) {
+                        errorMessage = 'Please provide more details about your motivation.';
+                        isValid = false;
+                    }
+                    formData.motivation = motivation;
+                    break;
+                case 8:
+                    const skills = document.getElementById('skills').value.trim();
+                    if (!skills) {
+                        errorMessage = 'Please list your skills.';
+                        isValid = false;
+                    } else if (skills.length < 20) {
+                        errorMessage = 'Please provide more details about your skills.';
+                        isValid = false;
+                    }
+                    formData.skills = skills;
+                    break;
+                case 9:
+                    formData.portfolio = document.getElementById('portfolio').value.trim();
+                    break;
+                case 10:
+                    formData.additionalInfo = document.getElementById('additionalInfo').value.trim();
+                    break;
             }
+
+            if (!isValid) {
+                errorElement.textContent = errorMessage;
+                errorElement.style.display = 'block';
+                errorElement.classList.add('animate__animated', 'animate__shakeX');
+                setTimeout(() => {
+                    errorElement.classList.remove('animate__animated', 'animate__shakeX');
+                }, 1000);
+            }
+
+            return isValid;
         }
 
-        function showSuccess() {
-            successMessage.classList.add('show');
+        function nextStep() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+
+            if (currentStep === totalSteps) {
+                submitApplication();
+                return;
+            }
+
+            // Hide current step
+            document.getElementById(`step${currentStep}`).style.display = 'none';
+            
+            // Show next step
+            currentStep++;
+            const nextStepElement = document.getElementById(`step${currentStep}`);
+            nextStepElement.style.display = 'block';
+            nextStepElement.classList.add('animate__animated', 'slide-in-right');
+            
+            updateProgress();
+            updateButtons();
+
+            // Remove animation class after animation completes
             setTimeout(() => {
-                // Redirect to dashboard or main app
-                window.location.href = '/app'; // Change this to your app's main page
-            }, 2000);
+                nextStepElement.classList.remove('animate__animated', 'slide-in-right');
+            }, 600);
         }
 
-        // Email/Password login
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // Reset errors
-            hideError(emailInput, emailError);
-            hideError(passwordInput, passwordError);
-            
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
-            
-            // Basic validation
-            if (!email) {
-                showError(emailInput, emailError, 'Email is required');
-                return;
-            }
-            
-            if (!password) {
-                showError(passwordInput, passwordError, 'Password is required');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showError(passwordInput, passwordError, 'Password must be at least 6 characters');
-                return;
-            }
-            
-            setLoading(true);
-            
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                console.log('User signed in:', userCredential.user);
-                showSuccess();
-            } catch (error) {
-                console.error('Login error:', error);
-                
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                        showError(emailInput, emailError, 'No account found with this email');
-                        break;
-                    case 'auth/wrong-password':
-                        showError(passwordInput, passwordError, 'Incorrect password');
-                        break;
-                    case 'auth/invalid-email':
-                        showError(emailInput, emailError, 'Invalid email address');
-                        break;
-                    case 'auth/too-many-requests':
-                        showError(passwordInput, passwordError, 'Too many failed attempts. Try again later');
-                        break;
-                    default:
-                        showError(passwordInput, passwordError, 'Login failed. Please try again');
-                }
-            } finally {
-                setLoading(false);
-            }
-        });
+        function previousStep() {
+            if (currentStep === 1) return;
 
-        // Google Sign In
-        googleSignInBtn.addEventListener('click', async () => {
-            setLoading(true);
+            // Hide current step
+            document.getElementById(`step${currentStep}`).style.display = 'none';
             
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                console.log('Google sign in successful:', result.user);
-                showSuccess();
-            } catch (error) {
-                console.error('Google sign in error:', error);
-                
-                if (error.code !== 'auth/popup-closed-by-user') {
-                    alert('Google sign in failed. Please try again.');
-                }
-            } finally {
-                setLoading(false);
-            }
-        });
-
-        // Forgot Password
-        forgotPasswordLink.addEventListener('click', async (e) => {
-            e.preventDefault();
+            // Show previous step
+            currentStep--;
+            const prevStepElement = document.getElementById(`step${currentStep}`);
+            prevStepElement.style.display = 'block';
+            prevStepElement.classList.add('animate__animated', 'slide-in-left');
             
-            const email = emailInput.value.trim();
-            
-            if (!email) {
-                showError(emailInput, emailError, 'Please enter your email first');
-                return;
-            }
-            
-            try {
-                await sendPasswordResetEmail(auth, email);
-                alert('Password reset email sent! Check your inbox.');
-            } catch (error) {
-                console.error('Password reset error:', error);
-                
-                if (error.code === 'auth/user-not-found') {
-                    showError(emailInput, emailError, 'No account found with this email');
-                } else {
-                    alert('Failed to send password reset email. Please try again.');
-                }
-            }
-        });
+            updateProgress();
+            updateButtons();
 
-        // Clear errors on input
-        emailInput.addEventListener('input', () => hideError(emailInput, emailError));
-        passwordInput.addEventListener('input', () => hideError(passwordInput, passwordError));
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                prevStepElement.classList.remove('animate__animated', 'slide-in-left');
+            }, 600);
+        }
 
-        // Sign up link (you can implement sign up page similarly)
-        document.getElementById('signupLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            // Redirect to sign up page
-            window.location.href = '/signup'; // Change this to your signup page
-        });
+        function updateButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
 
-        // Auth state observer
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                console.log('User is signed in:', user);
-                // User is already signed in, redirect to dashboard
-                showSuccess();
+            if (currentStep === 1) {
+                prevBtn.style.display = 'none';
             } else {
-                console.log('User is signed out');
+                prevBtn.style.display = 'block';
+            }
+
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Submit Application';
+                nextBtn.classList.add('animate__animated', 'animate__pulse');
+            } else {
+                nextBtn.innerHTML = 'Next<i class="fas fa-arrow-right ms-2"></i>';
+                nextBtn.classList.remove('animate__animated', 'animate__pulse');
+            }
+        }
+
+        async function submitApplication() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const successMessage = document.getElementById('successMessage');
+            const generalError = document.getElementById('generalError');
+            const nextBtn = document.getElementById('nextBtn');
+
+            // Show loading
+            loadingSpinner.style.display = 'block';
+            nextBtn.disabled = true;
+
+            // Create Discord embed
+            const embed = {
+                title: "🚌 New Developer Application - Dayride Transit Company",
+                color: 3447003, // Blue color
+                timestamp: new Date().toISOString(),
+                fields: [
+                    {
+                        name: "👤 Contact Information",
+                        value: `**Discord:** ${formData.discordUsername}\n**Roblox:** ${formData.robloxUsername}`,
+                        inline: false
+                    },
+                    {
+                        name: "💼 Experience & Skills",
+                        value: `**Level:** ${formData.experienceLevel}\n**Specialization:** ${formData.specialization}\n**Availability:** ${formData.availability} hours/week`,
+                        inline: false
+                    },
+                    {
+                        name: "🚀 Previous Projects",
+                        value: formData.previousProjects.length > 1024 ? formData.previousProjects.substring(0, 1021) + "..." : formData.previousProjects,
+                        inline: false
+                    },
+                    {
+                        name: "💡 Motivation",
+                        value: formData.motivation.length > 1024 ? formData.motivation.substring(0, 1021) + "..." : formData.motivation,
+                        inline: false
+                    },
+                    {
+                        name: "🛠️ Technical Skills",
+                        value: formData.skills.length > 1024 ? formData.skills.substring(0, 1021) + "..." : formData.skills,
+                        inline: false
+                    }
+                ],
+                footer: {
+                    text: "Dayride Transit Company | Developer Applications",
+                    icon_url: "https://cdn.discordapp.com/emojis/🚌.png"
+                }
+            };
+
+            // Add portfolio if provided
+            if (formData.portfolio) {
+                embed.fields.push({
+                    name: "🎨 Portfolio",
+                    value: formData.portfolio.length > 1024 ? formData.portfolio.substring(0, 1021) + "..." : formData.portfolio,
+                    inline: false
+                });
+            }
+
+            // Add additional info if provided
+            if (formData.additionalInfo) {
+                embed.fields.push({
+                    name: "ℹ️ Additional Information",
+                    value: formData.additionalInfo.length > 1024 ? formData.additionalInfo.substring(0, 1021) + "..." : formData.additionalInfo,
+                    inline: false
+                });
+            }
+
+            const webhookData = {
+                username: "Dayride Applications",
+                avatar_url: "https://cdn.discordapp.com/emojis/🚌.png",
+                embeds: [embed]
+            };
+
+            try {
+                // Note: Replace WEBHOOK_URL variable at the top with your actual Discord webhook URL
+                if (WEBHOOK_URL === 'YOUR_DISCORD_WEBHOOK_URL_HERE') {
+                    // For demo purposes, simulate successful submission
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    throw new Error('Please configure your Discord webhook URL in the code');
+                }
+
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(webhookData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // Success
+                loadingSpinner.style.display = 'none';
+                successMessage.innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-check-circle fa-3x mb-3" style="color: #22c55e;"></i>
+                        <h4>Application Submitted Successfully! 🎉</h4>
+                        <p>Thank you for applying to Dayride Transit Company! We've received your application and will review it carefully.</p>
+                        <p><strong>What's next?</strong></p>
+                        <ul class="text-start mt-3">
+                            <li>Our team will review your application within 3-5 business days</li>
+                            <li>We'll contact you via Discord (${formData.discordUsername}) with updates</li>
+                            <li>If selected, you'll be invited for a brief interview</li>
+                        </ul>
+                        <p class="mt-3"><em>Keep an eye on your Discord DMs!</em></p>
+                    </div>
+                `;
+                successMessage.style.display = 'block';
+                successMessage.classList.add('animate__animated', 'animate__fadeInUp');
+                
+                // Hide the form
+                document.getElementById('applicationForm').style.display = 'none';
+
+            } catch (error) {
+                console.error('Error submitting application:', error);
+                loadingSpinner.style.display = 'none';
+                
+                if (error.message.includes('configure your Discord webhook')) {
+                    // Demo mode - show success anyway
+                    successMessage.innerHTML = `
+                        <div class="text-center">
+                            <i class="fas fa-info-circle fa-3x mb-3" style="color: #3b82f6;"></i>
+                            <h4>Demo Mode - Application Completed! 🚀</h4>
+                            <p>This is a demonstration of the application form. In a real implementation, your application would be sent to Discord.</p>
+                            <p><strong>Your Application Summary:</strong></p>
+                            <div class="text-start mt-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+                                <p><strong>Discord:</strong> ${formData.discordUsername}</p>
+                                <p><strong>Roblox:</strong> ${formData.robloxUsername}</p>
+                                <p><strong>Experience:</strong> ${formData.experienceLevel}</p>
+                                <p><strong>Specialization:</strong> ${formData.specialization}</p>
+                                <p><strong>Availability:</strong> ${formData.availability}</p>
+                            </div>
+                            <p class="mt-3"><em>To use this form in production, configure the Discord webhook URL at the top of the code.</em></p>
+                        </div>
+                    `;
+                    successMessage.style.display = 'block';
+                    successMessage.classList.add('animate__animated', 'animate__fadeInUp');
+                    document.getElementById('applicationForm').style.display = 'none';
+                } else {
+                    generalError.innerHTML = `
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Submission Error:</strong> ${error.message}
+                        <br><small>Please try again or contact an administrator if the problem persists.</small>
+                    `;
+                    generalError.style.display = 'block';
+                    generalError.classList.add('animate__animated', 'animate__shakeX');
+                }
+                
+                nextBtn.disabled = false;
+            }
+        }
+
+        // Handle Enter key navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                const activeElement = document.activeElement;
+                
+                // Don't auto-advance if user is typing in a textarea
+                if (activeElement.tagName.toLowerCase() === 'textarea') {
+                    return;
+                }
+                
+                if (currentStep < totalSteps) {
+                    nextStep();
+                } else {
+                    submitApplication();
+                }
             }
         });
+
+        // Auto-resize textareas
+        document.addEventListener('input', function(event) {
+            if (event.target.classList.contains('form-textarea')) {
+                event.target.style.height = 'auto';
+                event.target.style.height = (event.target.scrollHeight) + 'px';
+            }
+        });
+
+        // Add some interactive feedback
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add focus effects to inputs
+            const inputs = document.querySelectorAll('.form-input, .select-custom');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('animate__animated', 'animate__pulse');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('animate__animated', 'animate__pulse');
+                });
+            });
+
+            // Initialize progress
+            updateProgress();
+        });
+
+        // Add smooth scrolling for better UX
+        function smoothScrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Call smooth scroll on step changes
+        const originalNextStep = nextStep;
+        const originalPreviousStep = previousStep;
+
+        nextStep = function() {
+            originalNextStep();
+            smoothScrollToTop();
+        };
+
+        previousStep = function() {
+            originalPreviousStep();
+            smoothScrollToTop();
+        };
+
+        // Add typing indicator for better UX
+        let typingTimer;
+        document.addEventListener('input', function(event) {
+            if (event.target.classList.contains('form-input') || event.target.classList.contains('form-textarea')) {
+                clearTimeout(typingTimer);
+                
+                // Add subtle glow effect while typing
+                event.target.style.boxShadow = '0 0 15px rgba(59, 130, 246, 0.2)';
+                
+                typingTimer = setTimeout(() => {
+                    event.target.style.boxShadow = '';
+                }, 1000);
+            }
+        });
+
+        // Prevent form submission on Enter in regular inputs
+        document.querySelectorAll('input[type="text"], select').forEach(input => {
+            input.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    nextStep();
+                }
+            });
+        });
+
+        // Add custom validation messages
+        function showValidationSuccess(stepNumber) {
+            const step = document.getElementById(`step${stepNumber}`);
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-check-circle text-success';
+            icon.style.position = 'absolute';
+            icon.style.top = '10px';
+            icon.style.right = '10px';
+            icon.style.fontSize = '1.5rem';
+            
+            // Remove any existing success icons
+            const existingIcon = step.querySelector('.fa-check-circle');
+            if (existingIcon) {
+                existingIcon.remove();
+            }
+            
+            step.style.position = 'relative';
+            step.appendChild(icon);
+            
+            icon.classList.add('animate__animated', 'animate__bounceIn');
+        }
+
+        // Enhanced validation with success indicators
+        const originalValidateStep = validateStep;
+        validateStep = function(step) {
+            const isValid = originalValidateStep(step);
+            if (isValid && step < totalSteps) {
+                showValidationSuccess(step);
+            }
+            return isValid;
+        };
     </script>
 </body>
 </html>
