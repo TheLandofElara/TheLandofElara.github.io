@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTC Staff - Developer Dashboard</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #000000 0%, #1a1a1a 100%);
+            border-right: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .main-content {
+            background: #0f0f0f;
+            min-height: 100vh;
+        }
+
+        .card-custom {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+            border-color: #555;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-custom {
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-custom {
+            background: linear-gradient(90deg, #ffffff 0%, #c0c0c0 100%);
+            transition: width 0.6s ease;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            color: #ccc;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 0;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #000;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            transform: translateX(5px);
+        }
+
+        .task-item {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            border-color: #555;
+            transform: translateX(5px);
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .calendar-day {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin: 2px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day.off {
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            color: #000;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.1);
+            border-color: #555;
+        }
+
+        .stats-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .ring-progress {
+            transform: rotate(-90deg);
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 col-md-3 sidebar vh-100 position-fixed animate__animated animate__slideInLeft">
+                <div class="p-4">
+                    <h3 class="text-white mb-4">
+                        <i class="fas fa-code me-2"></i>
+                        DTC Staff
+                    </h3>
+                    <nav class="nav flex-column">
+                        <a href="#" class="nav-link active">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            Dashboard
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-tasks me-2"></i>
+                            Tasks
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            Calendar
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Analytics
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cog me-2"></i>
+                            Settings
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-10 col-md-9 offset-lg-2 offset-md-3 main-content">
+                <div class="p-4">
+                    <!-- Header -->
+                    <div class="row mb-4 animate__animated animate__fadeInDown">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h1 class="h2 mb-1">Welcome back, Alex!</h1>
+                                    <p class="text-muted">Here's your development overview for January 2025</p>
+                                </div>
+                                <div class="floating">
+                                    <button class="btn btn-custom">
+                                        <i class="fas fa-plus me-2"></i>
+                                        New Task
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card card-custom p-4 fade-in-up">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <i class="fas fa-dollar-sign fa-2x text-white pulse-animation"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Monthly Earnings</h6>
+                                        <div class="metric-value">$8,450</div>
+                                        <small class="text-success">
+                                            <i class="fas fa-arrow-up me-1"></i>
+                                            +12.5% from last month
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.1s">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <i class="fas fa-tasks fa-2x text-white pulse-animation"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Active Tasks</h6>
+                                        <div class="metric-value">7</div>
+                                        <small class="text-warning">
+                                            <i class="fas fa-clock me-1"></i>
+                                            3 due this week
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.2s">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <i class="fas fa-calendar-check fa-2x text-white pulse-animation"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Days Off Left</h6>
+                                        <div class="metric-value">12</div>
+                                        <small class="text-info">
+                                            <i class="fas fa-beach me-1"></i>
+                                            Plan your vacation
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.3s">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <i class="fas fa-code fa-2x text-white pulse-animation"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Projects</h6>
+                                        <div class="metric-value">3</div>
+                                        <small class="text-success">
+                                            <i class="fas fa-check me-1"></i>
+                                            1 completed this month
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tasks and Calendar Row -->
+                    <div class="row mb-4">
+                        <div class="col-lg-8 mb-3">
+                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.4s">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">Current Tasks</h5>
+                                    <button class="btn btn-sm btn-custom">View All</button>
+                                </div>
+                                
+                                <div class="task-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">API Integration for Mobile App</h6>
+                                            <p class="text-muted mb-2">Implement REST API endpoints for user authentication</p>
+                                            <div class="progress progress-custom mb-2" style="height: 6px;">
+                                                <div class="progress-bar progress-bar-custom" style="width: 75%"></div>
+                                            </div>
+                                            <small class="text-muted">75% Complete</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-warning">High</span>
+                                            <p class="text-muted mb-0 mt-1">
+                                                <i class="fas fa-clock me-1"></i>
+                                                2 days left
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="task-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Database Optimization</h6>
+                                            <p class="text-muted mb-2">Optimize query performance for user dashboard</p>
+                                            <div class="progress progress-custom mb-2" style="height: 6px;">
+                                                <div class="progress-bar progress-bar-custom" style="width: 45%"></div>
+                                            </div>
+                                            <small class="text-muted">45% Complete</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-info">Medium</span>
+                                            <p class="text-muted mb-0 mt-1">
+                                                <i class="fas fa-clock me-1"></i>
+                                                5 days left
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="task-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Frontend Component Library</h6>
+                                            <p class="text-muted mb-2">Create reusable React components for the design system</p>
+                                            <div class="progress progress-custom mb-2" style="height: 6px;">
+                                                <div class="progress-bar progress-bar-custom" style="width: 20%"></div>
+                                            </div>
+                                            <small class="text-muted">20% Complete</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-success">Low</span>
+                                            <p class="text-muted mb-0 mt-1">
+                                                <i class="fas fa-clock me-1"></i>
+                                                10 days left
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mb-3">
+                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.5s">
+                                <h5 class="mb-3">Days Off Calendar</h5>
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-2">January 2025</h6>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="calendar-day">1</div>
+                                        <div class="calendar-day">2</div>
+                                        <div class="calendar-day">3</div>
+                                        <div class="calendar-day off">4</div>
+                                        <div class="calendar-day off">5</div>
+                                        <div class="calendar-day">6</div>
+                                        <div class="calendar-day">7</div>
+                                        <div class="calendar-day">8</div>
+                                        <div class="calendar-day">9</div>
+                                        <div class="calendar-day">10</div>
+                                        <div class="calendar-day">11</div>
+                                        <div class="calendar-day off">12</div>
+                                        <div class="calendar-day">13</div>
+                                        <div class="calendar-day">14</div>
+                                        <div class="calendar-day">15</div>
+                                        <div class="calendar-day">16</div>
+                                        <div class="calendar-day">17</div>
+                                        <div class="calendar-day off">18</div>
+                                        <div class="calendar-day off">19</div>
+                                        <div class="calendar-day">20</div>
+                                        <div class="calendar-day">21</div>
+                                        <div class="calendar-day">22</div>
+                                        <div class="calendar-day">23</div>
+                                        <div class="calendar-day">24</div>
+                                        <div class="calendar-day off">25</div>
+                                        <div class="calendar-day off">26</div>
+                                        <div class="calendar-day">27</div>
+                                        <div class="calendar-day">28</div>
+                                        <div class="calendar-day">29</div>
+                                        <div class="calendar-day">30</div>
+                                        <div class="calendar-day">31</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div class="calendar-day off me-2" style="width: 16px; height: 16px; font-size: 0;"></div>
+                                    <small class="text-muted">Days Off</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance and Stats -->
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.6s">
+                                <h5 class="mb-3">Performance Metrics</h5>
+                                <div class="row">
+                                    <div class="col-6 text-center">
+                                        <div class="stats-ring mx-auto mb-3">
+                                            <svg width="120" height="120" class="ring-progress">
+                                                <circle cx="60" cy="60" r="50" fill="none" stroke="#333" stroke-width="8"/>
+                                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gradient1)" stroke-width="8" 
+                                                        stroke-dasharray="314" stroke-dashoffset="78" stroke-linecap="round"/>
+                                                <defs>
+                                                    <linearGradient id="gradient1">
+                                                        <stop offset="0%" style="stop-color:#ffffff"/>
+                                                        <stop offset="100%" style="stop-color:#c0c0c0"/>
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>
+                                            <div class="position-absolute top-50 start-50 translate-middle text-center">
+                                                <div class="metric-value" style="font-size: 1.5rem;">85%</div>
+                                                <small class="text-muted">Efficiency</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <div class="stats-ring mx-auto mb-3">
+                                            <svg width="120" height="120" class="ring-progress">
+                                                <circle cx="60" cy="60" r="50" fill="none" stroke="#333" stroke-width="8"/>
+                                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gradient2)" stroke-width="8" 
+                                                        stroke-dasharray="314" stroke-dashoffset="94" stroke-linecap="round"/>
+                                                <defs>
+                                                    <linearGradient id="gradient2">
+                                                        <stop offset="0%" style="stop-color:#ffffff"/>
+                                                        <stop offset="100%" style="stop-color:#c0c0c0"/>
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>
+                                            <div class="position-absolute top-50 start-50 translate-middle text-center">
+                                                <div class="metric-value" style="font-size: 1.5rem;">70%</div>
+                                                <small class="text-muted">Quality</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 mb-3">
+                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.7s">
+                                <h5 class="mb-3">Quick Stats</h5>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Code Reviews</span>
+                                        <span class="text-white">23</span>
+                                    </div>
+                                    <div class="progress progress-custom" style="height: 4px;">
+                                        <div class="progress-bar progress-bar-custom" style="width: 92%"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Commits This Week</span>
+                                        <span class="text-white">47</span>
+                                    </div>
+                                    <div class="progress progress-custom" style="height: 4px;">
+                                        <div class="progress-bar progress-bar-custom" style="width: 78%"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Bug Fixes</span>
+                                        <span class="text-white">12</span>
+                                    </div>
+                                    <div class="progress progress-custom" style="height: 4px;">
+                                        <div class="progress-bar progress-bar-custom" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Features Deployed</span>
+                                        <span class="text-white">8</span>
+                                    </div>
+                                    <div class="progress progress-custom" style="height: 4px;">
+                                        <div class="progress-bar progress-bar-custom" style="width: 88%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Animate progress bars on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBars = document.querySelectorAll('.progress-bar-custom');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+
+            // Animate ring charts
+            const rings = document.querySelectorAll('.ring-progress circle:last-child');
+            rings.forEach(ring => {
+                const dashOffset = ring.getAttribute('stroke-dashoffset');
+                ring.style.strokeDashoffset = '314';
+                setTimeout(() => {
+                    ring.style.strokeDashoffset = dashOffset;
+                }, 800);
+            });
+
+            // Add hover effects to calendar days
+            const calendarDays = document.querySelectorAll('.calendar-day');
+            calendarDays.forEach(day => {
+                day.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                });
+                
+                day.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Animate metric values
+            const metricValues = document.querySelectorAll('.metric-value');
+            metricValues.forEach(metric => {
+                const finalValue = metric.textContent;
+                let currentValue = 0;
+                const increment = finalValue.includes('$') ? 100 : 1;
+                const isMonetary = finalValue.includes('$');
+                
+                metric.textContent = isMonetary ? '$0' : '0';
+                
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    const targetValue = parseInt(finalValue.replace(/[^0-9]/g, ''));
+                    
+                    if (currentValue >= targetValue) {
+                        currentValue = targetValue;
+                        clearInterval(timer);
+                    }
+                    
+                    metric.textContent = isMonetary ? `$${currentValue.toLocaleString()}` : currentValue;
+                }, 50);
+            });
+        });
+
+        // Add click ripple effect
+        document.querySelectorAll('.card-custom').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.1)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = (e.clientX - card.offsetLeft - 25) + 'px';
+                ripple.style.top = (e.clientY - card.offsetTop - 25) + 'px';
+                ripple.style.width = ripple.style.height = '50px';
+                
+                card.style.position = 'relative';
+                card.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add CSS animation for ripple
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
