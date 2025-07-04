@@ -3,20 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTC Staff - Developer Dashboard</title>
+    <title>DTC Staff Panel - Developer Dashboard</title>
     
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    
     <style>
+        :root {
+            --primary-black: #000000;
+            --secondary-black: #1a1a1a;
+            --tertiary-black: #2d2d2d;
+            --quaternary-black: #404040;
+            --primary-white: #ffffff;
+            --secondary-white: #f8f9fa;
+            --accent-gray: #666666;
+            --border-gray: #333333;
+            --success-green: #10b981;
+            --warning-yellow: #f59e0b;
+            --danger-red: #ef4444;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -25,503 +43,618 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+            color: var(--primary-white);
+            min-height: 100vh;
             overflow-x: hidden;
         }
 
         .sidebar {
-            background: linear-gradient(180deg, #000000 0%, #1a1a1a 100%);
-            border-right: 1px solid #333;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-gray);
             transition: all 0.3s ease;
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
         }
 
-        .main-content {
-            background: #0f0f0f;
-            min-height: 100vh;
+        .sidebar:hover {
+            background: rgba(26, 26, 26, 0.98);
         }
 
-        .card-custom {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            border: 1px solid #333;
-            border-radius: 16px;
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-gray);
+            background: linear-gradient(45deg, var(--primary-black), var(--secondary-black));
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            margin: 0.5rem 0;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-custom:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
-            border-color: #555;
-        }
-
-        .btn-custom {
-            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            padding: 10px 20px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-custom:hover {
-            background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
-        }
-
-        .progress-custom {
-            background: #333;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-bar-custom {
-            background: linear-gradient(90deg, #ffffff 0%, #c0c0c0 100%);
-            transition: width 0.6s ease;
-        }
-
-        .metric-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .nav-link {
-            color: #ccc;
+            color: var(--accent-gray);
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
             transition: all 0.3s ease;
-            border-radius: 8px;
-            margin: 2px 0;
+            border-left: 3px solid transparent;
         }
 
         .nav-link:hover, .nav-link.active {
-            color: #000;
-            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            color: var(--primary-white);
+            background: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--primary-white);
             transform: translateX(5px);
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-gray);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-white), transparent, var(--primary-white));
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .stat-card {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-gray);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-white);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-white), var(--accent-gray));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .progress-custom {
+            height: 8px;
+            background: var(--tertiary-black);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-custom {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-white), var(--accent-gray));
+            border-radius: 10px;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-custom::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .task-item {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 10px 0;
+            background: rgba(45, 45, 45, 0.8);
+            border: 1px solid var(--border-gray);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .task-item:hover {
-            border-color: #555;
-            transform: translateX(5px);
+            background: rgba(45, 45, 45, 1);
+            border-color: var(--accent-gray);
+            transform: translateX(10px);
         }
 
-        .pulse-animation {
+        .warning-badge {
+            background: linear-gradient(45deg, var(--danger-red), #dc2626);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        .status-online {
+            width: 12px;
+            height: 12px;
+            background: var(--success-green);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+            margin-right: 0.5rem;
         }
 
-        .floating {
-            animation: floating 3s ease-in-out infinite;
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
         }
 
-        .calendar-day {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            margin: 2px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            transition: all 0.3s ease;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
         }
 
-        .calendar-day.off {
-            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-            color: #000;
-        }
-
-        .calendar-day:hover {
-            transform: scale(1.1);
-            border-color: #555;
-        }
-
-        .stats-ring {
+        .chart-container {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-gray);
+            border-radius: 15px;
+            padding: 1.5rem;
+            height: 300px;
             position: relative;
-            width: 120px;
-            height: 120px;
         }
 
-        .ring-progress {
-            transform: rotate(-90deg);
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--danger-red);
+            border-radius: 50%;
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            animation: pulse 1.5s infinite;
         }
 
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        .typing-animation {
+            border-right: 2px solid var(--primary-white);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { border-color: var(--primary-white); }
+            51%, 100% { border-color: transparent; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
             }
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-lg-2 col-md-3 sidebar vh-100 position-fixed animate__animated animate__slideInLeft">
-                <div class="p-4">
-                    <h3 class="text-white mb-4">
-                        <i class="fas fa-code me-2"></i>
-                        DTC Staff
-                    </h3>
-                    <nav class="nav flex-column">
-                        <a href="#" class="nav-link active">
-                            <i class="fas fa-tachometer-alt me-2"></i>
-                            Dashboard
-                        </a>
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-tasks me-2"></i>
-                            Tasks
-                        </a>
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-alt me-2"></i>
-                            Calendar
-                        </a>
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-chart-line me-2"></i>
-                            Analytics
-                        </a>
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-cog me-2"></i>
-                            Settings
-                        </a>
-                    </nav>
+    <!-- Floating Particles Background -->
+    <div class="floating-particles" id="particles"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar animate__animated animate__slideInLeft">
+        <div class="sidebar-brand">
+            <h4 class="fw-bold mb-0">
+                <i class="fab fa-react me-2"></i>
+                DTC Staff Panel
+            </h4>
+            <small class="text-muted">Developer Dashboard</small>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-tasks"></i>
+                    Tasks
+                    <span class="notification-dot"></span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    Analytics
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Warnings
+                    <span class="badge bg-danger ms-auto">3</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header animate__animated animate__fadeInDown">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold mb-1">Welcome back, Alex Johnson</h2>
+                    <p class="text-muted mb-0">
+                        <span class="status-online"></span>
+                        Online • Last updated: <span id="currentTime"></span>
+                    </p>
+                </div>
+                <div class="text-end">
+                    <div class="d-flex align-items-center">
+                        <i class="fab fa-roblox-studio me-2 fs-4"></i>
+                        <div>
+                            <div class="fw-bold">Roblox Studio</div>
+                            <small class="text-muted">Connected</small>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Main Content -->
-            <div class="col-lg-10 col-md-9 offset-lg-2 offset-md-3 main-content">
-                <div class="p-4">
-                    <!-- Header -->
-                    <div class="row mb-4 animate__animated animate__fadeInDown">
-                        <div class="col-12">
-                            <div class="d-flex justify-content-between align-items-center">
+        <!-- Stats Grid -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1">Monthly Earnings</h6>
+                            <h3 class="fw-bold mb-0" id="earnings">$0</h3>
+                        </div>
+                        <div class="p-2 bg-success bg-opacity-10 rounded">
+                            <i class="fas fa-dollar-sign text-success"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <small class="text-success me-2">
+                            <i class="fas fa-arrow-up"></i> 23.5%
+                        </small>
+                        <small class="text-muted">vs last month</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1">Active Tasks</h6>
+                            <h3 class="fw-bold mb-0">7</h3>
+                        </div>
+                        <div class="p-2 bg-primary bg-opacity-10 rounded">
+                            <i class="fas fa-tasks text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="progress-custom mb-2">
+                        <div class="progress-bar-custom" style="width: 65%"></div>
+                    </div>
+                    <small class="text-muted">65% completed</small>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1">Warnings</h6>
+                            <h3 class="fw-bold mb-0 text-warning">3</h3>
+                        </div>
+                        <div class="p-2 bg-warning bg-opacity-10 rounded">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="warning-badge">Action Required</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1">Productivity</h6>
+                            <h3 class="fw-bold mb-0 text-success">94%</h3>
+                        </div>
+                        <div class="p-2 bg-success bg-opacity-10 rounded">
+                            <i class="fas fa-chart-line text-success"></i>
+                        </div>
+                    </div>
+                    <div class="progress-custom mb-2">
+                        <div class="progress-bar-custom" style="width: 94%; background: linear-gradient(90deg, #10b981, #059669)"></div>
+                    </div>
+                    <small class="text-muted">Excellent performance</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="row">
+            <!-- Tasks Section -->
+            <div class="col-lg-8 mb-4">
+                <div class="stat-card animate__animated animate__fadeInLeft">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Current Tasks</h5>
+                        <button class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-plus me-1"></i> Add Task
+                        </button>
+                    </div>
+                    
+                    <div id="tasksList">
+                        <div class="task-item">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div>
-                                    <h1 class="h2 mb-1">Welcome back, Alex!</h1>
-                                    <p class="text-muted">Here's your development overview for January 2025</p>
+                                    <h6 class="fw-semibold mb-1">UI/UX Redesign for Main Menu</h6>
+                                    <p class="text-muted small mb-0">Create modern interface for the game lobby</p>
                                 </div>
-                                <div class="floating">
-                                    <button class="btn btn-custom">
-                                        <i class="fas fa-plus me-2"></i>
-                                        New Task
-                                    </button>
+                                <span class="badge bg-warning">In Progress</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Due: <span class="time-left" data-deadline="2025-07-08">3 days left</span>
+                                </small>
+                                <div class="progress-custom" style="width: 120px;">
+                                    <div class="progress-bar-custom" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="task-item">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-semibold mb-1">Bug Fix: Player Movement System</h6>
+                                    <p class="text-muted small mb-0">Resolve collision detection issues</p>
+                                </div>
+                                <span class="badge bg-danger">Urgent</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Due: <span class="time-left text-danger" data-deadline="2025-07-05">1 day left</span>
+                                </small>
+                                <div class="progress-custom" style="width: 120px;">
+                                    <div class="progress-bar-custom" style="width: 90%; background: linear-gradient(90deg, #ef4444, #dc2626)"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="task-item">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-semibold mb-1">Database Optimization</h6>
+                                    <p class="text-muted small mb-0">Improve player data loading times</p>
+                                </div>
+                                <span class="badge bg-success">Completed</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-check me-1"></i>
+                                    Completed 2 days ago
+                                </small>
+                                <div class="progress-custom" style="width: 120px;">
+                                    <div class="progress-bar-custom" style="width: 100%; background: linear-gradient(90deg, #10b981, #059669)"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Metrics Cards -->
-                    <div class="row mb-4">
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <div class="card card-custom p-4 fade-in-up">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-3">
-                                        <i class="fas fa-dollar-sign fa-2x text-white pulse-animation"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="text-muted mb-1">Monthly Earnings</h6>
-                                        <div class="metric-value">$8,450</div>
-                                        <small class="text-success">
-                                            <i class="fas fa-arrow-up me-1"></i>
-                                            +12.5% from last month
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.1s">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-3">
-                                        <i class="fas fa-tasks fa-2x text-white pulse-animation"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="text-muted mb-1">Active Tasks</h6>
-                                        <div class="metric-value">7</div>
-                                        <small class="text-warning">
-                                            <i class="fas fa-clock me-1"></i>
-                                            3 due this week
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.2s">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-3">
-                                        <i class="fas fa-calendar-check fa-2x text-white pulse-animation"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="text-muted mb-1">Days Off Left</h6>
-                                        <div class="metric-value">12</div>
-                                        <small class="text-info">
-                                            <i class="fas fa-beach me-1"></i>
-                                            Plan your vacation
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.3s">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-3">
-                                        <i class="fas fa-code fa-2x text-white pulse-animation"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="text-muted mb-1">Projects</h6>
-                                        <div class="metric-value">3</div>
-                                        <small class="text-success">
-                                            <i class="fas fa-check me-1"></i>
-                                            1 completed this month
-                                        </small>
-                                    </div>
-                                </div>
+                </div>
+            </div>
+            
+            <!-- Right Sidebar -->
+            <div class="col-lg-4">
+                <!-- Warnings Section -->
+                <div class="stat-card mb-4 animate__animated animate__fadeInRight">
+                    <h5 class="fw-bold mb-3 text-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Active Warnings
+                    </h5>
+                    
+                    <div class="mb-3 p-3 border border-warning rounded bg-warning bg-opacity-10">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-exclamation-circle text-warning me-2 mt-1"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-semibold mb-1">Deadline Approaching</h6>
+                                <p class="small mb-0 text-muted">Player Movement System bug fix due in 24 hours</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Tasks and Calendar Row -->
-                    <div class="row mb-4">
-                        <div class="col-lg-8 mb-3">
-                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.4s">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="mb-0">Current Tasks</h5>
-                                    <button class="btn btn-sm btn-custom">View All</button>
-                                </div>
-                                
-                                <div class="task-item">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="mb-1">API Integration for Mobile App</h6>
-                                            <p class="text-muted mb-2">Implement REST API endpoints for user authentication</p>
-                                            <div class="progress progress-custom mb-2" style="height: 6px;">
-                                                <div class="progress-bar progress-bar-custom" style="width: 75%"></div>
-                                            </div>
-                                            <small class="text-muted">75% Complete</small>
-                                        </div>
-                                        <div class="text-end">
-                                            <span class="badge bg-warning">High</span>
-                                            <p class="text-muted mb-0 mt-1">
-                                                <i class="fas fa-clock me-1"></i>
-                                                2 days left
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="task-item">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="mb-1">Database Optimization</h6>
-                                            <p class="text-muted mb-2">Optimize query performance for user dashboard</p>
-                                            <div class="progress progress-custom mb-2" style="height: 6px;">
-                                                <div class="progress-bar progress-bar-custom" style="width: 45%"></div>
-                                            </div>
-                                            <small class="text-muted">45% Complete</small>
-                                        </div>
-                                        <div class="text-end">
-                                            <span class="badge bg-info">Medium</span>
-                                            <p class="text-muted mb-0 mt-1">
-                                                <i class="fas fa-clock me-1"></i>
-                                                5 days left
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="task-item">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="mb-1">Frontend Component Library</h6>
-                                            <p class="text-muted mb-2">Create reusable React components for the design system</p>
-                                            <div class="progress progress-custom mb-2" style="height: 6px;">
-                                                <div class="progress-bar progress-bar-custom" style="width: 20%"></div>
-                                            </div>
-                                            <small class="text-muted">20% Complete</small>
-                                        </div>
-                                        <div class="text-end">
-                                            <span class="badge bg-success">Low</span>
-                                            <p class="text-muted mb-0 mt-1">
-                                                <i class="fas fa-clock me-1"></i>
-                                                10 days left
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 mb-3">
-                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.5s">
-                                <h5 class="mb-3">Days Off Calendar</h5>
-                                <div class="mb-3">
-                                    <h6 class="text-muted mb-2">January 2025</h6>
-                                    <div class="d-flex flex-wrap">
-                                        <div class="calendar-day">1</div>
-                                        <div class="calendar-day">2</div>
-                                        <div class="calendar-day">3</div>
-                                        <div class="calendar-day off">4</div>
-                                        <div class="calendar-day off">5</div>
-                                        <div class="calendar-day">6</div>
-                                        <div class="calendar-day">7</div>
-                                        <div class="calendar-day">8</div>
-                                        <div class="calendar-day">9</div>
-                                        <div class="calendar-day">10</div>
-                                        <div class="calendar-day">11</div>
-                                        <div class="calendar-day off">12</div>
-                                        <div class="calendar-day">13</div>
-                                        <div class="calendar-day">14</div>
-                                        <div class="calendar-day">15</div>
-                                        <div class="calendar-day">16</div>
-                                        <div class="calendar-day">17</div>
-                                        <div class="calendar-day off">18</div>
-                                        <div class="calendar-day off">19</div>
-                                        <div class="calendar-day">20</div>
-                                        <div class="calendar-day">21</div>
-                                        <div class="calendar-day">22</div>
-                                        <div class="calendar-day">23</div>
-                                        <div class="calendar-day">24</div>
-                                        <div class="calendar-day off">25</div>
-                                        <div class="calendar-day off">26</div>
-                                        <div class="calendar-day">27</div>
-                                        <div class="calendar-day">28</div>
-                                        <div class="calendar-day">29</div>
-                                        <div class="calendar-day">30</div>
-                                        <div class="calendar-day">31</div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="calendar-day off me-2" style="width: 16px; height: 16px; font-size: 0;"></div>
-                                    <small class="text-muted">Days Off</small>
-                                </div>
+                    
+                    <div class="mb-3 p-3 border border-danger rounded bg-danger bg-opacity-10">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-times-circle text-danger me-2 mt-1"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-semibold mb-1">Performance Issue</h6>
+                                <p class="small mb-0 text-muted">High memory usage detected in main script</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Performance and Stats -->
-                    <div class="row">
-                        <div class="col-lg-6 mb-3">
-                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.6s">
-                                <h5 class="mb-3">Performance Metrics</h5>
-                                <div class="row">
-                                    <div class="col-6 text-center">
-                                        <div class="stats-ring mx-auto mb-3">
-                                            <svg width="120" height="120" class="ring-progress">
-                                                <circle cx="60" cy="60" r="50" fill="none" stroke="#333" stroke-width="8"/>
-                                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gradient1)" stroke-width="8" 
-                                                        stroke-dasharray="314" stroke-dashoffset="78" stroke-linecap="round"/>
-                                                <defs>
-                                                    <linearGradient id="gradient1">
-                                                        <stop offset="0%" style="stop-color:#ffffff"/>
-                                                        <stop offset="100%" style="stop-color:#c0c0c0"/>
-                                                    </linearGradient>
-                                                </defs>
-                                            </svg>
-                                            <div class="position-absolute top-50 start-50 translate-middle text-center">
-                                                <div class="metric-value" style="font-size: 1.5rem;">85%</div>
-                                                <small class="text-muted">Efficiency</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 text-center">
-                                        <div class="stats-ring mx-auto mb-3">
-                                            <svg width="120" height="120" class="ring-progress">
-                                                <circle cx="60" cy="60" r="50" fill="none" stroke="#333" stroke-width="8"/>
-                                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gradient2)" stroke-width="8" 
-                                                        stroke-dasharray="314" stroke-dashoffset="94" stroke-linecap="round"/>
-                                                <defs>
-                                                    <linearGradient id="gradient2">
-                                                        <stop offset="0%" style="stop-color:#ffffff"/>
-                                                        <stop offset="100%" style="stop-color:#c0c0c0"/>
-                                                    </linearGradient>
-                                                </defs>
-                                            </svg>
-                                            <div class="position-absolute top-50 start-50 translate-middle text-center">
-                                                <div class="metric-value" style="font-size: 1.5rem;">70%</div>
-                                                <small class="text-muted">Quality</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    
+                    <div class="p-3 border border-info rounded bg-info bg-opacity-10">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-info-circle text-info me-2 mt-1"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-semibold mb-1">Code Review</h6>
+                                <p class="small mb-0 text-muted">Pending approval for recent commits</p>
                             </div>
                         </div>
-
-                        <div class="col-lg-6 mb-3">
-                            <div class="card card-custom p-4 fade-in-up" style="animation-delay: 0.7s">
-                                <h5 class="mb-3">Quick Stats</h5>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span>Code Reviews</span>
-                                        <span class="text-white">23</span>
-                                    </div>
-                                    <div class="progress progress-custom" style="height: 4px;">
-                                        <div class="progress-bar progress-bar-custom" style="width: 92%"></div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span>Commits This Week</span>
-                                        <span class="text-white">47</span>
-                                    </div>
-                                    <div class="progress progress-custom" style="height: 4px;">
-                                        <div class="progress-bar progress-bar-custom" style="width: 78%"></div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span>Bug Fixes</span>
-                                        <span class="text-white">12</span>
-                                    </div>
-                                    <div class="progress progress-custom" style="height: 4px;">
-                                        <div class="progress-bar progress-bar-custom" style="width: 65%"></div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span>Features Deployed</span>
-                                        <span class="text-white">8</span>
-                                    </div>
-                                    <div class="progress progress-custom" style="height: 4px;">
-                                        <div class="progress-bar progress-bar-custom" style="width: 88%"></div>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Chart -->
+                <div class="chart-container animate__animated animate__fadeInRight" style="animation-delay: 0.2s">
+                    <h5 class="fw-bold mb-3">Performance Overview</h5>
+                    <canvas id="performanceChart" width="100%" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Additional Stats Row -->
+        <div class="row mt-4">
+            <div class="col-md-6 mb-3">
+                <div class="stat-card animate__animated animate__fadeInUp">
+                    <h5 class="fw-bold mb-3">Recent Activity</h5>
+                    <div class="activity-item d-flex align-items-center mb-3">
+                        <div class="p-2 bg-success bg-opacity-10 rounded me-3">
+                            <i class="fas fa-code text-success"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-semibold mb-0">Pushed new commit</h6>
+                            <small class="text-muted">Fixed player teleportation bug • 2 hours ago</small>
+                        </div>
+                    </div>
+                    <div class="activity-item d-flex align-items-center mb-3">
+                        <div class="p-2 bg-primary bg-opacity-10 rounded me-3">
+                            <i class="fas fa-comment text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-semibold mb-0">Code review completed</h6>
+                            <small class="text-muted">Approved UI changes for inventory system • 4 hours ago</small>
+                        </div>
+                    </div>
+                    <div class="activity-item d-flex align-items-center">
+                        <div class="p-2 bg-warning bg-opacity-10 rounded me-3">
+                            <i class="fas fa-bug text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-semibold mb-0">Bug reported</h6>
+                            <small class="text-muted">Server lag issues during peak hours • 6 hours ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+                    <h5 class="fw-bold mb-3">Quick Actions</h5>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <button class="btn glass-effect w-100 text-white p-3 d-flex flex-column align-items-center">
+                                <i class="fas fa-rocket fs-4 mb-2"></i>
+                                <span class="small">Deploy Build</span>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn glass-effect w-100 text-white p-3 d-flex flex-column align-items-center">
+                                <i class="fas fa-database fs-4 mb-2"></i>
+                                <span class="small">Backup Data</span>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn glass-effect w-100 text-white p-3 d-flex flex-column align-items-center">
+                                <i class="fas fa-chart-bar fs-4 mb-2"></i>
+                                <span class="small">View Reports</span>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn glass-effect w-100 text-white p-3 d-flex flex-column align-items-center">
+                                <i class="fas fa-cogs fs-4 mb-2"></i>
+                                <span class="small">Settings</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -533,96 +666,171 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Animate progress bars on load
-        document.addEventListener('DOMContentLoaded', function() {
-            const progressBars = document.querySelectorAll('.progress-bar-custom');
-            progressBars.forEach(bar => {
-                const width = bar.style.width;
-                bar.style.width = '0%';
-                setTimeout(() => {
-                    bar.style.width = width;
-                }, 500);
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: true, 
+                hour: '2-digit', 
+                minute: '2-digit' 
             });
-
-            // Animate ring charts
-            const rings = document.querySelectorAll('.ring-progress circle:last-child');
-            rings.forEach(ring => {
-                const dashOffset = ring.getAttribute('stroke-dashoffset');
-                ring.style.strokeDashoffset = '314';
-                setTimeout(() => {
-                    ring.style.strokeDashoffset = dashOffset;
-                }, 800);
-            });
-
-            // Add hover effects to calendar days
-            const calendarDays = document.querySelectorAll('.calendar-day');
-            calendarDays.forEach(day => {
-                day.addEventListener('mouseenter', function() {
-                    this.style.transform = 'scale(1.1)';
-                });
-                
-                day.addEventListener('mouseleave', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            });
-
-            // Animate metric values
-            const metricValues = document.querySelectorAll('.metric-value');
-            metricValues.forEach(metric => {
-                const finalValue = metric.textContent;
-                let currentValue = 0;
-                const increment = finalValue.includes('$') ? 100 : 1;
-                const isMonetary = finalValue.includes('$');
-                
-                metric.textContent = isMonetary ? '$0' : '0';
-                
-                const timer = setInterval(() => {
-                    currentValue += increment;
-                    const targetValue = parseInt(finalValue.replace(/[^0-9]/g, ''));
-                    
-                    if (currentValue >= targetValue) {
-                        currentValue = targetValue;
-                        clearInterval(timer);
-                    }
-                    
-                    metric.textContent = isMonetary ? `$${currentValue.toLocaleString()}` : currentValue;
-                }, 50);
-            });
-        });
-
-        // Add click ripple effect
-        document.querySelectorAll('.card-custom').forEach(card => {
-            card.addEventListener('click', function(e) {
-                const ripple = document.createElement('div');
-                ripple.style.position = 'absolute';
-                ripple.style.borderRadius = '50%';
-                ripple.style.background = 'rgba(255, 255, 255, 0.1)';
-                ripple.style.transform = 'scale(0)';
-                ripple.style.animation = 'ripple 0.6s linear';
-                ripple.style.left = (e.clientX - card.offsetLeft - 25) + 'px';
-                ripple.style.top = (e.clientY - card.offsetTop - 25) + 'px';
-                ripple.style.width = ripple.style.height = '50px';
-                
-                card.style.position = 'relative';
-                card.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-
-        // Add CSS animation for ripple
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
+            document.getElementById('currentTime').textContent = timeString;
+        }
+        
+        // Animate earnings counter
+        function animateEarnings() {
+            const target = 8547;
+            const element = document.getElementById('earnings');
+            let current = 0;
+            const increment = target / 100;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
                 }
+                element.textContent = '$' + Math.floor(current).toLocaleString();
+            }, 20);
+        }
+        
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(particle);
             }
-        `;
-        document.head.appendChild(style);
+        }
+        
+        // Update task deadlines
+        function updateDeadlines() {
+            const timeLeftElements = document.querySelectorAll('.time-left');
+            timeLeftElements.forEach(element => {
+                const deadline = new Date(element.getAttribute('data-deadline'));
+                const now = new Date();
+                const diff = deadline - now;
+                const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                
+                if (days <= 0) {
+                    element.textContent = 'Overdue';
+                    element.classList.add('text-danger');
+                } else if (days === 1) {
+                    element.textContent = '1 day left';
+                } else {
+                    element.textContent = `${days} days left`;
+                }
+            });
+        }
+        
+        // Simple chart simulation
+        function createChart() {
+            const canvas = document.getElementById('performanceChart');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 200;
+            
+            // Chart data
+            const data = [65, 72, 68, 85, 90, 88, 94];
+            const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw chart
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            for (let i = 0; i < data.length; i++) {
+                const x = (canvas.width / (data.length - 1)) * i;
+                const y = canvas.height - (data[i] / 100) * canvas.height;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+                
+                // Draw points
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            
+            ctx.stroke();
+        }
+        
+        // Add hover effects to navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(10px)';
+            });
+            
+            link.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.transform = 'translateX(0)';
+                }
+            });
+        });
+        
+        // Add click effects to cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+        
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            setTimeout(animateEarnings, 500);
+            createParticles();
+            updateDeadlines();
+            createChart();
+            
+            // Add typing animation to welcome message
+            const welcomeText = document.querySelector('.header h2');
+            welcomeText.classList.add('typing-animation');
+            
+            // Update deadlines every minute
+            setInterval(updateDeadlines, 60000);
+        });
+        
+        // Add some interactive features
+        document.addEventListener('mousemove', function(e) {
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach((particle, index) => {
+                if (index % 5 === 0) { // Only affect every 5th particle for performance
+                    const rect = particle.getBoundingClientRect();
+                    const distance = Math.sqrt(
+                        Math.pow(e.clientX - rect.left, 2) + 
+                        Math.pow(e.clientY - rect.top, 2)
+                    );
+                    
+                    if (distance < 100) {
+                        particle.style.opacity = '0.8';
+                        particle.style.transform = 'scale(1.5)';
+                    } else {
+                        particle.style.opacity = '';
+                        particle.style.transform = '';
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
