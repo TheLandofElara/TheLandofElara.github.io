@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayride Transit Company - Developer Application</title>
+    <title>Dayride Transit Company - Application Portal</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
@@ -281,39 +281,6 @@
             padding: 0.5rem;
         }
 
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            margin-top: 1rem;
-            cursor: pointer;
-        }
-
-        .checkbox-custom {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            margin-right: 12px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .checkbox-custom.checked {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-color: var(--accent-blue);
-        }
-
-        .checkbox-custom.checked::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
         .loading-spinner {
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-top: 3px solid var(--accent-blue);
@@ -329,6 +296,80 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .application-card {
+            background: rgba(45, 45, 45, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .application-card:hover {
+            transform: translateY(-3px);
+            background: rgba(45, 45, 45, 0.8);
+            border-color: var(--accent-blue);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .application-card.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .application-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .application-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-to-selection {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-selection:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -339,132 +380,110 @@
     </div>
 
     <div class="form-container">
-        <div class="question-card animate__animated animate__fadeInUp">
+        <div class="question-card animate__animated animate__fadeInUp" id="applicationSelection">
             <div class="logo-text">
                 <i class="fas fa-bus"></i> Dayride Transit
             </div>
-            <div class="subtitle">Developer Application Portal</div>
+            <div class="subtitle">Application Portal - Select Your Position</div>
+            
+            <div class="application-grid">
+                <div class="application-card" onclick="selectApplication('developer')">
+                    <div class="application-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h4>Developer Application</h4>
+                    <p class="text-secondary">Join our development team and help build amazing transportation experiences.</p>
+                    <ul class="text-secondary mt-2" style="font-size: 0.9rem;">
+                        <li>Scripting & Programming</li>
+                        <li>UI/UX Design</li>
+                        <li>Game Development</li>
+                    </ul>
+                </div>
+
+                <div class="application-card" onclick="selectApplication('moderator')">
+                    <div class="application-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Moderator Application</h4>
+                    <p class="text-secondary">Help maintain a positive and safe environment for all players.</p>
+                    <ul class="text-secondary mt-2" style="font-size: 0.9rem;">
+                        <li>Community Management</li>
+                        <li>Player Support</li>
+                        <li>Rule Enforcement</li>
+                    </ul>
+                </div>
+
+                <div class="application-card" onclick="selectApplication('management')">
+                    <div class="application-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h4>Management Application</h4>
+                    <p class="text-secondary">Lead teams and help shape the future of Dayride Transit Company.</p>
+                    <ul class="text-secondary mt-2" style="font-size: 0.9rem;">
+                        <li>Team Leadership</li>
+                        <li>Strategic Planning</li>
+                        <li>Operations Management</li>
+                    </ul>
+                </div>
+
+                <div class="application-card" onclick="selectApplication('designer')">
+                    <div class="application-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h4>Designer Application</h4>
+                    <p class="text-secondary">Create stunning visuals and immersive environments for our games.</p>
+                    <ul class="text-secondary mt-2" style="font-size: 0.9rem;">
+                        <li>3D Modeling</li>
+                        <li>Graphic Design</li>
+                        <li>Environment Art</li>
+                    </ul>
+                </div>
+
+                <div class="application-card" onclick="selectApplication('tester')">
+                    <div class="application-icon">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <h4>Beta Tester Application</h4>
+                    <p class="text-secondary">Help us find bugs and improve the quality of our games.</p>
+                    <ul class="text-secondary mt-2" style="font-size: 0.9rem;">
+                        <li>Quality Assurance</li>
+                        <li>Bug Reporting</li>
+                        <li>Feature Testing</li>
+                    </ul>
+                </div>
+
+                <div class="application-card" onclick="selectApplication('content')">
+                    <div class="application-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h4>Content Creator Application</h4>
+                    <p class="text-secondary">Create engaging content and help promote our community.</p>
+                    <ul class="text-secondary mt-2" style="font-size: 0.9rem;">
+                        <li>Video Creation</li>
+                        <li>Social Media</li>
+                        <li>Community Engagement</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card hidden" id="applicationForm">
+            <a href="#" class="back-to-selection" onclick="backToSelection()">
+                <i class="fas fa-arrow-left me-2"></i>Back to Selection
+            </a>
+            
+            <div class="logo-text" id="formTitle">
+                <i class="fas fa-code"></i> Developer Application
+            </div>
+            <div class="subtitle" id="formSubtitle">Help us build amazing transportation experiences</div>
             
             <div class="progress-bar-custom">
                 <div class="progress-fill" id="progressFill" style="width: 0%"></div>
             </div>
 
-            <form id="applicationForm">
-                <!-- Question 1: Discord Username -->
-                <div class="question-step active" id="step1">
-                    <div class="question-number">1</div>
-                    <h3 class="mb-3">What's your Discord username?</h3>
-                    <p class="text-secondary mb-3">We'll use this to contact you about your application.</p>
-                    <input type="text" class="form-input" id="discordUsername" placeholder="e.g., username#1234 or @username" required>
-                    <div class="error-message" id="error1"></div>
-                </div>
+            <form id="mainForm">
+                <div id="formQuestions"></div>
 
-                <!-- Question 2: Roblox Username -->
-                <div class="question-step" id="step2" style="display: none;">
-                    <div class="question-number">2</div>
-                    <h3 class="mb-3">What's your Roblox username?</h3>
-                    <p class="text-secondary mb-3">This helps us verify your identity and experience.</p>
-                    <input type="text" class="form-input" id="robloxUsername" placeholder="Enter your Roblox username" required>
-                    <div class="error-message" id="error2"></div>
-                </div>
-
-                <!-- Question 3: Experience Level -->
-                <div class="question-step" id="step3" style="display: none;">
-                    <div class="question-number">3</div>
-                    <h3 class="mb-3">What's your development experience level?</h3>
-                    <p class="text-secondary mb-3">Help us understand your current skill level.</p>
-                    <select class="select-custom" id="experienceLevel" required>
-                        <option value="">Select your experience level</option>
-                        <option value="beginner">Beginner (0-6 months)</option>
-                        <option value="intermediate">Intermediate (6 months - 2 years)</option>
-                        <option value="advanced">Advanced (2-5 years)</option>
-                        <option value="expert">Expert (5+ years)</option>
-                    </select>
-                    <div class="error-message" id="error3"></div>
-                </div>
-
-                <!-- Question 4: Specialization -->
-                <div class="question-step" id="step4" style="display: none;">
-                    <div class="question-number">4</div>
-                    <h3 class="mb-3">What's your primary development specialization?</h3>
-                    <p class="text-secondary mb-3">Choose the area you're most skilled in.</p>
-                    <select class="select-custom" id="specialization" required>
-                        <option value="">Select your specialization</option>
-                        <option value="scripting">Scripting (Lua/Programming)</option>
-                        <option value="building">Building & Design</option>
-                        <option value="ui-ux">UI/UX Design</option>
-                        <option value="modeling">3D Modeling</option>
-                        <option value="game-design">Game Design</option>
-                        <option value="animation">Animation</option>
-                        <option value="vfx">Visual Effects</option>
-                        <option value="sound">Sound Design</option>
-                        <option value="full-stack">Full-Stack Development</option>
-                    </select>
-                    <div class="error-message" id="error4"></div>
-                </div>
-
-                <!-- Question 5: Previous Projects -->
-                <div class="question-step" id="step5" style="display: none;">
-                    <div class="question-number">5</div>
-                    <h3 class="mb-3">Tell us about your previous projects</h3>
-                    <p class="text-secondary mb-3">Share any games, scripts, or assets you've worked on.</p>
-                    <textarea class="form-input form-textarea" id="previousProjects" placeholder="Describe your past projects, including links to games, portfolio, or GitHub if available..." required></textarea>
-                    <div class="error-message" id="error5"></div>
-                </div>
-
-                <!-- Question 6: Availability -->
-                <div class="question-step" id="step6" style="display: none;">
-                    <div class="question-number">6</div>
-                    <h3 class="mb-3">How many hours per week can you commit?</h3>
-                    <p class="text-secondary mb-3">Help us understand your availability for development work.</p>
-                    <select class="select-custom" id="availability" required>
-                        <option value="">Select your availability</option>
-                        <option value="1-5">1-5 hours/week (Casual)</option>
-                        <option value="5-10">5-10 hours/week (Part-time)</option>
-                        <option value="10-20">10-20 hours/week (Regular)</option>
-                        <option value="20-30">20-30 hours/week (Dedicated)</option>
-                        <option value="30+">30+ hours/week (Full-time)</option>
-                    </select>
-                    <div class="error-message" id="error6"></div>
-                </div>
-
-                <!-- Question 7: Motivation -->
-                <div class="question-step" id="step7" style="display: none;">
-                    <div class="question-number">7</div>
-                    <h3 class="mb-3">Why do you want to join Dayride Transit Company?</h3>
-                    <p class="text-secondary mb-3">Tell us what motivates you to work on transportation games.</p>
-                    <textarea class="form-input form-textarea" id="motivation" placeholder="Share your passion for transportation games and what excites you about joining our team..." required></textarea>
-                    <div class="error-message" id="error7"></div>
-                </div>
-
-                <!-- Question 8: Skills -->
-                <div class="question-step" id="step8" style="display: none;">
-                    <div class="question-number">8</div>
-                    <h3 class="mb-3">What specific skills can you bring to our team?</h3>
-                    <p class="text-secondary mb-3">List your technical and creative abilities.</p>
-                    <textarea class="form-input form-textarea" id="skills" placeholder="List your programming languages, tools, software knowledge, or any unique skills you possess..." required></textarea>
-                    <div class="error-message" id="error8"></div>
-                </div>
-
-                <!-- Question 9: Portfolio -->
-                <div class="question-step" id="step9" style="display: none;">
-                    <div class="question-number">9</div>
-                    <h3 class="mb-3">Share your portfolio or work samples</h3>
-                    <p class="text-secondary mb-3">Provide links to your best work (optional but recommended).</p>
-                    <textarea class="form-input form-textarea" id="portfolio" placeholder="Include links to your games, GitHub, DevForum posts, or any other relevant work..."></textarea>
-                    <div class="error-message" id="error9"></div>
-                </div>
-
-                <!-- Question 10: Additional Info -->
-                <div class="question-step" id="step10" style="display: none;">
-                    <div class="question-number">10</div>
-                    <h3 class="mb-3">Is there anything else you'd like us to know?</h3>
-                    <p class="text-secondary mb-3">Any additional information that might help your application.</p>
-                    <textarea class="form-input form-textarea" id="additionalInfo" placeholder="Share any additional information, achievements, or questions you have..."></textarea>
-                    <div class="error-message" id="error10"></div>
-                </div>
-
-                <!-- Navigation Buttons -->
                 <div class="d-flex justify-content-between mt-4">
                     <button type="button" class="btn btn-secondary-custom" id="prevBtn" onclick="previousStep()" style="display: none;">
                         <i class="fas fa-arrow-left me-2"></i>Previous
@@ -485,21 +504,813 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         let currentStep = 1;
-        const totalSteps = 10;
-        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R'; // Replace with your Discord webhook URL
+        let totalSteps = 0;
+        let currentApplication = '';
+        let formData = {};
 
-        const formData = {
-            discordUsername: '',
-            robloxUsername: '',
-            experienceLevel: '',
-            specialization: '',
-            previousProjects: '',
-            availability: '',
-            motivation: '',
-            skills: '',
-            portfolio: '',
-            additionalInfo: ''
+        const WEBHOOK_URLS = {
+            developer: 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R',
+            moderator: 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R',
+            management: 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R',
+            designer: 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R',
+            tester: 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R',
+            content: 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R'
         };
+
+        const applicationConfigs = {
+            developer: {
+                title: '<i class="fas fa-code"></i> Developer Application',
+                subtitle: 'Help us build amazing transportation experiences',
+                color: 3447003,
+                emoji: '💻',
+                questions: [
+                    {
+                        id: 'discordUsername',
+                        number: 1,
+                        title: "What's your Discord username?",
+                        description: "We'll use this to contact you about your application.",
+                        type: 'text',
+                        placeholder: 'e.g., username#1234 or @username',
+                        required: true,
+                        minLength: 2
+                    },
+                    {
+                        id: 'robloxUsername',
+                        number: 2,
+                        title: "What's your Roblox username?",
+                        description: "This helps us verify your identity and experience.",
+                        type: 'text',
+                        placeholder: 'Enter your Roblox username',
+                        required: true,
+                        minLength: 3
+                    },
+                    {
+                        id: 'experienceLevel',
+                        number: 3,
+                        title: "What's your development experience level?",
+                        description: "Help us understand your current skill level.",
+                        type: 'select',
+                        options: [
+                            { value: 'beginner', text: 'Beginner (0-6 months)' },
+                            { value: 'intermediate', text: 'Intermediate (6 months - 2 years)' },
+                            { value: 'advanced', text: 'Advanced (2-5 years)' },
+                            { value: 'expert', text: 'Expert (5+ years)' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'specialization',
+                        number: 4,
+                        title: "What's your primary development specialization?",
+                        description: "Choose the area you're most skilled in.",
+                        type: 'select',
+                        options: [
+                            { value: 'scripting', text: 'Scripting (Lua/Programming)' },
+                            { value: 'building', text: 'Building & Design' },
+                            { value: 'ui-ux', text: 'UI/UX Design' },
+                            { value: 'modeling', text: '3D Modeling' },
+                            { value: 'game-design', text: 'Game Design' },
+                            { value: 'animation', text: 'Animation' },
+                            { value: 'vfx', text: 'Visual Effects' },
+                            { value: 'sound', text: 'Sound Design' },
+                            { value: 'full-stack', text: 'Full-Stack Development' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'previousProjects',
+                        number: 5,
+                        title: "Tell us about your previous projects",
+                        description: "Share any games, scripts, or assets you've worked on.",
+                        type: 'textarea',
+                        placeholder: 'Describe your past projects, including links to games, portfolio, or GitHub if available...',
+                        required: true,
+                        minLength: 20
+                    },
+                    {
+                        id: 'availability',
+                        number: 6,
+                        title: "How many hours per week can you commit?",
+                        description: "Help us understand your availability for development work.",
+                        type: 'select',
+                        options: [
+                            { value: '1-5', text: '1-5 hours/week (Casual)' },
+                            { value: '5-10', text: '5-10 hours/week (Part-time)' },
+                            { value: '10-20', text: '10-20 hours/week (Regular)' },
+                            { value: '20-30', text: '20-30 hours/week (Dedicated)' },
+                            { value: '30+', text: '30+ hours/week (Full-time)' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'motivation',
+                        number: 7,
+                        title: "Why do you want to join Dayride Transit Company?",
+                        description: "Tell us what motivates you to work on transportation games.",
+                        type: 'textarea',
+                        placeholder: 'Share your passion for transportation games and what excites you about joining our team...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'skills',
+                        number: 8,
+                        title: "What specific skills can you bring to our team?",
+                        description: "List your technical and creative abilities.",
+                        type: 'textarea',
+                        placeholder: 'List your programming languages, tools, software knowledge, or any unique skills you possess...',
+                        required: true,
+                        minLength: 20
+                    },
+                    {
+                        id: 'portfolio',
+                        number: 9,
+                        title: "Share your portfolio or work samples",
+                        description: "Provide links to your best work (optional but recommended).",
+                        type: 'textarea',
+                        placeholder: 'Include links to your games, GitHub, DevForum posts, or any other relevant work...',
+                        required: false
+                    },
+                    {
+                        id: 'additionalInfo',
+                        number: 10,
+                        title: "Is there anything else you'd like us to know?",
+                        description: "Any additional information that might help your application.",
+                        type: 'textarea',
+                        placeholder: 'Share any additional information, achievements, or questions you have...',
+                        required: false
+                    }
+                ]
+            },
+            moderator: {
+                title: '<i class="fas fa-shield-alt"></i> Moderator Application',
+                subtitle: 'Help maintain a positive and safe environment',
+                color: 15105570,
+                emoji: '🛡️',
+                questions: [
+                    {
+                        id: 'discordUsername',
+                        number: 1,
+                        title: "What's your Discord username?",
+                        description: "We'll use this to contact you about your application.",
+                        type: 'text',
+                        placeholder: 'e.g., username#1234 or @username',
+                        required: true,
+                        minLength: 2
+                    },
+                    {
+                        id: 'robloxUsername',
+                        number: 2,
+                        title: "What's your Roblox username?",
+                        description: "This helps us verify your identity and experience.",
+                        type: 'text',
+                        placeholder: 'Enter your Roblox username',
+                        required: true,
+                        minLength: 3
+                    },
+                    {
+                        id: 'age',
+                        number: 3,
+                        title: "What's your age range?",
+                        description: "Helps us understand our team demographics.",
+                        type: 'select',
+                        options: [
+                            { value: '13-15', text: '13-15 years old' },
+                            { value: '16-17', text: '16-17 years old' },
+                            { value: '18-20', text: '18-20 years old' },
+                            { value: '21+', text: '21+ years old' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'timezone',
+                        number: 4,
+                        title: "What's your timezone?",
+                        description: "This helps us schedule moderation coverage.",
+                        type: 'select',
+                        options: [
+                            { value: 'PST', text: 'PST (Pacific)' },
+                            { value: 'MST', text: 'MST (Mountain)' },
+                            { value: 'CST', text: 'CST (Central)' },
+                            { value: 'EST', text: 'EST (Eastern)' },
+                            { value: 'GMT', text: 'GMT (Greenwich)' },
+                            { value: 'CET', text: 'CET (Central European)' },
+                            { value: 'JST', text: 'JST (Japan Standard)' },
+                            { value: 'AEST', text: 'AEST (Australian Eastern)' },
+                            { value: 'other', text: 'Other' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'moderationExperience',
+                        number: 5,
+                        title: "Do you have any moderation experience?",
+                        description: "Tell us about your previous moderation roles.",
+                        type: 'textarea',
+                        placeholder: 'Describe any moderation experience you have, including Discord servers, Roblox groups, or other platforms...',
+                        required: true,
+                        minLength: 10
+                    },
+                    {
+                        id: 'availability',
+                        number: 6,
+                        title: "How many hours per week can you moderate?",
+                        description: "Help us understand your availability.",
+                        type: 'select',
+                        options: [
+                            { value: '5-10', text: '5-10 hours/week' },
+                            { value: '10-20', text: '10-20 hours/week' },
+                            { value: '20-30', text: '20-30 hours/week' },
+                            { value: '30+', text: '30+ hours/week' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'conflictResolution',
+                        number: 7,
+                        title: "How would you handle a conflict between players?",
+                        description: "Describe your approach to resolving disputes.",
+                        type: 'textarea',
+                        placeholder: 'Explain how you would mediate conflicts and maintain a positive environment...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'ruleBreaking',
+                        number: 8,
+                        title: "How would you handle someone breaking rules?",
+                        description: "Walk us through your enforcement process.",
+                        type: 'textarea',
+                        placeholder: 'Describe your step-by-step approach to handling rule violations...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'motivation',
+                        number: 9,
+                        title: "Why do you want to be a moderator?",
+                        description: "Tell us what motivates you to help the community.",
+                        type: 'textarea',
+                        placeholder: 'Share your passion for community management and helping others...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'additionalInfo',
+                        number: 10,
+                        title: "Is there anything else you'd like us to know?",
+                        description: "Any additional information that might help your application.",
+                        type: 'textarea',
+                        placeholder: 'Share any additional information, achievements, or questions you have...',
+                        required: false
+                    }
+                ]
+            },
+            management: {
+                title: '<i class="fas fa-users-cog"></i> Management Application',
+                subtitle: 'Lead teams and shape our future',
+                color: 10181046,
+                emoji: '👔',
+                questions: [
+                    {
+                        id: 'discordUsername',
+                        number: 1,
+                        title: "What's your Discord username?",
+                        description: "We'll use this to contact you about your application.",
+                        type: 'text',
+                        placeholder: 'e.g., username#1234 or @username',
+                        required: true,
+                        minLength: 2
+                    },
+                    {
+                        id: 'robloxUsername',
+                        number: 2,
+                        title: "What's your Roblox username?",
+                        description: "This helps us verify your identity and experience.",
+                        type: 'text',
+                        placeholder: 'Enter your Roblox username',
+                        required: true,
+                        minLength: 3
+                    },
+                    {
+                        id: 'leadershipExperience',
+                        number: 3,
+                        title: "What leadership experience do you have?",
+                        description: "Tell us about your management and leadership background.",
+                        type: 'textarea',
+                        placeholder: 'Describe your leadership roles, team management experience, and accomplishments...',
+                        required: true,
+                        minLength: 50
+                    },
+                    {
+                        id: 'managementStyle',
+                        number: 4,
+                        title: "How would you describe your management style?",
+                        description: "Help us understand your approach to leadership.",
+                        type: 'textarea',
+                        placeholder: 'Explain your leadership philosophy, communication style, and how you motivate teams...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'departmentInterest',
+                        number: 5,
+                        title: "Which department interests you most?",
+                        description: "Choose the area you'd like to manage.",
+                        type: 'select',
+                        options: [
+                            { value: 'development', text: 'Development Team' },
+                            { value: 'moderation', text: 'Moderation Team' },
+                            { value: 'design', text: 'Design Team' },
+                            { value: 'marketing', text: 'Marketing & Community' },
+                            { value: 'operations', text: 'Operations' },
+                            { value: 'hr', text: 'Human Resources' },
+                            { value: 'general', text: 'General Management' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'problemSolving',
+                        number: 6,
+                        title: "Describe a challenging problem you've solved",
+                        description: "Show us your problem-solving abilities.",
+                        type: 'textarea',
+                        placeholder: 'Walk us through a complex problem you faced and how you solved it...',
+                        required: true,
+                        minLength: 50
+                    },
+                    {
+                        id: 'teamConflict',
+                        number: 7,
+                        title: "How would you handle conflict within your team?",
+                        description: "Explain your approach to team conflict resolution.",
+                        type: 'textarea',
+                        placeholder: 'Describe how you would mediate disputes and maintain team harmony...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'availability',
+                        number: 8,
+                        title: "How many hours per week can you commit?",
+                        description: "Management requires significant time investment.",
+                        type: 'select',
+                        options: [
+                            { value: '15-25', text: '15-25 hours/week' },
+                            { value: '25-35', text: '25-35 hours/week' },
+                            { value: '35+', text: '35+ hours/week' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'vision',
+                        number: 9,
+                        title: "What's your vision for Dayride Transit Company?",
+                        description: "Share your ideas for our company's future.",
+                        type: 'textarea',
+                        placeholder: 'Describe your vision for growth, improvements, and long-term goals...',
+                        required: true,
+                        minLength: 50
+                    },
+                    {
+                        id: 'additionalInfo',
+                        number: 10,
+                        title: "Is there anything else you'd like us to know?",
+                        description: "Any additional information that might help your application.",
+                        type: 'textarea',
+                        placeholder: 'Share any additional information, achievements, or questions you have...',
+                        required: false
+                    }
+                ]
+            },
+            designer: {
+                title: '<i class="fas fa-paint-brush"></i> Designer Application',
+                subtitle: 'Create stunning visuals and immersive environments',
+                color: 16744272,
+                emoji: '🎨',
+                questions: [
+                    {
+                        id: 'discordUsername',
+                        number: 1,
+                        title: "What's your Discord username?",
+                        description: "We'll use this to contact you about your application.",
+                        type: 'text',
+                        placeholder: 'e.g., username#1234 or @username',
+                        required: true,
+                        minLength: 2
+                    },
+                    {
+                        id: 'robloxUsername',
+                        number: 2,
+                        title: "What's your Roblox username?",
+                        description: "This helps us verify your identity and experience.",
+                        type: 'text',
+                        placeholder: 'Enter your Roblox username',
+                        required: true,
+                        minLength: 3
+                    },
+                    {
+                        id: 'designSpecialty',
+                        number: 3,
+                        title: "What's your design specialty?",
+                        description: "Choose your primary area of expertise.",
+                        type: 'select',
+                        options: [
+                            { value: '3d-modeling', text: '3D Modeling' },
+                            { value: 'texturing', text: 'Texturing & Materials' },
+                            { value: 'environment', text: 'Environment Design' },
+                            { value: 'ui-design', text: 'UI/UX Design' },
+                            { value: 'graphic-design', text: 'Graphic Design' },
+                            { value: 'concept-art', text: 'Concept Art' },
+                            { value: 'animation', text: 'Animation' },
+                            { value: 'lighting', text: 'Lighting Design' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'software',
+                        number: 4,
+                        title: "What design software do you use?",
+                        description: "List the tools and software you're proficient with.",
+                        type: 'textarea',
+                        placeholder: 'List software like Blender, Maya, Photoshop, Figma, etc., and your skill level with each...',
+                        required: true,
+                        minLength: 20
+                    },
+                    {
+                        id: 'experience',
+                        number: 5,
+                        title: "How long have you been designing?",
+                        description: "Help us understand your experience level.",
+                        type: 'select',
+                        options: [
+                            { value: 'beginner', text: 'Beginner (0-6 months)' },
+                            { value: 'intermediate', text: 'Intermediate (6 months - 2 years)' },
+                            { value: 'advanced', text: 'Advanced (2-5 years)' },
+                            { value: 'expert', text: 'Expert (5+ years)' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'portfolio',
+                        number: 6,
+                        title: "Share your portfolio",
+                        description: "Provide links to your best design work.",
+                        type: 'textarea',
+                        placeholder: 'Include links to your portfolio, ArtStation, Behance, or other showcases of your work...',
+                        required: true,
+                        minLength: 10
+                    },
+                    {
+                        id: 'designProcess',
+                        number: 7,
+                        title: "Describe your design process",
+                        description: "Walk us through how you approach a new project.",
+                        type: 'textarea',
+                        placeholder: 'Explain your workflow from concept to completion, including research, sketching, iteration, etc...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'availability',
+                        number: 8,
+                        title: "How many hours per week can you commit?",
+                        description: "Help us understand your availability for design work.",
+                        type: 'select',
+                        options: [
+                            { value: '5-10', text: '5-10 hours/week (Part-time)' },
+                            { value: '10-20', text: '10-20 hours/week (Regular)' },
+                            { value: '20-30', text: '20-30 hours/week (Dedicated)' },
+                            { value: '30+', text: '30+ hours/week (Full-time)' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'motivation',
+                        number: 9,
+                        title: "Why do you want to design for transportation games?",
+                        description: "Tell us what excites you about this field.",
+                        type: 'textarea',
+                        placeholder: 'Share your passion for transportation design and what draws you to this industry...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'additionalInfo',
+                        number: 10,
+                        title: "Is there anything else you'd like us to know?",
+                        description: "Any additional information that might help your application.",
+                        type: 'textarea',
+                        placeholder: 'Share any additional information, achievements, or questions you have...',
+                        required: false
+                    }
+                ]
+            },
+            tester: {
+                title: '<i class="fas fa-bug"></i> Beta Tester Application',
+                subtitle: 'Help us find bugs and improve quality',
+                color: 2067276,
+                emoji: '🐛',
+                questions: [
+                    {
+                        id: 'discordUsername',
+                        number: 1,
+                        title: "What's your Discord username?",
+                        description: "We'll use this to contact you about your application.",
+                        type: 'text',
+                        placeholder: 'e.g., username#1234 or @username',
+                        required: true,
+                        minLength: 2
+                    },
+                    {
+                        id: 'robloxUsername',
+                        number: 2,
+                        title: "What's your Roblox username?",
+                        description: "This helps us verify your identity and experience.",
+                        type: 'text',
+                        placeholder: 'Enter your Roblox username',
+                        required: true,
+                        minLength: 3
+                    },
+                    {
+                        id: 'testingExperience',
+                        number: 3,
+                        title: "Do you have any testing experience?",
+                        description: "Tell us about your experience with beta testing or QA.",
+                        type: 'textarea',
+                        placeholder: 'Describe any experience you have with testing games, reporting bugs, or quality assurance...',
+                        required: true,
+                        minLength: 10
+                    },
+                    {
+                        id: 'devicesPlatforms',
+                        number: 4,
+                        title: "What devices/platforms can you test on?",
+                        description: "Help us understand your testing capabilities.",
+                        type: 'textarea',
+                        placeholder: 'List devices (PC, mobile, tablet) and their specifications that you can use for testing...',
+                        required: true,
+                        minLength: 10
+                    },
+                    {
+                        id: 'reportingSkills',
+                        number: 5,
+                        title: "How would you report a bug you found?",
+                        description: "Show us your bug reporting skills.",
+                        type: 'textarea',
+                        placeholder: 'Describe the steps you would take to document and report a bug, including what information you would include...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'availability',
+                        number: 6,
+                        title: "How many hours per week can you test?",
+                        description: "Help us understand your availability.",
+                        type: 'select',
+                        options: [
+                            { value: '2-5', text: '2-5 hours/week' },
+                            { value: '5-10', text: '5-10 hours/week' },
+                            { value: '10-15', text: '10-15 hours/week' },
+                            { value: '15+', text: '15+ hours/week' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'attentionToDetail',
+                        number: 7,
+                        title: "Describe a time you noticed something others missed",
+                        description: "Show us your attention to detail.",
+                        type: 'textarea',
+                        placeholder: 'Share an example of when your careful observation helped identify an issue or problem...',
+                        required: true,
+                        minLength: 20
+                    },
+                    {
+                        id: 'feedbackStyle',
+                        number: 8,
+                        title: "How do you provide constructive feedback?",
+                        description: "Tell us about your communication style.",
+                        type: 'textarea',
+                        placeholder: 'Explain how you communicate issues and suggestions in a helpful, constructive way...',
+                        required: true,
+                        minLength: 20
+                    },
+                    {
+                        id: 'motivation',
+                        number: 9,
+                        title: "Why do you want to be a beta tester?",
+                        description: "Tell us what motivates you to help improve games.",
+                        type: 'textarea',
+                        placeholder: 'Share why you enjoy testing and how you want to contribute to game quality...',
+                        required: true,
+                        minLength: 20
+                    },
+                    {
+                        id: 'additionalInfo',
+                        number: 10,
+                        title: "Is there anything else you'd like us to know?",
+                        description: "Any additional information that might help your application.",
+                        type: 'textarea',
+                        placeholder: 'Share any additional information, achievements, or questions you have...',
+                        required: false
+                    }
+                ]
+            },
+            content: {
+                title: '<i class="fas fa-video"></i> Content Creator Application',
+                subtitle: 'Create engaging content and promote our community',
+                color: 16711680,
+                emoji: '📹',
+                questions: [
+                    {
+                        id: 'discordUsername',
+                        number: 1,
+                        title: "What's your Discord username?",
+                        description: "We'll use this to contact you about your application.",
+                        type: 'text',
+                        placeholder: 'e.g., username#1234 or @username',
+                        required: true,
+                        minLength: 2
+                    },
+                    {
+                        id: 'robloxUsername',
+                        number: 2,
+                        title: "What's your Roblox username?",
+                        description: "This helps us verify your identity and experience.",
+                        type: 'text',
+                        placeholder: 'Enter your Roblox username',
+                        required: true,
+                        minLength: 3
+                    },
+                    {
+                        id: 'contentType',
+                        number: 3,
+                        title: "What type of content do you create?",
+                        description: "Choose your primary content creation focus.",
+                        type: 'select',
+                        options: [
+                            { value: 'youtube', text: 'YouTube Videos' },
+                            { value: 'tiktok', text: 'TikTok/Short Form' },
+                            { value: 'streaming', text: 'Live Streaming' },
+                            { value: 'social-media', text: 'Social Media Posts' },
+                            { value: 'photography', text: 'Screenshots/Photography' },
+                            { value: 'articles', text: 'Articles/Blog Posts' },
+                            { value: 'tutorials', text: 'Tutorials/Guides' },
+                            { value: 'multiple', text: 'Multiple Formats' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'platforms',
+                        number: 4,
+                        title: "What platforms do you use?",
+                        description: "List your social media presence and follower counts.",
+                        type: 'textarea',
+                        placeholder: 'List platforms (YouTube, TikTok, Twitter, etc.) with usernames and approximate follower/subscriber counts...',
+                        required: true,
+                        minLength: 20
+                    },
+                    {
+                        id: 'contentExamples',
+                        number: 5,
+                        title: "Share examples of your best content",
+                        description: "Provide links to your most successful or representative work.",
+                        type: 'textarea',
+                        placeholder: 'Include links to videos, posts, or other content that showcases your abilities...',
+                        required: true,
+                        minLength: 10
+                    },
+                    {
+                        id: 'contentSchedule',
+                        number: 6,
+                        title: "How often do you create content?",
+                        description: "Help us understand your content creation frequency.",
+                        type: 'select',
+                        options: [
+                            { value: 'daily', text: 'Daily' },
+                            { value: 'few-times-week', text: 'Few times per week' },
+                            { value: 'weekly', text: 'Weekly' },
+                            { value: 'bi-weekly', text: 'Bi-weekly' },
+                            { value: 'monthly', text: 'Monthly' },
+                            { value: 'irregular', text: 'Irregular schedule' }
+                        ],
+                        required: true
+                    },
+                    {
+                        id: 'editing',
+                        number: 7,
+                        title: "What editing software do you use?",
+                        description: "Tell us about your editing and production skills.",
+                        type: 'textarea',
+                        placeholder: 'List video/photo editing software you use and your skill level with each...',
+                        required: true,
+                        minLength: 10
+                    },
+                    {
+                        id: 'collaborationIdeas',
+                        number: 8,
+                        title: "What content ideas do you have for Dayride Transit?",
+                        description: "Show us your creativity and understanding of our brand.",
+                        type: 'textarea',
+                        placeholder: 'Describe specific content ideas, series concepts, or promotional strategies you would create...',
+                        required: true,
+                        minLength: 30
+                    },
+                    {
+                        id: 'motivation',
+                        number: 9,
+                        title: "Why do you want to create content for us?",
+                        description: "Tell us what attracts you to our community.",
+                        type: 'textarea',
+                        placeholder: 'Share what excites you about transportation games and promoting our community...',
+                        required: true,
+                        minLength: 20
+                    },
+                    {
+                        id: 'additionalInfo',
+                        number: 10,
+                        title: "Is there anything else you'd like us to know?",
+                        description: "Any additional information that might help your application.",
+                        type: 'textarea',
+                        placeholder: 'Share any additional information, achievements, or questions you have...',
+                        required: false
+                    }
+                ]
+            }
+        };
+
+        function selectApplication(appType) {
+            currentApplication = appType;
+            const config = applicationConfigs[appType];
+            
+            document.getElementById('applicationSelection').classList.add('hidden');
+            document.getElementById('applicationForm').classList.remove('hidden');
+            document.getElementById('applicationForm').classList.add('fade-in');
+            
+            document.getElementById('formTitle').innerHTML = config.title;
+            document.getElementById('formSubtitle').textContent = config.subtitle;
+            
+            generateQuestions(config.questions);
+            totalSteps = config.questions.length;
+            currentStep = 1;
+            formData = {};
+            
+            updateProgress();
+            updateButtons();
+        }
+
+        function backToSelection() {
+            document.getElementById('applicationForm').classList.add('hidden');
+            document.getElementById('applicationSelection').classList.remove('hidden');
+            document.getElementById('applicationSelection').classList.add('fade-in');
+            
+            currentStep = 1;
+            formData = {};
+            currentApplication = '';
+            
+            document.getElementById('formQuestions').innerHTML = '';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('generalError').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('mainForm').style.display = 'block';
+        }
+
+        function generateQuestions(questions) {
+            const questionsContainer = document.getElementById('formQuestions');
+            questionsContainer.innerHTML = '';
+            
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-step';
+                questionDiv.id = `step${question.number}`;
+                if (index > 0) questionDiv.style.display = 'none';
+                
+                let inputHTML = '';
+                
+                if (question.type === 'text') {
+                    inputHTML = `<input type="text" class="form-input" id="${question.id}" placeholder="${question.placeholder}" ${question.required ? 'required' : ''}>`;
+                } else if (question.type === 'textarea') {
+                    inputHTML = `<textarea class="form-input form-textarea" id="${question.id}" placeholder="${question.placeholder}" ${question.required ? 'required' : ''}></textarea>`;
+                } else if (question.type === 'select') {
+                    const options = question.options.map(opt => `<option value="${opt.value}">${opt.text}</option>`).join('');
+                    inputHTML = `<select class="select-custom" id="${question.id}" ${question.required ? 'required' : ''}>
+                        <option value="">Select an option</option>
+                        ${options}
+                    </select>`;
+                }
+                
+                questionDiv.innerHTML = `
+                    <div class="question-number">${question.number}</div>
+                    <h3 class="mb-3">${question.title}</h3>
+                    <p class="text-secondary mb-3">${question.description}</p>
+                    ${inputHTML}
+                    <div class="error-message" id="error${question.number}"></div>
+                `;
+                
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
 
         function updateProgress() {
             const progress = (currentStep / totalSteps) * 100;
@@ -507,100 +1318,27 @@
         }
 
         function validateStep(step) {
+            const config = applicationConfigs[currentApplication];
+            const question = config.questions[step - 1];
             const errorElement = document.getElementById(`error${step}`);
             errorElement.style.display = 'none';
             
             let isValid = true;
             let errorMessage = '';
-
-            switch(step) {
-                case 1:
-                    const discord = document.getElementById('discordUsername').value.trim();
-                    if (!discord) {
-                        errorMessage = 'Please enter your Discord username.';
-                        isValid = false;
-                    } else if (discord.length < 2) {
-                        errorMessage = 'Discord username seems too short.';
-                        isValid = false;
-                    }
-                    formData.discordUsername = discord;
-                    break;
-                case 2:
-                    const roblox = document.getElementById('robloxUsername').value.trim();
-                    if (!roblox) {
-                        errorMessage = 'Please enter your Roblox username.';
-                        isValid = false;
-                    } else if (roblox.length < 3) {
-                        errorMessage = 'Roblox username must be at least 3 characters.';
-                        isValid = false;
-                    }
-                    formData.robloxUsername = roblox;
-                    break;
-                case 3:
-                    const experience = document.getElementById('experienceLevel').value;
-                    if (!experience) {
-                        errorMessage = 'Please select your experience level.';
-                        isValid = false;
-                    }
-                    formData.experienceLevel = experience;
-                    break;
-                case 4:
-                    const specialization = document.getElementById('specialization').value;
-                    if (!specialization) {
-                        errorMessage = 'Please select your specialization.';
-                        isValid = false;
-                    }
-                    formData.specialization = specialization;
-                    break;
-                case 5:
-                    const projects = document.getElementById('previousProjects').value.trim();
-                    if (!projects) {
-                        errorMessage = 'Please describe your previous projects.';
-                        isValid = false;
-                    } else if (projects.length < 20) {
-                        errorMessage = 'Please provide more details about your projects.';
-                        isValid = false;
-                    }
-                    formData.previousProjects = projects;
-                    break;
-                case 6:
-                    const availability = document.getElementById('availability').value;
-                    if (!availability) {
-                        errorMessage = 'Please select your availability.';
-                        isValid = false;
-                    }
-                    formData.availability = availability;
-                    break;
-                case 7:
-                    const motivation = document.getElementById('motivation').value.trim();
-                    if (!motivation) {
-                        errorMessage = 'Please share your motivation for joining.';
-                        isValid = false;
-                    } else if (motivation.length < 30) {
-                        errorMessage = 'Please provide more details about your motivation.';
-                        isValid = false;
-                    }
-                    formData.motivation = motivation;
-                    break;
-                case 8:
-                    const skills = document.getElementById('skills').value.trim();
-                    if (!skills) {
-                        errorMessage = 'Please list your skills.';
-                        isValid = false;
-                    } else if (skills.length < 20) {
-                        errorMessage = 'Please provide more details about your skills.';
-                        isValid = false;
-                    }
-                    formData.skills = skills;
-                    break;
-                case 9:
-                    formData.portfolio = document.getElementById('portfolio').value.trim();
-                    break;
-                case 10:
-                    formData.additionalInfo = document.getElementById('additionalInfo').value.trim();
-                    break;
+            
+            const element = document.getElementById(question.id);
+            const value = element.value.trim();
+            
+            if (question.required && !value) {
+                errorMessage = `Please ${question.type === 'select' ? 'select' : 'enter'} ${question.title.toLowerCase().replace(/[?]/g, '')}.`;
+                isValid = false;
+            } else if (question.minLength && value.length < question.minLength) {
+                errorMessage = `Please provide more details (minimum ${question.minLength} characters).`;
+                isValid = false;
             }
-
+            
+            formData[question.id] = value;
+            
             if (!isValid) {
                 errorElement.textContent = errorMessage;
                 errorElement.style.display = 'block';
@@ -609,7 +1347,7 @@
                     errorElement.classList.remove('animate__animated', 'animate__shakeX');
                 }, 1000);
             }
-
+            
             return isValid;
         }
 
@@ -623,10 +1361,8 @@
                 return;
             }
 
-            // Hide current step
             document.getElementById(`step${currentStep}`).style.display = 'none';
             
-            // Show next step
             currentStep++;
             const nextStepElement = document.getElementById(`step${currentStep}`);
             nextStepElement.style.display = 'block';
@@ -635,7 +1371,6 @@
             updateProgress();
             updateButtons();
 
-            // Remove animation class after animation completes
             setTimeout(() => {
                 nextStepElement.classList.remove('animate__animated', 'slide-in-right');
             }, 600);
@@ -644,10 +1379,8 @@
         function previousStep() {
             if (currentStep === 1) return;
 
-            // Hide current step
             document.getElementById(`step${currentStep}`).style.display = 'none';
             
-            // Show previous step
             currentStep--;
             const prevStepElement = document.getElementById(`step${currentStep}`);
             prevStepElement.style.display = 'block';
@@ -656,7 +1389,6 @@
             updateProgress();
             updateButtons();
 
-            // Remove animation class after animation completes
             setTimeout(() => {
                 prevStepElement.classList.remove('animate__animated', 'slide-in-left');
             }, 600);
@@ -686,66 +1418,32 @@
             const successMessage = document.getElementById('successMessage');
             const generalError = document.getElementById('generalError');
             const nextBtn = document.getElementById('nextBtn');
+            const config = applicationConfigs[currentApplication];
 
-            // Show loading
             loadingSpinner.style.display = 'block';
             nextBtn.disabled = true;
 
-            // Create Discord embed
             const embed = {
-                title: "🚌 New Developer Application - Dayride Transit Company",
-                color: 3447003, // Blue color
+                title: `${config.emoji} New ${currentApplication.charAt(0).toUpperCase() + currentApplication.slice(1)} Application - Dayride Transit Company`,
+                color: config.color,
                 timestamp: new Date().toISOString(),
-                fields: [
-                    {
-                        name: "👤 Contact Information",
-                        value: `**Discord:** ${formData.discordUsername}\n**Roblox:** ${formData.robloxUsername}`,
-                        inline: false
-                    },
-                    {
-                        name: "💼 Experience & Skills",
-                        value: `**Level:** ${formData.experienceLevel}\n**Specialization:** ${formData.specialization}\n**Availability:** ${formData.availability} hours/week`,
-                        inline: false
-                    },
-                    {
-                        name: "🚀 Previous Projects",
-                        value: formData.previousProjects.length > 1024 ? formData.previousProjects.substring(0, 1021) + "..." : formData.previousProjects,
-                        inline: false
-                    },
-                    {
-                        name: "💡 Motivation",
-                        value: formData.motivation.length > 1024 ? formData.motivation.substring(0, 1021) + "..." : formData.motivation,
-                        inline: false
-                    },
-                    {
-                        name: "🛠️ Technical Skills",
-                        value: formData.skills.length > 1024 ? formData.skills.substring(0, 1021) + "..." : formData.skills,
-                        inline: false
-                    }
-                ],
+                fields: [],
                 footer: {
-                    text: "Dayride Transit Company | Developer Applications",
+                    text: "Dayride Transit Company | Application Portal",
                     icon_url: "https://cdn.discordapp.com/emojis/🚌.png"
                 }
             };
 
-            // Add portfolio if provided
-            if (formData.portfolio) {
-                embed.fields.push({
-                    name: "🎨 Portfolio",
-                    value: formData.portfolio.length > 1024 ? formData.portfolio.substring(0, 1021) + "..." : formData.portfolio,
-                    inline: false
-                });
-            }
-
-            // Add additional info if provided
-            if (formData.additionalInfo) {
-                embed.fields.push({
-                    name: "ℹ️ Additional Information",
-                    value: formData.additionalInfo.length > 1024 ? formData.additionalInfo.substring(0, 1021) + "..." : formData.additionalInfo,
-                    inline: false
-                });
-            }
+            config.questions.forEach(question => {
+                const value = formData[question.id];
+                if (value) {
+                    embed.fields.push({
+                        name: question.title,
+                        value: value.length > 1024 ? value.substring(0, 1021) + "..." : value,
+                        inline: false
+                    });
+                }
+            });
 
             const webhookData = {
                 username: "Dayride Applications",
@@ -754,14 +1452,14 @@
             };
 
             try {
-                // Note: Replace WEBHOOK_URL variable at the top with your actual Discord webhook URL
-                if (WEBHOOK_URL === 'YOUR_DISCORD_WEBHOOK_URL_HERE') {
-                    // For demo purposes, simulate successful submission
+                const webhookUrl = WEBHOOK_URLS[currentApplication];
+                
+                if (webhookUrl === 'https://discord.com/api/webhooks/1390082683782172732/_ySyiqk_JChKRmmw7_tzYNUsSZawR4O_kCUYSDhjYttprGdLqcAZiOW2LwjJL3hyH6-R') {
                     await new Promise(resolve => setTimeout(resolve, 2000));
-                    throw new Error('Please configure your Discord webhook URL in the code');
+                    throw new Error('Please configure your Discord webhook URL for this application type');
                 }
 
-                const response = await fetch(WEBHOOK_URL, {
+                const response = await fetch(webhookUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -773,13 +1471,12 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                // Success
                 loadingSpinner.style.display = 'none';
                 successMessage.innerHTML = `
                     <div class="text-center">
                         <i class="fas fa-check-circle fa-3x mb-3" style="color: #22c55e;"></i>
-                        <h4>Application Submitted Successfully! 🎉</h4>
-                        <p>Thank you for applying to Dayride Transit Company! We've received your application and will review it carefully.</p>
+                        <h4>${config.emoji} ${currentApplication.charAt(0).toUpperCase() + currentApplication.slice(1)} Application Submitted! 🎉</h4>
+                        <p>Thank you for applying to Dayride Transit Company! We've received your ${currentApplication} application and will review it carefully.</p>
                         <p><strong>What's next?</strong></p>
                         <ul class="text-start mt-3">
                             <li>Our team will review your application within 3-5 business days</li>
@@ -792,34 +1489,30 @@
                 successMessage.style.display = 'block';
                 successMessage.classList.add('animate__animated', 'animate__fadeInUp');
                 
-                // Hide the form
-                document.getElementById('applicationForm').style.display = 'none';
+                document.getElementById('mainForm').style.display = 'none';
 
             } catch (error) {
                 console.error('Error submitting application:', error);
                 loadingSpinner.style.display = 'none';
                 
                 if (error.message.includes('configure your Discord webhook')) {
-                    // Demo mode - show success anyway
                     successMessage.innerHTML = `
                         <div class="text-center">
                             <i class="fas fa-info-circle fa-3x mb-3" style="color: #3b82f6;"></i>
-                            <h4>Demo Mode - Application Completed! 🚀</h4>
+                            <h4>Demo Mode - ${currentApplication.charAt(0).toUpperCase() + currentApplication.slice(1)} Application Completed! 🚀</h4>
                             <p>This is a demonstration of the application form. In a real implementation, your application would be sent to Discord.</p>
                             <p><strong>Your Application Summary:</strong></p>
                             <div class="text-start mt-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
-                                <p><strong>Discord:</strong> ${formData.discordUsername}</p>
-                                <p><strong>Roblox:</strong> ${formData.robloxUsername}</p>
-                                <p><strong>Experience:</strong> ${formData.experienceLevel}</p>
-                                <p><strong>Specialization:</strong> ${formData.specialization}</p>
-                                <p><strong>Availability:</strong> ${formData.availability}</p>
+                                <p><strong>Discord:</strong> ${formData.discordUsername || 'N/A'}</p>
+                                <p><strong>Roblox:</strong> ${formData.robloxUsername || 'N/A'}</p>
+                                <p><strong>Position:</strong> ${currentApplication.charAt(0).toUpperCase() + currentApplication.slice(1)}</p>
                             </div>
-                            <p class="mt-3"><em>To use this form in production, configure the Discord webhook URL at the top of the code.</em></p>
+                            <p class="mt-3"><em>To use this form in production, configure the Discord webhook URLs in the WEBHOOK_URLS object.</em></p>
                         </div>
                     `;
                     successMessage.style.display = 'block';
                     successMessage.classList.add('animate__animated', 'animate__fadeInUp');
-                    document.getElementById('applicationForm').style.display = 'none';
+                    document.getElementById('mainForm').style.display = 'none';
                 } else {
                     generalError.innerHTML = `
                         <i class="fas fa-exclamation-triangle me-2"></i>
@@ -834,14 +1527,16 @@
             }
         }
 
-        // Handle Enter key navigation
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
                 const activeElement = document.activeElement;
                 
-                // Don't auto-advance if user is typing in a textarea
                 if (activeElement.tagName.toLowerCase() === 'textarea') {
+                    return;
+                }
+                
+                if (document.getElementById('applicationForm').classList.contains('hidden')) {
                     return;
                 }
                 
@@ -853,7 +1548,6 @@
             }
         });
 
-        // Auto-resize textareas
         document.addEventListener('input', function(event) {
             if (event.target.classList.contains('form-textarea')) {
                 event.target.style.height = 'auto';
@@ -861,9 +1555,7 @@
             }
         });
 
-        // Add some interactive feedback
         document.addEventListener('DOMContentLoaded', function() {
-            // Add focus effects to inputs
             const inputs = document.querySelectorAll('.form-input, .select-custom');
             inputs.forEach(input => {
                 input.addEventListener('focus', function() {
@@ -874,12 +1566,8 @@
                     this.parentElement.classList.remove('animate__animated', 'animate__pulse');
                 });
             });
-
-            // Initialize progress
-            updateProgress();
         });
 
-        // Add smooth scrolling for better UX
         function smoothScrollToTop() {
             window.scrollTo({
                 top: 0,
@@ -887,7 +1575,6 @@
             });
         }
 
-        // Call smooth scroll on step changes
         const originalNextStep = nextStep;
         const originalPreviousStep = previousStep;
 
@@ -901,13 +1588,11 @@
             smoothScrollToTop();
         };
 
-        // Add typing indicator for better UX
         let typingTimer;
         document.addEventListener('input', function(event) {
             if (event.target.classList.contains('form-input') || event.target.classList.contains('form-textarea')) {
                 clearTimeout(typingTimer);
                 
-                // Add subtle glow effect while typing
                 event.target.style.boxShadow = '0 0 15px rgba(59, 130, 246, 0.2)';
                 
                 typingTimer = setTimeout(() => {
@@ -916,17 +1601,17 @@
             }
         });
 
-        // Prevent form submission on Enter in regular inputs
-        document.querySelectorAll('input[type="text"], select').forEach(input => {
-            input.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    nextStep();
-                }
-            });
+        document.addEventListener('click', function(event) {
+            if (event.target.matches('input[type="text"], select')) {
+                event.target.addEventListener('keydown', function(keyEvent) {
+                    if (keyEvent.key === 'Enter') {
+                        keyEvent.preventDefault();
+                        nextStep();
+                    }
+                });
+            }
         });
 
-        // Add custom validation messages
         function showValidationSuccess(stepNumber) {
             const step = document.getElementById(`step${stepNumber}`);
             const icon = document.createElement('i');
@@ -936,7 +1621,6 @@
             icon.style.right = '10px';
             icon.style.fontSize = '1.5rem';
             
-            // Remove any existing success icons
             const existingIcon = step.querySelector('.fa-check-circle');
             if (existingIcon) {
                 existingIcon.remove();
@@ -948,7 +1632,6 @@
             icon.classList.add('animate__animated', 'animate__bounceIn');
         }
 
-        // Enhanced validation with success indicators
         const originalValidateStep = validateStep;
         validateStep = function(step) {
             const isValid = originalValidateStep(step);
