@@ -3,834 +3,568 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTC Staff Panel - Developer Dashboard</title>
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
+    <title>RoFleet 2025 - Bus Company Awards</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <style>
-        :root {
-            --primary-black: #000000;
-            --secondary-black: #1a1a1a;
-            --tertiary-black: #2d2d2d;
-            --quaternary-black: #404040;
-            --primary-white: #ffffff;
-            --secondary-white: #f8f9fa;
-            --accent-gray: #666666;
-            --border-gray: #333333;
-            --success-green: #10b981;
-            --warning-yellow: #f59e0b;
-            --danger-red: #ef4444;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
-            color: var(--primary-white);
-            min-height: 100vh;
-            overflow-x: hidden;
         }
-
-        .sidebar {
-            background: rgba(26, 26, 26, 0.95);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid var(--border-gray);
-            transition: all 0.3s ease;
-            position: fixed;
-            height: 100vh;
-            z-index: 1000;
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
         }
-
-        .sidebar:hover {
-            background: rgba(26, 26, 26, 0.98);
-        }
-
-        .sidebar-brand {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-gray);
-            background: linear-gradient(45deg, var(--primary-black), var(--secondary-black));
-        }
-
-        .sidebar-nav {
-            padding: 1rem 0;
-        }
-
-        .nav-item {
-            margin: 0.5rem 0;
+        
+        .card-hover {
             transition: all 0.3s ease;
         }
-
-        .nav-link {
-            color: var(--accent-gray);
-            padding: 0.75rem 1.5rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary-white);
-            background: rgba(255, 255, 255, 0.05);
-            border-left-color: var(--primary-white);
-            transform: translateX(5px);
-        }
-
-        .nav-link i {
-            margin-right: 0.75rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        .main-content {
-            margin-left: 250px;
-            padding: 2rem;
-            min-height: 100vh;
-        }
-
-        .header {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-gray);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-white), transparent, var(--primary-white));
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .stat-card {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-gray);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .stat-card:hover {
+        
+        .card-hover:hover {
             transform: translateY(-5px);
-            border-color: var(--primary-white);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
         }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-white), var(--accent-gray));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .progress-custom {
-            height: 8px;
-            background: var(--tertiary-black);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar-custom {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-white), var(--accent-gray));
-            border-radius: 10px;
-            transition: width 1s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-bar-custom::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: progressShine 2s infinite;
-        }
-
-        @keyframes progressShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .task-item {
-            background: rgba(45, 45, 45, 0.8);
-            border: 1px solid var(--border-gray);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .task-item:hover {
-            background: rgba(45, 45, 45, 1);
-            border-color: var(--accent-gray);
-            transform: translateX(10px);
-        }
-
-        .warning-badge {
-            background: linear-gradient(45deg, var(--danger-red), #dc2626);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        
+        .pulse-animation {
             animation: pulse 2s infinite;
         }
-
-        .status-online {
-            width: 12px;
-            height: 12px;
-            background: var(--success-green);
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulse 2s infinite;
-            margin-right: 0.5rem;
-        }
-
-        .floating-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
-            50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
-        }
-
-        .chart-container {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-gray);
-            border-radius: 15px;
-            padding: 1.5rem;
-            height: 300px;
-            position: relative;
-        }
-
-        .notification-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--danger-red);
-            border-radius: 50%;
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            animation: pulse 1.5s infinite;
-        }
-
+        
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
-
-        .typing-animation {
-            border-right: 2px solid var(--primary-white);
-            animation: blink 1s infinite;
+        
+        .voting-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
         }
-
-        @keyframes blink {
-            0%, 50% { border-color: var(--primary-white); }
-            51%, 100% { border-color: transparent; }
+        
+        .category-badge {
+            background: linear-gradient(45deg, #ffffff, #f0f0f0);
+            color: #000;
         }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-            }
-        }
-
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        
+        .hidden { display: none; }
+        .active { display: block; }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
         }
     </style>
 </head>
-<body>
-    <!-- Floating Particles Background -->
-    <div class="floating-particles" id="particles"></div>
-
-    <!-- Sidebar -->
-    <div class="sidebar animate__animated animate__slideInLeft">
-        <div class="sidebar-brand">
-            <h4 class="fw-bold mb-0">
-                <i class="fab fa-react me-2"></i>
-                DTC Staff Panel
-            </h4>
-            <small class="text-muted">Developer Dashboard</small>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <div class="nav-item">
-                <a href="#" class="nav-link active">
-                    <i class="fas fa-home"></i>
-                    Dashboard
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-tasks"></i>
-                    Tasks
-                    <span class="notification-dot"></span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-chart-line"></i>
-                    Analytics
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Warnings
-                    <span class="badge bg-danger ms-auto">3</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    Settings
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
-            </div>
-        </nav>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Header -->
-        <div class="header animate__animated animate__fadeInDown">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="fw-bold mb-1">Welcome back, Alex Johnson</h2>
-                    <p class="text-muted mb-0">
-                        <span class="status-online"></span>
-                        Online • Last updated: <span id="currentTime"></span>
-                    </p>
+<body class="gradient-bg min-h-screen text-white">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black bg-opacity-90 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold animate__animated animate__fadeInLeft">
+                    RoFleet <span class="text-gray-400">2025</span>
                 </div>
-                <div class="text-end">
-                    <div class="d-flex align-items-center">
-                        <i class="fab fa-roblox-studio me-2 fs-4"></i>
-                        <div>
-                            <div class="fw-bold">Roblox Studio</div>
-                            <small class="text-muted">Connected</small>
-                        </div>
-                    </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="showPage('home')" class="nav-link hover:text-gray-300 transition-colors">Home</button>
+                    <button onclick="showPage('categories')" class="nav-link hover:text-gray-300 transition-colors">Vote</button>
+                    <button onclick="showPage('results')" class="nav-link hover:text-gray-300 transition-colors">Live Results</button>
+                    <button onclick="showPage('leaderboard')" class="nav-link hover:text-gray-300 transition-colors">Leaderboard</button>
+                </div>
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
-
-        <!-- Stats Grid -->
-        <div class="row mb-4">
-            <div class="col-md-3 mb-3">
-                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h6 class="text-muted mb-1">Monthly Earnings</h6>
-                            <h3 class="fw-bold mb-0" id="earnings">$0</h3>
-                        </div>
-                        <div class="p-2 bg-success bg-opacity-10 rounded">
-                            <i class="fas fa-dollar-sign text-success"></i>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <small class="text-success me-2">
-                            <i class="fas fa-arrow-up"></i> 23.5%
-                        </small>
-                        <small class="text-muted">vs last month</small>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-3 mb-3">
-                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h6 class="text-muted mb-1">Active Tasks</h6>
-                            <h3 class="fw-bold mb-0">7</h3>
-                        </div>
-                        <div class="p-2 bg-primary bg-opacity-10 rounded">
-                            <i class="fas fa-tasks text-primary"></i>
-                        </div>
-                    </div>
-                    <div class="progress-custom mb-2">
-                        <div class="progress-bar-custom" style="width: 65%"></div>
-                    </div>
-                    <small class="text-muted">65% completed</small>
-                </div>
-            </div>
-            
-            <div class="col-md-3 mb-3">
-                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h6 class="text-muted mb-1">Warnings</h6>
-                            <h3 class="fw-bold mb-0 text-warning">3</h3>
-                        </div>
-                        <div class="p-2 bg-warning bg-opacity-10 rounded">
-                            <i class="fas fa-exclamation-triangle text-warning"></i>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="warning-badge">Action Required</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-3 mb-3">
-                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h6 class="text-muted mb-1">Productivity</h6>
-                            <h3 class="fw-bold mb-0 text-success">94%</h3>
-                        </div>
-                        <div class="p-2 bg-success bg-opacity-10 rounded">
-                            <i class="fas fa-chart-line text-success"></i>
-                        </div>
-                    </div>
-                    <div class="progress-custom mb-2">
-                        <div class="progress-bar-custom" style="width: 94%; background: linear-gradient(90deg, #10b981, #059669)"></div>
-                    </div>
-                    <small class="text-muted">Excellent performance</small>
-                </div>
+        <div id="mobileMenu" class="hidden md:hidden bg-black">
+            <div class="px-6 py-4 space-y-2">
+                <button onclick="showPage('home')" class="block w-full text-left hover:text-gray-300 transition-colors">Home</button>
+                <button onclick="showPage('categories')" class="block w-full text-left hover:text-gray-300 transition-colors">Vote</button>
+                <button onclick="showPage('results')" class="block w-full text-left hover:text-gray-300 transition-colors">Live Results</button>
+                <button onclick="showPage('leaderboard')" class="block w-full text-left hover:text-gray-300 transition-colors">Leaderboard</button>
             </div>
         </div>
+    </nav>
 
-        <!-- Main Content Grid -->
-        <div class="row">
-            <!-- Tasks Section -->
-            <div class="col-lg-8 mb-4">
-                <div class="stat-card animate__animated animate__fadeInLeft">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold mb-0">Current Tasks</h5>
-                        <button class="btn btn-outline-light btn-sm">
-                            <i class="fas fa-plus me-1"></i> Add Task
-                        </button>
-                    </div>
-                    
-                    <div id="tasksList">
-                        <div class="task-item">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <div>
-                                    <h6 class="fw-semibold mb-1">UI/UX Redesign for Main Menu</h6>
-                                    <p class="text-muted small mb-0">Create modern interface for the game lobby</p>
-                                </div>
-                                <span class="badge bg-warning">In Progress</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">
-                                    <i class="fas fa-clock me-1"></i>
-                                    Due: <span class="time-left" data-deadline="2025-07-08">3 days left</span>
-                                </small>
-                                <div class="progress-custom" style="width: 120px;">
-                                    <div class="progress-bar-custom" style="width: 75%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="task-item">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <div>
-                                    <h6 class="fw-semibold mb-1">Bug Fix: Player Movement System</h6>
-                                    <p class="text-muted small mb-0">Resolve collision detection issues</p>
-                                </div>
-                                <span class="badge bg-danger">Urgent</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">
-                                    <i class="fas fa-clock me-1"></i>
-                                    Due: <span class="time-left text-danger" data-deadline="2025-07-05">1 day left</span>
-                                </small>
-                                <div class="progress-custom" style="width: 120px;">
-                                    <div class="progress-bar-custom" style="width: 90%; background: linear-gradient(90deg, #ef4444, #dc2626)"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="task-item">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <div>
-                                    <h6 class="fw-semibold mb-1">Database Optimization</h6>
-                                    <p class="text-muted small mb-0">Improve player data loading times</p>
-                                </div>
-                                <span class="badge bg-success">Completed</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">
-                                    <i class="fas fa-check me-1"></i>
-                                    Completed 2 days ago
-                                </small>
-                                <div class="progress-custom" style="width: 120px;">
-                                    <div class="progress-bar-custom" style="width: 100%; background: linear-gradient(90deg, #10b981, #059669)"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Home Page -->
+    <div id="homePage" class="page active pt-20">
+        <div class="container mx-auto px-6 py-12">
+            <div class="text-center mb-16 animate__animated animate__fadeInUp">
+                <h1 class="text-6xl font-bold mb-6">RoFleet 2025</h1>
+                <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                    The ultimate bus company awards event. Vote for your favorite companies across multiple categories and see who comes out on top!
+                </p>
+                <button onclick="showPage('categories')" class="bg-white text-black px-8 py-4 rounded-lg font-semibold hover:bg-gray-200 transition-all transform hover:scale-105 animate__animated animate__pulse animate__infinite">
+                    Start Voting Now
+                </button>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="text-center p-8 voting-card rounded-xl card-hover animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="text-4xl mb-4">🚌</div>
+                    <h3 class="text-xl font-semibold mb-4">Multiple Categories</h3>
+                    <p class="text-gray-400">Vote across various categories like Best Service, Most Reliable, and Best Design</p>
+                </div>
+                <div class="text-center p-8 voting-card rounded-xl card-hover animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-semibold mb-4">Live Results</h3>
+                    <p class="text-gray-400">Watch the competition unfold with real-time voting results and leaderboards</p>
+                </div>
+                <div class="text-center p-8 voting-card rounded-xl card-hover animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="text-4xl mb-4">🏆</div>
+                    <h3 class="text-xl font-semibold mb-4">Fair Competition</h3>
+                    <p class="text-gray-400">Every vote counts equally in determining the winners of each category</p>
                 </div>
             </div>
-            
-            <!-- Right Sidebar -->
-            <div class="col-lg-4">
-                <!-- Warnings Section -->
-                <div class="stat-card mb-4 animate__animated animate__fadeInRight">
-                    <h5 class="fw-bold mb-3 text-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        Active Warnings
-                    </h5>
-                    
-                    <div class="mb-3 p-3 border border-warning rounded bg-warning bg-opacity-10">
-                        <div class="d-flex align-items-start">
-                            <i class="fas fa-exclamation-circle text-warning me-2 mt-1"></i>
-                            <div class="flex-grow-1">
-                                <h6 class="fw-semibold mb-1">Deadline Approaching</h6>
-                                <p class="small mb-0 text-muted">Player Movement System bug fix due in 24 hours</p>
-                            </div>
-                        </div>
+
+            <div class="text-center">
+                <h2 class="text-3xl font-bold mb-8">Event Statistics</h2>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="p-6 voting-card rounded-xl">
+                        <div class="text-2xl font-bold" id="totalVotes">0</div>
+                        <div class="text-gray-400">Total Votes</div>
                     </div>
-                    
-                    <div class="mb-3 p-3 border border-danger rounded bg-danger bg-opacity-10">
-                        <div class="d-flex align-items-start">
-                            <i class="fas fa-times-circle text-danger me-2 mt-1"></i>
-                            <div class="flex-grow-1">
-                                <h6 class="fw-semibold mb-1">Performance Issue</h6>
-                                <p class="small mb-0 text-muted">High memory usage detected in main script</p>
-                            </div>
-                        </div>
+                    <div class="p-6 voting-card rounded-xl">
+                        <div class="text-2xl font-bold" id="totalCompanies">0</div>
+                        <div class="text-gray-400">Companies</div>
                     </div>
-                    
-                    <div class="p-3 border border-info rounded bg-info bg-opacity-10">
-                        <div class="d-flex align-items-start">
-                            <i class="fas fa-info-circle text-info me-2 mt-1"></i>
-                            <div class="flex-grow-1">
-                                <h6 class="fw-semibold mb-1">Code Review</h6>
-                                <p class="small mb-0 text-muted">Pending approval for recent commits</p>
-                            </div>
-                        </div>
+                    <div class="p-6 voting-card rounded-xl">
+                        <div class="text-2xl font-bold">6</div>
+                        <div class="text-gray-400">Categories</div>
                     </div>
-                </div>
-                
-                <!-- Performance Chart -->
-                <div class="chart-container animate__animated animate__fadeInRight" style="animation-delay: 0.2s">
-                    <h5 class="fw-bold mb-3">Performance Overview</h5>
-                    <canvas id="performanceChart" width="100%" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Additional Stats Row -->
-        <div class="row mt-4">
-            <div class="col-md-6 mb-3">
-                <div class="stat-card animate__animated animate__fadeInUp">
-                    <h5 class="fw-bold mb-3">Recent Activity</h5>
-                    <div class="activity-item d-flex align-items-center mb-3">
-                        <div class="p-2 bg-success bg-opacity-10 rounded me-3">
-                            <i class="fas fa-code text-success"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="fw-semibold mb-0">Pushed new commit</h6>
-                            <small class="text-muted">Fixed player teleportation bug • 2 hours ago</small>
-                        </div>
-                    </div>
-                    <div class="activity-item d-flex align-items-center mb-3">
-                        <div class="p-2 bg-primary bg-opacity-10 rounded me-3">
-                            <i class="fas fa-comment text-primary"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="fw-semibold mb-0">Code review completed</h6>
-                            <small class="text-muted">Approved UI changes for inventory system • 4 hours ago</small>
-                        </div>
-                    </div>
-                    <div class="activity-item d-flex align-items-center">
-                        <div class="p-2 bg-warning bg-opacity-10 rounded me-3">
-                            <i class="fas fa-bug text-warning"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="fw-semibold mb-0">Bug reported</h6>
-                            <small class="text-muted">Server lag issues during peak hours • 6 hours ago</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 mb-3">
-                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                    <h5 class="fw-bold mb-3">Quick Actions</h5>
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <button class="btn glass-effect w-100 text-white p-3 d-flex flex-column align-items-center">
-                                <i class="fas fa-rocket fs-4 mb-2"></i>
-                                <span class="small">Deploy Build</span>
-                            </button>
-                        </div>
-                        <div class="col-6">
-                            <button class="btn glass-effect w-100 text-white p-3 d-flex flex-column align-items-center">
-                                <i class="fas fa-database fs-4 mb-2"></i>
-                                <span class="small">Backup Data</span>
-                            </button>
-                        </div>
-                        <div class="col-6">
-                            <button class="btn glass-effect w-100 text-white p-3 d-flex flex-column align-items-center">
-                                <i class="fas fa-chart-bar fs-4 mb-2"></i>
-                                <span class="small">View Reports</span>
-                            </button>
-                        </div>
-                        <div class="col-6">
-                            <button class="btn glass-effect w-100 text-white p-3 d-flex flex-column align-items-center">
-                                <i class="fas fa-cogs fs-4 mb-2"></i>
-                                <span class="small">Settings</span>
-                            </button>
-                        </div>
+                    <div class="p-6 voting-card rounded-xl">
+                        <div class="text-2xl font-bold pulse-animation">LIVE</div>
+                        <div class="text-gray-400">Status</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <!-- Categories Page -->
+    <div id="categoriesPage" class="page hidden pt-20">
+        <div class="container mx-auto px-6 py-12">
+            <div class="text-center mb-12 animate__animated animate__fadeInDown">
+                <h1 class="text-4xl font-bold mb-4">Vote by Category</h1>
+                <p class="text-xl text-gray-300">Choose a category to cast your vote</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp" onclick="showVotingModal('Best Overall Service')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🌟</div>
+                        <h3 class="text-xl font-semibold mb-2">Best Overall Service</h3>
+                        <p class="text-gray-400 mb-4">Vote for the company with the best overall customer service</p>
+                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    </div>
+                </div>
+
+                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-1s" onclick="showVotingModal('Most Reliable')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">⏱️</div>
+                        <h3 class="text-xl font-semibold mb-2">Most Reliable</h3>
+                        <p class="text-gray-400 mb-4">The company you can always count on for punctuality</p>
+                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    </div>
+                </div>
+
+                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-2s" onclick="showVotingModal('Best Bus Design')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🎨</div>
+                        <h3 class="text-xl font-semibold mb-2">Best Bus Design</h3>
+                        <p class="text-gray-400 mb-4">Most aesthetically pleasing and functional bus design</p>
+                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    </div>
+                </div>
+
+                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-3s" onclick="showVotingModal('Most Innovative')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">💡</div>
+                        <h3 class="text-xl font-semibold mb-2">Most Innovative</h3>
+                        <p class="text-gray-400 mb-4">Leading the way with new technologies and features</p>
+                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    </div>
+                </div>
+
+                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-4s" onclick="showVotingModal('Best Value for Money')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">💰</div>
+                        <h3 class="text-xl font-semibold mb-2">Best Value for Money</h3>
+                        <p class="text-gray-400 mb-4">Excellent service at the most reasonable price</p>
+                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    </div>
+                </div>
+
+                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-5s" onclick="showVotingModal('Most Eco-Friendly')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🌱</div>
+                        <h3 class="text-xl font-semibold mb-2">Most Eco-Friendly</h3>
+                        <p class="text-gray-400 mb-4">Leading environmental sustainability efforts</p>
+                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <div class="bg-gray-800 rounded-lg p-6 max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold mb-2">Add New Company</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="newCompanyName" placeholder="Company Name" class="flex-1 px-4 py-2 bg-gray-700 rounded-lg text-white">
+                        <button onclick="addNewCompany()" class="bg-white text-black px-6 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="page hidden pt-20">
+        <div class="container mx-auto px-6 py-12">
+            <div class="text-center mb-12 animate__animated animate__fadeInDown">
+                <h1 class="text-4xl font-bold mb-4">Live Results</h1>
+                <p class="text-xl text-gray-300">Real-time voting results across all categories</p>
+            </div>
+
+            <div id="resultsContainer" class="space-y-8">
+                <!-- Results will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Page -->
+    <div id="leaderboardPage" class="page hidden pt-20">
+        <div class="container mx-auto px-6 py-12">
+            <div class="text-center mb-12 animate__animated animate__fadeInDown">
+                <h1 class="text-4xl font-bold mb-4">Overall Leaderboard</h1>
+                <p class="text-xl text-gray-300">Companies ranked by total votes across all categories</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div id="leaderboardContainer" class="space-y-4">
+                    <!-- Leaderboard will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voting Modal -->
+    <div id="votingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto animate__animated animate__zoomIn">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modalTitle" class="text-2xl font-bold">Vote for Category</h2>
+                <button onclick="closeVotingModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div id="companiesList" class="space-y-3">
+                <!-- Companies will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-900 rounded-xl p-8 max-w-md w-full mx-4 text-center animate__animated animate__bounceIn">
+            <div class="text-4xl mb-4">✅</div>
+            <h2 class="text-2xl font-bold mb-4">Vote Submitted!</h2>
+            <p class="text-gray-300 mb-6">Thank you for your vote. Your opinion matters!</p>
+            <button onclick="closeSuccessModal()" class="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">Continue Voting</button>
+        </div>
+    </div>
+
     <script>
-        // Update current time
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { 
-                hour12: true, 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-            document.getElementById('currentTime').textContent = timeString;
-        }
-        
-        // Animate earnings counter
-        function animateEarnings() {
-            const target = 8547;
-            const element = document.getElementById('earnings');
-            let current = 0;
-            const increment = target / 100;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                element.textContent = '$' + Math.floor(current).toLocaleString();
-            }, 20);
-        }
-        
-        // Create floating particles
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                container.appendChild(particle);
-            }
-        }
-        
-        // Update task deadlines
-        function updateDeadlines() {
-            const timeLeftElements = document.querySelectorAll('.time-left');
-            timeLeftElements.forEach(element => {
-                const deadline = new Date(element.getAttribute('data-deadline'));
-                const now = new Date();
-                const diff = deadline - now;
-                const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-                
-                if (days <= 0) {
-                    element.textContent = 'Overdue';
-                    element.classList.add('text-danger');
-                } else if (days === 1) {
-                    element.textContent = '1 day left';
-                } else {
-                    element.textContent = `${days} days left`;
-                }
-            });
-        }
-        
-        // Simple chart simulation
-        function createChart() {
-            const canvas = document.getElementById('performanceChart');
-            const ctx = canvas.getContext('2d');
-            
-            // Set canvas size
-            canvas.width = canvas.offsetWidth;
-            canvas.height = 200;
-            
-            // Chart data
-            const data = [65, 72, 68, 85, 90, 88, 94];
-            const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-            
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw chart
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            
-            for (let i = 0; i < data.length; i++) {
-                const x = (canvas.width / (data.length - 1)) * i;
-                const y = canvas.height - (data[i] / 100) * canvas.height;
-                
-                if (i === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
-                
-                // Draw points
-                ctx.fillStyle = '#ffffff';
-                ctx.beginPath();
-                ctx.arc(x, y, 3, 0, 2 * Math.PI);
-                ctx.fill();
-            }
-            
-            ctx.stroke();
-        }
-        
-        // Add hover effects to navigation
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateX(10px)';
-            });
-            
-            link.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('active')) {
-                    this.style.transform = 'translateX(0)';
-                }
+        // Global state
+        let companies = [
+            "Metro Transit Co.",
+            "City Bus Lines",
+            "Express Travel",
+            "Urban Riders",
+            "Swift Transport",
+            "Green Line Buses",
+            "Royal Coach Services",
+            "Galaxy Transit"
+        ];
+
+        let votes = {};
+        let currentCategory = '';
+
+        // Initialize voting data structure
+        const categories = [
+            'Best Overall Service',
+            'Most Reliable',
+            'Best Bus Design',
+            'Most Innovative',
+            'Best Value for Money',
+            'Most Eco-Friendly'
+        ];
+
+        // Initialize votes object
+        categories.forEach(category => {
+            votes[category] = {};
+            companies.forEach(company => {
+                votes[category][company] = 0;
             });
         });
-        
-        // Add click effects to cards
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('click', function() {
-                this.style.transform = 'scale(0.98)';
+
+        // Webhook URL - Replace with your actual webhook URL
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1391946446617579654/9FevCQ215yfDXox2KVtAMyjELhfzlRKi0KUl1DQPbwsM6bgshqNnKWQKm9jE1sl6TAgR';
+
+        // Navigation functions
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+                page.classList.add('hidden');
+            });
+            
+            document.getElementById(pageId + 'Page').classList.remove('hidden');
+            document.getElementById(pageId + 'Page').classList.add('active');
+            
+            if (pageId === 'results') {
+                updateResults();
+            } else if (pageId === 'leaderboard') {
+                updateLeaderboard();
+            }
+            
+            // Close mobile menu
+            document.getElementById('mobileMenu').classList.add('hidden');
+            
+            // Update stats on home page
+            if (pageId === 'home') {
+                updateStats();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Voting modal functions
+        function showVotingModal(category) {
+            currentCategory = category;
+            document.getElementById('modalTitle').textContent = `Vote for ${category}`;
+            
+            const companiesList = document.getElementById('companiesList');
+            companiesList.innerHTML = '';
+            
+            companies.forEach(company => {
+                const companyDiv = document.createElement('div');
+                companyDiv.className = 'flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer';
+                companyDiv.onclick = () => vote(category, company);
+                
+                companyDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gradient-to-r from-gray-600 to-gray-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-lg font-bold">${company.charAt(0)}</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">${company}</h3>
+                            <p class="text-sm text-gray-400">${votes[category][company] || 0} votes</p>
+                        </div>
+                    </div>
+                    <button class="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                        Vote
+                    </button>
+                `;
+                
+                companiesList.appendChild(companyDiv);
+            });
+            
+            document.getElementById('votingModal').classList.remove('hidden');
+        }
+
+        function closeVotingModal() {
+            document.getElementById('votingModal').classList.add('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        // Voting function
+        async function vote(category, company) {
+            try {
+                // Update local vote count
+                votes[category][company]++;
+                
+                // Prepare data for webhook
+                const voteData = {
+                    timestamp: new Date().toISOString(),
+                    category: category,
+                    company: company,
+                    event: 'RoFleet 2025',
+                    totalVotes: Object.values(votes[category]).reduce((a, b) => a + b, 0)
+                };
+
+                // Send to webhook
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(voteData)
+                });
+
+                closeVotingModal();
+                document.getElementById('successModal').classList.remove('hidden');
+                
+                // Update results if on results page
+                if (document.getElementById('resultsPage').classList.contains('active')) {
+                    updateResults();
+                }
+            } catch (error) {
+                console.error('Error sending vote:', error);
+                // Still update local state even if webhook fails
+                closeVotingModal();
+                document.getElementById('successModal').classList.remove('hidden');
+            }
+        }
+
+        // Add new company function
+        function addNewCompany() {
+            const input = document.getElementById('newCompanyName');
+            const companyName = input.value.trim();
+            
+            if (companyName && !companies.includes(companyName)) {
+                companies.push(companyName);
+                
+                // Add to all categories
+                categories.forEach(category => {
+                    votes[category][companyName] = 0;
+                });
+                
+                input.value = '';
+                
+                // Show success animation
+                input.style.backgroundColor = '#065f46';
                 setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
+                    input.style.backgroundColor = '#374151';
+                }, 1000);
+                
+                updateStats();
+            }
+        }
+
+        // Results functions
+        function updateResults() {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+            
+            categories.forEach((category, index) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = `voting-card rounded-xl p-6 animate__animated animate__fadeInUp`;
+                categoryDiv.style.animationDelay = `${index * 0.1}s`;
+                
+                const sortedCompanies = Object.entries(votes[category])
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 5);
+                
+                const totalVotes = Object.values(votes[category]).reduce((a, b) => a + b, 0);
+                
+                categoryDiv.innerHTML = `
+                    <h3 class="text-xl font-semibold mb-4">${category}</h3>
+                    <p class="text-gray-400 mb-4">Total votes: ${totalVotes}</p>
+                    <div class="space-y-3">
+                        ${sortedCompanies.map(([company, voteCount], idx) => {
+                            const percentage = totalVotes > 0 ? (voteCount / totalVotes * 100) : 0;
+                            return `
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center flex-1">
+                                        <span class="text-sm font-medium w-6">${idx + 1}.</span>
+                                        <span class="ml-2 flex-1">${company}</span>
+                                        <span class="text-sm text-gray-400">${voteCount} votes</span>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-white h-2 rounded-full progress-bar" style="width: ${percentage}%"></div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(categoryDiv);
             });
-        });
-        
-        // Initialize everything
+        }
+
+        // Leaderboard functions
+        function updateLeaderboard() {
+            const container = document.getElementById('leaderboardContainer');
+            container.innerHTML = '';
+            
+            // Calculate total votes for each company
+            const companyTotals = {};
+            companies.forEach(company => {
+                companyTotals[company] = categories.reduce((total, category) => {
+                    return total + (votes[category][company] || 0);
+                }, 0);
+            });
+            
+            const sortedCompanies = Object.entries(companyTotals)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 10);
+            
+            sortedCompanies.forEach(([company, totalVotes], index) => {
+                const companyDiv = document.createElement('div');
+                companyDiv.className = `flex items-center justify-between p-6 voting-card rounded-xl animate__animated animate__fadeInLeft`;
+                companyDiv.style.animationDelay = `${index * 0.1}s`;
+                
+                const rankColors = ['text-yellow-400', 'text-gray-300', 'text-yellow-600'];
+                const rankColor = index < 3 ? rankColors[index] : 'text-gray-400';
+                
+                companyDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="text-2xl font-bold ${rankColor} w-12">#${index + 1}</div>
+                        <div class="w-12 h-12 bg-gradient-to-r from-gray-600 to-gray-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-lg font-bold">${company.charAt(0)}</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg">${company}</h3>
+                            <p class="text-gray-400">Total across all categories</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-bold">${totalVotes}</div>
+                        <div class="text-gray-400">votes</div>
+                    </div>
+                `;
+                
+                container.appendChild(companyDiv);
+            });
+        }
+
+        // Stats update function
+        function updateStats() {
+            const totalVotes = categories.reduce((total, category) => {
+                return total + Object.values(votes[category]).reduce((a, b) => a + b, 0);
+            }, 0);
+            
+            document.getElementById('totalVotes').textContent = totalVotes.toLocaleString();
+            document.getElementById('totalCompanies').textContent = companies.length;
+        }
+
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            updateTime();
-            setInterval(updateTime, 1000);
+            updateStats();
             
-            setTimeout(animateEarnings, 500);
-            createParticles();
-            updateDeadlines();
-            createChart();
-            
-            // Add typing animation to welcome message
-            const welcomeText = document.querySelector('.header h2');
-            welcomeText.classList.add('typing-animation');
-            
-            // Update deadlines every minute
-            setInterval(updateDeadlines, 60000);
+            // Add some sample votes for demonstration
+            setTimeout(() => {
+                votes['Best Overall Service']['Metro Transit Co.'] = 15;
+                votes['Best Overall Service']['City Bus Lines'] = 12;
+                votes['Most Reliable']['Express Travel'] = 18;
+                votes['Best Bus Design']['Urban Riders'] = 10;
+                updateStats();
+            }, 1000);
         });
-        
-        // Add some interactive features
-        document.addEventListener('mousemove', function(e) {
-            const particles = document.querySelectorAll('.particle');
-            particles.forEach((particle, index) => {
-                if (index % 5 === 0) { // Only affect every 5th particle for performance
-                    const rect = particle.getBoundingClientRect();
-                    const distance = Math.sqrt(
-                        Math.pow(e.clientX - rect.left, 2) + 
-                        Math.pow(e.clientY - rect.top, 2)
-                    );
-                    
-                    if (distance < 100) {
-                        particle.style.opacity = '0.8';
-                        particle.style.transform = 'scale(1.5)';
-                    } else {
-                        particle.style.opacity = '';
-                        particle.style.transform = '';
-                    }
-                }
-            });
-        });
+
+        // Auto-refresh results every 30 seconds if on results page
+        setInterval(() => {
+            if (document.getElementById('resultsPage').classList.contains('active')) {
+                updateResults();
+            }
+            if (document.getElementById('leaderboardPage').classList.contains('active')) {
+                updateLeaderboard();
+            }
+            updateStats();
+        }, 30000);
     </script>
 </body>
 </html>
