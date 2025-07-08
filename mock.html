@@ -3,138 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RoFleet 2025 - Bus Company Awards</title>
+    <title>RoFleet - Vote for Excellence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            font-family: 'Inter', sans-serif;
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        
         .gradient-bg {
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            background: linear-gradient(135deg, #1f1f1f 0%, #000000 100%);
         }
-        
         .card-hover {
             transition: all 0.3s ease;
         }
-        
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
         }
-        
-        .pulse-animation {
+        .btn-pulse {
             animation: pulse 2s infinite;
         }
-        
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
         }
-        
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background-color: white;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
         .voting-card {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            border: 1px solid #333;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .category-badge {
-            background: linear-gradient(45deg, #ffffff, #f0f0f0);
-            color: #000;
-        }
-        
-        .hidden { display: none; }
-        .active { display: block; }
-        
         .progress-bar {
-            transition: width 0.5s ease-in-out;
+            background: linear-gradient(90deg, #ffffff 0%, #cccccc 100%);
         }
     </style>
 </head>
-<body class="gradient-bg min-h-screen text-white">
+<body class="bg-black text-white min-h-screen">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 bg-black bg-opacity-90 backdrop-blur-md border-b border-gray-800">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="text-2xl font-bold animate__animated animate__fadeInLeft">
-                    RoFleet <span class="text-gray-400">2025</span>
+    <nav class="bg-gray-900 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">
+                        <span class="text-white">Ro</span><span class="text-gray-400">Fleet</span>
+                    </div>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <button onclick="showPage('home')" class="nav-link hover:text-gray-300 transition-colors">Home</button>
-                    <button onclick="showPage('categories')" class="nav-link hover:text-gray-300 transition-colors">Vote</button>
-                    <button onclick="showPage('results')" class="nav-link hover:text-gray-300 transition-colors">Live Results</button>
-                    <button onclick="showPage('leaderboard')" class="nav-link hover:text-gray-300 transition-colors">Leaderboard</button>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" onclick="showPage('home')" class="nav-link text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="#" onclick="showPage('voting')" class="nav-link text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Vote</a>
+                        <a href="#" onclick="showPage('categories')" class="nav-link text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Categories</a>
+                        <a href="#" onclick="showPage('about')" class="nav-link text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">About</a>
+                    </div>
                 </div>
                 <div class="md:hidden">
-                    <button onclick="toggleMobileMenu()" class="text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button onclick="toggleMobileMenu()" class="text-white hover:text-gray-300">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
                 </div>
             </div>
         </div>
-        <div id="mobileMenu" class="hidden md:hidden bg-black">
-            <div class="px-6 py-4 space-y-2">
-                <button onclick="showPage('home')" class="block w-full text-left hover:text-gray-300 transition-colors">Home</button>
-                <button onclick="showPage('categories')" class="block w-full text-left hover:text-gray-300 transition-colors">Vote</button>
-                <button onclick="showPage('results')" class="block w-full text-left hover:text-gray-300 transition-colors">Live Results</button>
-                <button onclick="showPage('leaderboard')" class="block w-full text-left hover:text-gray-300 transition-colors">Leaderboard</button>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-800">
+                <a href="#" onclick="showPage('home')" class="block text-white hover:text-gray-300 px-3 py-2 text-base font-medium">Home</a>
+                <a href="#" onclick="showPage('voting')" class="block text-white hover:text-gray-300 px-3 py-2 text-base font-medium">Vote</a>
+                <a href="#" onclick="showPage('categories')" class="block text-white hover:text-gray-300 px-3 py-2 text-base font-medium">Categories</a>
+                <a href="#" onclick="showPage('about')" class="block text-white hover:text-gray-300 px-3 py-2 text-base font-medium">About</a>
             </div>
         </div>
     </nav>
 
     <!-- Home Page -->
-    <div id="homePage" class="page active pt-20">
-        <div class="container mx-auto px-6 py-12">
-            <div class="text-center mb-16 animate__animated animate__fadeInUp">
-                <h1 class="text-6xl font-bold mb-6">RoFleet 2025</h1>
-                <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                    The ultimate bus company awards event. Vote for your favorite companies across multiple categories and see who comes out on top!
-                </p>
-                <button onclick="showPage('categories')" class="bg-white text-black px-8 py-4 rounded-lg font-semibold hover:bg-gray-200 transition-all transform hover:scale-105 animate__animated animate__pulse animate__infinite">
-                    Start Voting Now
-                </button>
+    <div id="home-page" class="page">
+        <div class="gradient-bg min-h-screen">
+            <div class="container mx-auto px-4 py-20">
+                <div class="text-center animate__animated animate__fadeInUp">
+                    <h1 class="text-6xl md:text-8xl font-bold mb-6">
+                        <span class="text-white">Ro</span><span class="text-gray-400">Fleet</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                        Vote for Excellence in Bus Transportation Services
+                    </p>
+                    <p class="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">
+                        Join the RoFleet community in recognizing outstanding bus companies across multiple categories. Your voice matters in shaping the future of transportation.
+                    </p>
+                    <button onclick="showPage('voting')" class="bg-white text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-200 transition-all duration-300 btn-pulse animate__animated animate__pulse animate__infinite">
+                        Start Voting Now
+                    </button>
+                </div>
+                
+                <div class="mt-20 grid md:grid-cols-3 gap-8 animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="voting-card p-6 rounded-lg card-hover">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Secure Voting</h3>
+                            <p class="text-gray-400">One vote per person per category ensures fair and accurate results.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="voting-card p-6 rounded-lg card-hover">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Community Driven</h3>
+                            <p class="text-gray-400">Join thousands of users in recognizing excellence in transportation.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="voting-card p-6 rounded-lg card-hover">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Multiple Categories</h3>
+                            <p class="text-gray-400">Vote across various categories to recognize different aspects of excellence.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <div class="grid md:grid-cols-3 gap-8 mb-16">
-                <div class="text-center p-8 voting-card rounded-xl card-hover animate__animated animate__fadeInUp animate__delay-1s">
-                    <div class="text-4xl mb-4">🚌</div>
-                    <h3 class="text-xl font-semibold mb-4">Multiple Categories</h3>
-                    <p class="text-gray-400">Vote across various categories like Best Service, Most Reliable, and Best Design</p>
+    <!-- Voting Page -->
+    <div id="voting-page" class="page hidden">
+        <div class="min-h-screen bg-black py-12">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12 animate__animated animate__fadeInDown">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">Cast Your Vote</h1>
+                    <p class="text-xl text-gray-400">Select a category and vote for your favorite bus company</p>
                 </div>
-                <div class="text-center p-8 voting-card rounded-xl card-hover animate__animated animate__fadeInUp animate__delay-2s">
-                    <div class="text-4xl mb-4">📊</div>
-                    <h3 class="text-xl font-semibold mb-4">Live Results</h3>
-                    <p class="text-gray-400">Watch the competition unfold with real-time voting results and leaderboards</p>
-                </div>
-                <div class="text-center p-8 voting-card rounded-xl card-hover animate__animated animate__fadeInUp animate__delay-3s">
-                    <div class="text-4xl mb-4">🏆</div>
-                    <h3 class="text-xl font-semibold mb-4">Fair Competition</h3>
-                    <p class="text-gray-400">Every vote counts equally in determining the winners of each category</p>
-                </div>
-            </div>
 
-            <div class="text-center">
-                <h2 class="text-3xl font-bold mb-8">Event Statistics</h2>
-                <div class="grid md:grid-cols-4 gap-6">
-                    <div class="p-6 voting-card rounded-xl">
-                        <div class="text-2xl font-bold" id="totalVotes">0</div>
-                        <div class="text-gray-400">Total Votes</div>
+                <div class="max-w-4xl mx-auto">
+                    <!-- Category Selection -->
+                    <div class="mb-8 animate__animated animate__fadeInUp">
+                        <label class="block text-lg font-semibold mb-4">Select Category:</label>
+                        <select id="category-select" onchange="updateCompanyList()" class="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-white transition-colors">
+                            <option value="">Choose a category...</option>
+                            <option value="best-service">Best Customer Service</option>
+                            <option value="most-reliable">Most Reliable</option>
+                            <option value="best-value">Best Value for Money</option>
+                            <option value="cleanest-buses">Cleanest Buses</option>
+                            <option value="best-drivers">Best Drivers</option>
+                            <option value="most-comfortable">Most Comfortable</option>
+                            <option value="best-routes">Best Route Coverage</option>
+                            <option value="most-punctual">Most Punctual</option>
+                        </select>
                     </div>
-                    <div class="p-6 voting-card rounded-xl">
-                        <div class="text-2xl font-bold" id="totalCompanies">0</div>
-                        <div class="text-gray-400">Companies</div>
+
+                    <!-- Company Selection -->
+                    <div id="company-selection" class="mb-8 hidden animate__animated animate__fadeInUp">
+                        <label class="block text-lg font-semibold mb-4">Select Bus Company:</label>
+                        <div id="company-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <!-- Companies will be dynamically added here -->
+                        </div>
                     </div>
-                    <div class="p-6 voting-card rounded-xl">
-                        <div class="text-2xl font-bold">6</div>
-                        <div class="text-gray-400">Categories</div>
-                    </div>
-                    <div class="p-6 voting-card rounded-xl">
-                        <div class="text-2xl font-bold pulse-animation">LIVE</div>
-                        <div class="text-gray-400">Status</div>
+
+                    <!-- Vote Button -->
+                    <div id="vote-section" class="text-center hidden animate__animated animate__fadeInUp">
+                        <button id="submit-vote" onclick="submitVote()" class="bg-white text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Submit Vote
+                        </button>
+                        <p class="text-sm text-gray-400 mt-4">You can only vote once per category</p>
                     </div>
                 </div>
             </div>
@@ -142,429 +199,529 @@
     </div>
 
     <!-- Categories Page -->
-    <div id="categoriesPage" class="page hidden pt-20">
-        <div class="container mx-auto px-6 py-12">
-            <div class="text-center mb-12 animate__animated animate__fadeInDown">
-                <h1 class="text-4xl font-bold mb-4">Vote by Category</h1>
-                <p class="text-xl text-gray-300">Choose a category to cast your vote</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp" onclick="showVotingModal('Best Overall Service')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">🌟</div>
-                        <h3 class="text-xl font-semibold mb-2">Best Overall Service</h3>
-                        <p class="text-gray-400 mb-4">Vote for the company with the best overall customer service</p>
-                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
-                    </div>
+    <div id="categories-page" class="page hidden">
+        <div class="min-h-screen bg-black py-12">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12 animate__animated animate__fadeInDown">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">Voting Categories</h1>
+                    <p class="text-xl text-gray-400">Explore all available voting categories</p>
                 </div>
 
-                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-1s" onclick="showVotingModal('Most Reliable')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">⏱️</div>
-                        <h3 class="text-xl font-semibold mb-2">Most Reliable</h3>
-                        <p class="text-gray-400 mb-4">The company you can always count on for punctuality</p>
-                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="voting-card p-6 rounded-lg card-hover animate__animated animate__fadeInUp">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">Best Customer Service</h3>
+                            <p class="text-gray-400 text-sm">Vote for companies with exceptional customer support and assistance.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-2s" onclick="showVotingModal('Best Bus Design')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">🎨</div>
-                        <h3 class="text-xl font-semibold mb-2">Best Bus Design</h3>
-                        <p class="text-gray-400 mb-4">Most aesthetically pleasing and functional bus design</p>
-                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    <div class="voting-card p-6 rounded-lg card-hover animate__animated animate__fadeInUp animate__delay-1s">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">Most Reliable</h3>
+                            <p class="text-gray-400 text-sm">Recognize companies with consistent and dependable service.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-3s" onclick="showVotingModal('Most Innovative')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">💡</div>
-                        <h3 class="text-xl font-semibold mb-2">Most Innovative</h3>
-                        <p class="text-gray-400 mb-4">Leading the way with new technologies and features</p>
-                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    <div class="voting-card p-6 rounded-lg card-hover animate__animated animate__fadeInUp animate__delay-2s">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">Best Value for Money</h3>
+                            <p class="text-gray-400 text-sm">Vote for companies offering the best price-to-quality ratio.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-4s" onclick="showVotingModal('Best Value for Money')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">💰</div>
-                        <h3 class="text-xl font-semibold mb-2">Best Value for Money</h3>
-                        <p class="text-gray-400 mb-4">Excellent service at the most reasonable price</p>
-                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    <div class="voting-card p-6 rounded-lg card-hover animate__animated animate__fadeInUp animate__delay-3s">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">Cleanest Buses</h3>
+                            <p class="text-gray-400 text-sm">Recognize companies maintaining the highest cleanliness standards.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="voting-card rounded-xl p-8 card-hover cursor-pointer animate__animated animate__fadeInUp animate__delay-5s" onclick="showVotingModal('Most Eco-Friendly')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">🌱</div>
-                        <h3 class="text-xl font-semibold mb-2">Most Eco-Friendly</h3>
-                        <p class="text-gray-400 mb-4">Leading environmental sustainability efforts</p>
-                        <div class="category-badge px-4 py-2 rounded-full text-sm font-medium">Click to Vote</div>
+                    <div class="voting-card p-6 rounded-lg card-hover animate__animated animate__fadeInUp animate__delay-4s">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">Best Drivers</h3>
+                            <p class="text-gray-400 text-sm">Vote for companies with the most professional and skilled drivers.</p>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="text-center mt-12">
-                <div class="bg-gray-800 rounded-lg p-6 max-w-md mx-auto">
-                    <h3 class="text-lg font-semibold mb-2">Add New Company</h3>
-                    <div class="flex gap-2">
-                        <input type="text" id="newCompanyName" placeholder="Company Name" class="flex-1 px-4 py-2 bg-gray-700 rounded-lg text-white">
-                        <button onclick="addNewCompany()" class="bg-white text-black px-6 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">Add</button>
+                    <div class="voting-card p-6 rounded-lg card-hover animate__animated animate__fadeInUp animate__delay-5s">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 1a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">Most Comfortable</h3>
+                            <p class="text-gray-400 text-sm">Vote for companies providing the most comfortable travel experience.</p>
+                        </div>
+                    </div>
+
+                    <div class="voting-card p-6 rounded-lg card-hover animate__animated animate__fadeInUp animate__delay-6s">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">Best Route Coverage</h3>
+                            <p class="text-gray-400 text-sm">Recognize companies with the most comprehensive route networks.</p>
+                        </div>
+                    </div>
+
+                    <div class="voting-card p-6 rounded-lg card-hover animate__animated animate__fadeInUp animate__delay-7s">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">Most Punctual</h3>
+                            <p class="text-gray-400 text-sm">Vote for companies with the best on-time performance records.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Results Page -->
-    <div id="resultsPage" class="page hidden pt-20">
-        <div class="container mx-auto px-6 py-12">
-            <div class="text-center mb-12 animate__animated animate__fadeInDown">
-                <h1 class="text-4xl font-bold mb-4">Live Results</h1>
-                <p class="text-xl text-gray-300">Real-time voting results across all categories</p>
-            </div>
+    <!-- About Page -->
+    <div id="about-page" class="page hidden">
+        <div class="min-h-screen bg-black py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-12 animate__animated animate__fadeInDown">
+                        <h1 class="text-4xl md:text-6xl font-bold mb-4">About RoFleet</h1>
+                        <p class="text-xl text-gray-400">Empowering communities through democratic transportation evaluation</p>
+                    </div>
 
-            <div id="resultsContainer" class="space-y-8">
-                <!-- Results will be populated by JavaScript -->
-            </div>
-        </div>
-    </div>
+                    <div class="space-y-8 animate__animated animate__fadeInUp">
+                        <div class="voting-card p-8 rounded-lg">
+                            <h2 class="text-2xl font-semibold mb-4">Our Mission</h2>
+                            <p class="text-gray-300 leading-relaxed">
+                                RoFleet is dedicated to improving public transportation by giving communities a voice in recognizing excellence. 
+                                Through our democratic voting platform, we aim to highlight bus companies that go above and beyond in serving their passengers, 
+                                encouraging continuous improvement across the industry.
+                            </p>
+                        </div>
 
-    <!-- Leaderboard Page -->
-    <div id="leaderboardPage" class="page hidden pt-20">
-        <div class="container mx-auto px-6 py-12">
-            <div class="text-center mb-12 animate__animated animate__fadeInDown">
-                <h1 class="text-4xl font-bold mb-4">Overall Leaderboard</h1>
-                <p class="text-xl text-gray-300">Companies ranked by total votes across all categories</p>
-            </div>
+                        <div class="voting-card p-8 rounded-lg">
+                            <h2 class="text-2xl font-semibold mb-4">How It Works</h2>
+                            <div class="space-y-4 text-gray-300">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-white rounded-full flex-shrink-0 flex items-center justify-center mt-1">
+                                        <span class="text-black text-sm font-bold">1</span>
+                                    </div>
+                                    <p>Choose from our comprehensive list of voting categories, each designed to evaluate different aspects of bus service quality.</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-white rounded-full flex-shrink-0 flex items-center justify-center mt-1">
+                                        <span class="text-black text-sm font-bold">2</span>
+                                    </div>
+                                    <p>Select your preferred bus company from our extensive database of transportation providers.</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-white rounded-full flex-shrink-0 flex items-center justify-center mt-1">
+                                        <span class="text-black text-sm font-bold">3</span>
+                                    </div>
+                                    <p>Cast your vote and contribute to the collective voice of the transportation community.</p>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="max-w-4xl mx-auto">
-                <div id="leaderboardContainer" class="space-y-4">
-                    <!-- Leaderboard will be populated by JavaScript -->
+                        <div class="voting-card p-8 rounded-lg">
+                            <h2 class="text-2xl font-semibold mb-4">Fair Voting Principles</h2>
+                            <p class="text-gray-300 leading-relaxed">
+                                We maintain the integrity of our voting system through strict one-vote-per-person-per-category policies. 
+                                This ensures that every voice is heard equally and that results truly reflect community sentiment. 
+                                Our secure voting mechanism prevents duplicate votes while maintaining user privacy.
+                            </p>
+                        </div>
+
+                        <div class="voting-card p-8 rounded-lg">
+                            <h2 class="text-2xl font-semibold mb-4">Community Impact</h2>
+                            <p class="text-gray-300 leading-relaxed">
+                                Your participation in RoFleet helps create a transparent ecosystem where excellence is recognized and rewarded. 
+                                Bus companies can use this feedback to understand community preferences and improve their services accordingly, 
+                                ultimately benefiting all passengers through enhanced transportation experiences.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Voting Modal -->
-    <div id="votingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto animate__animated animate__zoomIn">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="modalTitle" class="text-2xl font-bold">Vote for Category</h2>
-                <button onclick="closeVotingModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
-            </div>
-            <div id="companiesList" class="space-y-3">
-                <!-- Companies will be populated by JavaScript -->
             </div>
         </div>
     </div>
 
     <!-- Success Modal -->
-    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-900 rounded-xl p-8 max-w-md w-full mx-4 text-center animate__animated animate__bounceIn">
-            <div class="text-4xl mb-4">✅</div>
-            <h2 class="text-2xl font-bold mb-4">Vote Submitted!</h2>
-            <p class="text-gray-300 mb-6">Thank you for your vote. Your opinion matters!</p>
-            <button onclick="closeSuccessModal()" class="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">Continue Voting</button>
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 p-8 rounded-lg max-w-md mx-4 animate__animated animate__zoomIn">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-2">Vote Submitted Successfully!</h3>
+                <p class="text-gray-300 mb-4">Thank you for participating in RoFleet voting.</p>
+                <button onclick="closeSuccessModal()" class="bg-white text-black px-6 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 p-8 rounded-lg max-w-md mx-4 animate__animated animate__zoomIn">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-2">Unable to Submit Vote</h3>
+                <p id="error-message" class="text-gray-300 mb-4">You have already voted in this category.</p>
+                <button onclick="closeErrorModal()" class="bg-white text-black px-6 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                    Okay
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Global state
-        let companies = [
-            "Metro Transit Co.",
-            "City Bus Lines",
-            "Express Travel",
-            "Urban Riders",
-            "Swift Transport",
-            "Green Line Buses",
-            "Royal Coach Services",
-            "Galaxy Transit"
+        // Configuration
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1391946446617579654/9FevCQ215yfDXox2KVtAMyjELhfzlRKi0KUl1DQPbwsM6bgshqNnKWQKm9jE1sl6TAgR'; // Replace with your Discord webhook URL
+        
+        // Default bus companies - can be extended dynamically
+        const busCompanies = [
+            'Metro Transit Express',
+            'CityLine Bus Services',
+            'Regional Transport Co.',
+            'Urban Express Lines',
+            'Capital City Transit',
+            'Valley View Transportation',
+            'Coastal Bus Network',
+            'Mountain Route Express',
+            'Downtown Shuttle Services',
+            'Airport Connection Lines',
+            'Suburban Link Transit',
+            'Cross-Town Express',
+            'Harbor City Buses',
+            'Eastside Transportation',
+            'Westgate Bus Lines',
+            'Northpoint Transit',
+            'Southbound Express',
+            'Central Station Lines',
+            'Riverside Transportation',
+            'Hillcrest Bus Services'
         ];
 
-        let votes = {};
-        let currentCategory = '';
+        let selectedCategory = '';
+        let selectedCompany = '';
 
-        // Initialize voting data structure
-        const categories = [
-            'Best Overall Service',
-            'Most Reliable',
-            'Best Bus Design',
-            'Most Innovative',
-            'Best Value for Money',
-            'Most Eco-Friendly'
-        ];
-
-        // Initialize votes object
-        categories.forEach(category => {
-            votes[category] = {};
-            companies.forEach(company => {
-                votes[category][company] = 0;
-            });
-        });
-
-        // Webhook URL - Replace with your actual webhook URL
-        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1391946446617579654/9FevCQ215yfDXox2KVtAMyjELhfzlRKi0KUl1DQPbwsM6bgshqNnKWQKm9jE1sl6TAgR';
-
-        // Navigation functions
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
+        // Page navigation
+        function showPage(pageName) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
                 page.classList.add('hidden');
             });
             
-            document.getElementById(pageId + 'Page').classList.remove('hidden');
-            document.getElementById(pageId + 'Page').classList.add('active');
-            
-            if (pageId === 'results') {
-                updateResults();
-            } else if (pageId === 'leaderboard') {
-                updateLeaderboard();
+            // Show selected page
+            const targetPage = document.getElementById(pageName + '-page');
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                targetPage.classList.add('animate__animated', 'animate__fadeIn');
             }
             
-            // Close mobile menu
-            document.getElementById('mobileMenu').classList.add('hidden');
-            
-            // Update stats on home page
-            if (pageId === 'home') {
-                updateStats();
-            }
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.add('hidden');
         }
 
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
         }
 
-        // Voting modal functions
-        function showVotingModal(category) {
-            currentCategory = category;
-            document.getElementById('modalTitle').textContent = `Vote for ${category}`;
+        // Voting functionality
+        function updateCompanyList() {
+            const categorySelect = document.getElementById('category-select');
+            const companySelection = document.getElementById('company-selection');
+            const companyList = document.getElementById('company-list');
+            const voteSection = document.getElementById('vote-section');
             
-            const companiesList = document.getElementById('companiesList');
-            companiesList.innerHTML = '';
+            selectedCategory = categorySelect.value;
             
-            companies.forEach(company => {
-                const companyDiv = document.createElement('div');
-                companyDiv.className = 'flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer';
-                companyDiv.onclick = () => vote(category, company);
+            if (selectedCategory) {
+                // Check if user has already voted in this category
+                const votedCategories = getVotedCategories();
+                if (votedCategories.includes(selectedCategory)) {
+                    showErrorModal('You have already voted in this category. You can only vote once per category.');
+                    categorySelect.value = '';
+                    companySelection.classList.add('hidden');
+                    voteSection.classList.add('hidden');
+                    return;
+                }
                 
-                companyDiv.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gradient-to-r from-gray-600 to-gray-500 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-lg font-bold">${company.charAt(0)}</span>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold">${company}</h3>
-                            <p class="text-sm text-gray-400">${votes[category][company] || 0} votes</p>
-                        </div>
-                    </div>
-                    <button class="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
-                        Vote
-                    </button>
-                `;
+                // Show company selection
+                companySelection.classList.remove('hidden');
+                companySelection.classList.add('animate__animated', 'animate__fadeInUp');
                 
-                companiesList.appendChild(companyDiv);
+                // Clear previous companies
+                companyList.innerHTML = '';
+                
+                // Add companies
+                busCompanies.forEach((company, index) => {
+                    const companyCard = document.createElement('div');
+                    companyCard.className = 'voting-card p-4 rounded-lg cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 company-card animate__animated animate__fadeInUp';
+                    companyCard.style.animationDelay = `${index * 0.1}s`;
+                    companyCard.innerHTML = `
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3">
+                                <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
+                                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-sm">${company}</h4>
+                        </div>
+                    `;
+                    companyCard.onclick = () => selectCompany(company, companyCard);
+                    companyList.appendChild(companyCard);
+                });
+                
+                // Hide vote section initially
+                voteSection.classList.add('hidden');
+            } else {
+                companySelection.classList.add('hidden');
+                voteSection.classList.add('hidden');
+            }
+        }
+
+        function selectCompany(company, cardElement) {
+            // Remove selection from all cards
+            const allCards = document.querySelectorAll('.company-card');
+            allCards.forEach(card => {
+                card.classList.remove('bg-white', 'text-black');
             });
             
-            document.getElementById('votingModal').classList.remove('hidden');
+            // Select current card
+            cardElement.classList.add('bg-white', 'text-black');
+            selectedCompany = company;
+            
+            // Show vote section
+            const voteSection = document.getElementById('vote-section');
+            voteSection.classList.remove('hidden');
+            voteSection.classList.add('animate__animated', 'animate__fadeInUp');
         }
 
-        function closeVotingModal() {
-            document.getElementById('votingModal').classList.add('hidden');
+        function submitVote() {
+            if (!selectedCategory || !selectedCompany) {
+                showErrorModal('Please select both a category and a company before voting.');
+                return;
+            }
+            
+            // Check if user has already voted in this category
+            const votedCategories = getVotedCategories();
+            if (votedCategories.includes(selectedCategory)) {
+                showErrorModal('You have already voted in this category. You can only vote once per category.');
+                return;
+            }
+            
+            // Disable vote button
+            const submitButton = document.getElementById('submit-vote');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+            
+            // Prepare webhook data
+            const voteData = {
+                embeds: [{
+                    title: '🗳️ New RoFleet Vote Submitted',
+                    color: 16777215, // White color
+                    fields: [
+                        {
+                            name: '📊 Category',
+                            value: getCategoryDisplayName(selectedCategory),
+                            inline: true
+                        },
+                        {
+                            name: '🚌 Bus Company',
+                            value: selectedCompany,
+                            inline: true
+                        },
+                        {
+                            name: '⏰ Timestamp',
+                            value: new Date().toLocaleString(),
+                            inline: false
+                        }
+                    ],
+                    footer: {
+                        text: 'RoFleet Voting System'
+                    },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+            
+            // Send to webhook
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(voteData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Save vote to prevent duplicate voting
+                    saveVote(selectedCategory);
+                    
+                    // Show success modal
+                    showSuccessModal();
+                    
+                    // Reset form
+                    resetVotingForm();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorModal('Failed to submit vote. Please try again later.');
+                
+                // Re-enable button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Vote';
+            });
+        }
+
+        function getCategoryDisplayName(category) {
+            const categoryNames = {
+                'best-service': 'Best Customer Service',
+                'most-reliable': 'Most Reliable',
+                'best-value': 'Best Value for Money',
+                'cleanest-buses': 'Cleanest Buses',
+                'best-drivers': 'Best Drivers',
+                'most-comfortable': 'Most Comfortable',
+                'best-routes': 'Best Route Coverage',
+                'most-punctual': 'Most Punctual'
+            };
+            return categoryNames[category] || category;
+        }
+
+        function saveVote(category) {
+            let votedCategories = getVotedCategories();
+            if (!votedCategories.includes(category)) {
+                votedCategories.push(category);
+                setCookie('rofleet_voted_categories', JSON.stringify(votedCategories), 365);
+            }
+        }
+
+        function getVotedCategories() {
+            const cookie = getCookie('rofleet_voted_categories');
+            return cookie ? JSON.parse(cookie) : [];
+        }
+
+        function resetVotingForm() {
+            selectedCategory = '';
+            selectedCompany = '';
+            
+            document.getElementById('category-select').value = '';
+            document.getElementById('company-selection').classList.add('hidden');
+            document.getElementById('vote-section').classList.add('hidden');
+            
+            const submitButton = document.getElementById('submit-vote');
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit Vote';
+        }
+
+        // Modal functions
+        function showSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function closeSuccessModal() {
-            document.getElementById('successModal').classList.add('hidden');
+            const modal = document.getElementById('success-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
-        // Voting function
-        async function vote(category, company) {
-            try {
-                // Update local vote count
-                votes[category][company]++;
-                
-                // Prepare data for webhook
-                const voteData = {
-                    timestamp: new Date().toISOString(),
-                    category: category,
-                    company: company,
-                    event: 'RoFleet 2025',
-                    totalVotes: Object.values(votes[category]).reduce((a, b) => a + b, 0)
-                };
+        function showErrorModal(message) {
+            const modal = document.getElementById('error-modal');
+            const messageElement = document.getElementById('error-message');
+            messageElement.textContent = message;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
 
-                // Send to webhook
-                await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(voteData)
-                });
+        function closeErrorModal() {
+            const modal = document.getElementById('error-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
 
-                closeVotingModal();
-                document.getElementById('successModal').classList.remove('hidden');
-                
-                // Update results if on results page
-                if (document.getElementById('resultsPage').classList.contains('active')) {
-                    updateResults();
-                }
-            } catch (error) {
-                console.error('Error sending vote:', error);
-                // Still update local state even if webhook fails
-                closeVotingModal();
-                document.getElementById('successModal').classList.remove('hidden');
+        // Cookie utilities
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
             }
+            return null;
         }
 
-        // Add new company function
-        function addNewCompany() {
-            const input = document.getElementById('newCompanyName');
-            const companyName = input.value.trim();
-            
-            if (companyName && !companies.includes(companyName)) {
-                companies.push(companyName);
-                
-                // Add to all categories
-                categories.forEach(category => {
-                    votes[category][companyName] = 0;
-                });
-                
-                input.value = '';
-                
-                // Show success animation
-                input.style.backgroundColor = '#065f46';
-                setTimeout(() => {
-                    input.style.backgroundColor = '#374151';
-                }, 1000);
-                
-                updateStats();
-            }
-        }
-
-        // Results functions
-        function updateResults() {
-            const container = document.getElementById('resultsContainer');
-            container.innerHTML = '';
-            
-            categories.forEach((category, index) => {
-                const categoryDiv = document.createElement('div');
-                categoryDiv.className = `voting-card rounded-xl p-6 animate__animated animate__fadeInUp`;
-                categoryDiv.style.animationDelay = `${index * 0.1}s`;
-                
-                const sortedCompanies = Object.entries(votes[category])
-                    .sort(([,a], [,b]) => b - a)
-                    .slice(0, 5);
-                
-                const totalVotes = Object.values(votes[category]).reduce((a, b) => a + b, 0);
-                
-                categoryDiv.innerHTML = `
-                    <h3 class="text-xl font-semibold mb-4">${category}</h3>
-                    <p class="text-gray-400 mb-4">Total votes: ${totalVotes}</p>
-                    <div class="space-y-3">
-                        ${sortedCompanies.map(([company, voteCount], idx) => {
-                            const percentage = totalVotes > 0 ? (voteCount / totalVotes * 100) : 0;
-                            return `
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center flex-1">
-                                        <span class="text-sm font-medium w-6">${idx + 1}.</span>
-                                        <span class="ml-2 flex-1">${company}</span>
-                                        <span class="text-sm text-gray-400">${voteCount} votes</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-gray-700 rounded-full h-2">
-                                    <div class="bg-white h-2 rounded-full progress-bar" style="width: ${percentage}%"></div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                `;
-                
-                container.appendChild(categoryDiv);
-            });
-        }
-
-        // Leaderboard functions
-        function updateLeaderboard() {
-            const container = document.getElementById('leaderboardContainer');
-            container.innerHTML = '';
-            
-            // Calculate total votes for each company
-            const companyTotals = {};
-            companies.forEach(company => {
-                companyTotals[company] = categories.reduce((total, category) => {
-                    return total + (votes[category][company] || 0);
-                }, 0);
-            });
-            
-            const sortedCompanies = Object.entries(companyTotals)
-                .sort(([,a], [,b]) => b - a)
-                .slice(0, 10);
-            
-            sortedCompanies.forEach(([company, totalVotes], index) => {
-                const companyDiv = document.createElement('div');
-                companyDiv.className = `flex items-center justify-between p-6 voting-card rounded-xl animate__animated animate__fadeInLeft`;
-                companyDiv.style.animationDelay = `${index * 0.1}s`;
-                
-                const rankColors = ['text-yellow-400', 'text-gray-300', 'text-yellow-600'];
-                const rankColor = index < 3 ? rankColors[index] : 'text-gray-400';
-                
-                companyDiv.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="text-2xl font-bold ${rankColor} w-12">#${index + 1}</div>
-                        <div class="w-12 h-12 bg-gradient-to-r from-gray-600 to-gray-500 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-lg font-bold">${company.charAt(0)}</span>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-lg">${company}</h3>
-                            <p class="text-gray-400">Total across all categories</p>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-2xl font-bold">${totalVotes}</div>
-                        <div class="text-gray-400">votes</div>
-                    </div>
-                `;
-                
-                container.appendChild(companyDiv);
-            });
-        }
-
-        // Stats update function
-        function updateStats() {
-            const totalVotes = categories.reduce((total, category) => {
-                return total + Object.values(votes[category]).reduce((a, b) => a + b, 0);
-            }, 0);
-            
-            document.getElementById('totalVotes').textContent = totalVotes.toLocaleString();
-            document.getElementById('totalCompanies').textContent = companies.length;
-        }
-
-        // Initialize the application
+        // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            updateStats();
-            
-            // Add some sample votes for demonstration
-            setTimeout(() => {
-                votes['Best Overall Service']['Metro Transit Co.'] = 15;
-                votes['Best Overall Service']['City Bus Lines'] = 12;
-                votes['Most Reliable']['Express Travel'] = 18;
-                votes['Best Bus Design']['Urban Riders'] = 10;
-                updateStats();
-            }, 1000);
+            showPage('home');
         });
 
-        // Auto-refresh results every 30 seconds if on results page
-        setInterval(() => {
-            if (document.getElementById('resultsPage').classList.contains('active')) {
-                updateResults();
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const successModal = document.getElementById('success-modal');
+            const errorModal = document.getElementById('error-modal');
+            
+            if (event.target === successModal) {
+                closeSuccessModal();
             }
-            if (document.getElementById('leaderboardPage').classList.contains('active')) {
-                updateLeaderboard();
+            if (event.target === errorModal) {
+                closeErrorModal();
             }
-            updateStats();
-        }, 30000);
+        });
     </script>
 </body>
 </html>
